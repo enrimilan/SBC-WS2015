@@ -26,5 +26,14 @@ public class Part implements Serializable {
     public PartType getPartType() {
         return partType;
     }
+
+    @Override
+    public String toString() {
+        return "Part{" +
+                "partId=" + partId +
+                ", supplierId=" + supplierId +
+                ", partType=" + partType +
+                '}';
+    }
 }
 
