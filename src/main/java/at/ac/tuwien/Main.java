@@ -1,4 +1,4 @@
-package at.ac.tuwien.gui;
+package at.ac.tuwien;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -11,7 +11,7 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         logger.info("Application started.");
-        launch(args);
+        //launch(args);
     }
 
     @Override
