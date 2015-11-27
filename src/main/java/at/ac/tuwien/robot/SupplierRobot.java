@@ -47,6 +47,7 @@ public class SupplierRobot implements Runnable {
         int amount = Integer.valueOf(args[1]);
         try {
             SupplierRobot supplierRobot = new SupplierRobot(partType, amount);
+            supplierRobot.run();
         } catch (ConnectionException e) {
             e.printStackTrace();
         }
