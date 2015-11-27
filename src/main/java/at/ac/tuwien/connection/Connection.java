@@ -18,7 +18,7 @@ public class Connection implements IConnection {
 
 
     @Override
-    public void connect() throws ConnectionException {
+    public void establish() throws ConnectionException {
         try {
             registry = LocateRegistry.getRegistry(HOST,PORT);
             server = (IServer) registry.lookup(NAME);
