@@ -4,5 +4,6 @@ import at.ac.tuwien.entity.Part;
 
 public interface IConnection {
 
-    void supply(Part part);
+    void connect() throws ConnectionException;
+    void supply(Part part) throws ConnectionException;
 }
