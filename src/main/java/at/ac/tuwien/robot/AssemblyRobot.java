@@ -11,18 +11,21 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
 
     private final static int INTERVAL = 1000;
     private Connection connection;
-    public UUID id;
+    private UUID id;
+    private AssemblyRobot assemblyRobot;
 
     public AssemblyRobot() throws ConnectionException {
         this.connection = new Connection();
         connection.establish();
         this.id = UUID.randomUUID();
+        this.assemblyRobot = this;
     }
 
     @Override
     public void run() {
         try {
             connection.registerAssemblyRobot(this);
+
         } catch (ConnectionException e) {
             e.printStackTrace();
         }
@@ -41,6 +44,7 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
                     try {
                         Thread.sleep(INTERVAL);
                         connection.moduleAssembled(module);
+                        connection.registerAssemblyRobot(assemblyRobot);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (ConnectionException e) {
@@ -63,6 +67,7 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
                 try {
                     Thread.sleep(INTERVAL);
                     connection.moduleAssembled(module);
+                    connection.registerAssemblyRobot(assemblyRobot);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ConnectionException e) {
@@ -83,6 +88,7 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
                 try {
                     Thread.sleep(3*INTERVAL);
                     connection.droneAssembled(drone);
+                    connection.registerAssemblyRobot(assemblyRobot);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ConnectionException e) {
