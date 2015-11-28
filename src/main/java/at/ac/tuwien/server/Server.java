@@ -1,7 +1,6 @@
 package at.ac.tuwien.server;
 
-import at.ac.tuwien.entity.Part;
-import at.ac.tuwien.entity.PartType;
+import at.ac.tuwien.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,10 +17,10 @@ public class Server extends UnicastRemoteObject implements IServer {
     private final static int PORT = 4444;
     private final static String NAME = "admin";
     private Registry registry;
-    private CopyOnWriteArrayList<Part> cases;
-    private CopyOnWriteArrayList<Part> controlUnits;
-    private CopyOnWriteArrayList<Part> motors;
-    private CopyOnWriteArrayList<Part> rotors;
+    private CopyOnWriteArrayList<Part> cases, controlUnits, motors, rotors;
+    private CopyOnWriteArrayList<CaseControlUnitPair> caseControlUnitPairs;
+    private CopyOnWriteArrayList<MotorRotorPair> motorRotorPairs;
+    private CopyOnWriteArrayList<Drone> drones;
 
     public Server() throws RemoteException, AlreadyBoundException {
         super();
@@ -29,6 +28,9 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.controlUnits = new CopyOnWriteArrayList<Part>();
         this.motors = new CopyOnWriteArrayList<Part>();
         this.rotors = new CopyOnWriteArrayList<Part>();
+        this.caseControlUnitPairs = new CopyOnWriteArrayList<CaseControlUnitPair>();
+        this.motorRotorPairs = new CopyOnWriteArrayList<MotorRotorPair>();
+        this.drones = new CopyOnWriteArrayList<Drone>();
         registry = LocateRegistry.createRegistry(PORT);
         registry.bind(NAME, this);
     }
