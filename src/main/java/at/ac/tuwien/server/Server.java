@@ -1,8 +1,7 @@
 package at.ac.tuwien.server;
 
-import at.ac.tuwien.connection.IAssemblyRobotNotification;
+import at.ac.tuwien.robot.IAssemblyRobotNotification;
 import at.ac.tuwien.entity.*;
-import at.ac.tuwien.robot.AssemblyRobot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

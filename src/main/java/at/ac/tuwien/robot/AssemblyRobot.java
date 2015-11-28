@@ -2,7 +2,6 @@ package at.ac.tuwien.robot;
 
 import at.ac.tuwien.connection.Connection;
 import at.ac.tuwien.connection.ConnectionException;
-import at.ac.tuwien.connection.IAssemblyRobotNotification;
 import at.ac.tuwien.entity.*;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
     }
 
     @Override
-    public void mountMotorRotorPairs(final ArrayList<Part> motors, final ArrayList<Part> rotors) {
+    public void assembleMotorRotorPairs(final ArrayList<Part> motors, final ArrayList<Part> rotors) {
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -54,7 +53,7 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
     }
 
     @Override
-    public void mountCaseControlUnitPair(final Part casePart, final Part controlUnit) {
+    public void assembleCaseControlUnitPair(final Part casePart, final Part controlUnit) {
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -75,7 +74,7 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
     }
 
     @Override
-    public void mountDrone(final Module caseControlUnitPair, final ArrayList<Module> motorRotorPairs) {
+    public void assembleDrone(final Module caseControlUnitPair, final ArrayList<Module> motorRotorPairs) {
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -101,6 +100,7 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
 
         try {
             AssemblyRobot assemblyRobot = new AssemblyRobot();
+            assemblyRobot.run();
         } catch (ConnectionException e) {
             e.printStackTrace();
         }

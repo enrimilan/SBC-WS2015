@@ -1,6 +1,6 @@
 package at.ac.tuwien.server;
 
-import at.ac.tuwien.connection.IAssemblyRobotNotification;
+import at.ac.tuwien.robot.IAssemblyRobotNotification;
 import at.ac.tuwien.entity.Drone;
 import at.ac.tuwien.entity.Module;
 import at.ac.tuwien.entity.Part;

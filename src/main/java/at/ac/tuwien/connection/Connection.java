@@ -3,6 +3,7 @@ package at.ac.tuwien.connection;
 import at.ac.tuwien.entity.Drone;
 import at.ac.tuwien.entity.Module;
 import at.ac.tuwien.entity.Part;
+import at.ac.tuwien.robot.IAssemblyRobotNotification;
 import at.ac.tuwien.server.IServer;
 
 import java.rmi.NotBoundException;

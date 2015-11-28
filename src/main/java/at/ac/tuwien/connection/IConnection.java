@@ -3,6 +3,7 @@ package at.ac.tuwien.connection;
 import at.ac.tuwien.entity.Drone;
 import at.ac.tuwien.entity.Module;
 import at.ac.tuwien.entity.Part;
+import at.ac.tuwien.robot.IAssemblyRobotNotification;
 
 public interface IConnection {
 
