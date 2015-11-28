@@ -4,17 +4,22 @@ import at.ac.tuwien.connection.Connection;
 import at.ac.tuwien.connection.ConnectionException;
 import at.ac.tuwien.entity.*;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
+public class AssemblyRobot extends UnicastRemoteObject implements Runnable, IAssemblyRobotNotification, Serializable {
 
     private final static int INTERVAL = 1000;
     private Connection connection;
     private UUID id;
     private AssemblyRobot assemblyRobot;
 
-    public AssemblyRobot() throws ConnectionException {
+    public AssemblyRobot() throws ConnectionException, RemoteException {
+        super();
         this.connection = new Connection();
         connection.establish();
         this.id = UUID.randomUUID();
@@ -25,8 +30,10 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
     public void run() {
         try {
             connection.registerAssemblyRobot(this);
-
+            while (System.in.read() != -1);
         } catch (ConnectionException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -108,6 +115,8 @@ public class AssemblyRobot implements Runnable, IAssemblyRobotNotification {
             AssemblyRobot assemblyRobot = new AssemblyRobot();
             assemblyRobot.run();
         } catch (ConnectionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
