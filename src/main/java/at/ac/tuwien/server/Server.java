@@ -1,6 +1,8 @@
 package at.ac.tuwien.server;
 
+import at.ac.tuwien.connection.IAssemblyRobotNotification;
 import at.ac.tuwien.entity.*;
+import at.ac.tuwien.robot.AssemblyRobot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +20,9 @@ public class Server extends UnicastRemoteObject implements IServer {
     private final static String NAME = "admin";
     private Registry registry;
     private CopyOnWriteArrayList<Part> cases, controlUnits, motors, rotors;
-    private CopyOnWriteArrayList<CaseControlUnitPair> caseControlUnitPairs;
-    private CopyOnWriteArrayList<MotorRotorPair> motorRotorPairs;
+    private CopyOnWriteArrayList<Module> caseControlUnitPairs, motorRotorPairs;
     private CopyOnWriteArrayList<Drone> drones;
+    private CopyOnWriteArrayList<IAssemblyRobotNotification> assemblyRobots;
 
     public Server() throws RemoteException, AlreadyBoundException {
         super();
@@ -28,9 +30,10 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.controlUnits = new CopyOnWriteArrayList<Part>();
         this.motors = new CopyOnWriteArrayList<Part>();
         this.rotors = new CopyOnWriteArrayList<Part>();
-        this.caseControlUnitPairs = new CopyOnWriteArrayList<CaseControlUnitPair>();
-        this.motorRotorPairs = new CopyOnWriteArrayList<MotorRotorPair>();
+        this.caseControlUnitPairs = new CopyOnWriteArrayList<Module>();
+        this.motorRotorPairs = new CopyOnWriteArrayList<Module>();
         this.drones = new CopyOnWriteArrayList<Drone>();
+        this.assemblyRobots = new CopyOnWriteArrayList<IAssemblyRobotNotification>();
         registry = LocateRegistry.createRegistry(PORT);
         registry.bind(NAME, this);
     }
@@ -50,6 +53,28 @@ public class Server extends UnicastRemoteObject implements IServer {
             rotors.add(part);
         }
         logger.info("Notify GUI: " + part + " has been supplied.");
+    }
+
+    @Override
+    public void registerAssemblyRobot(IAssemblyRobotNotification assemblyRobotNotification) throws RemoteException {
+        assemblyRobots.add(assemblyRobotNotification);
+    }
+
+    @Override
+    public void moduleAssembled(Module module) throws RemoteException {
+        if(module.getModuleType() == ModuleType.CASE_CONTROL_UNIT_PAIR){
+            caseControlUnitPairs.add(module);
+        }
+        else if(module.getModuleType() == ModuleType.MOTOR_ROTOR_PAIR){
+            motorRotorPairs.add(module);
+        }
+        logger.info("Notify GUI: " + module + " has been supplied.");
+    }
+
+    @Override
+    public void droneAssembled(Drone drone) throws RemoteException {
+        drones.add(drone);
+        logger.info("Notify GUI: " + drone + " has been supplied.");
     }
 }
 

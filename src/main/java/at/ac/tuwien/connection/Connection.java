@@ -1,5 +1,7 @@
 package at.ac.tuwien.connection;
 
+import at.ac.tuwien.entity.Drone;
+import at.ac.tuwien.entity.Module;
 import at.ac.tuwien.entity.Part;
 import at.ac.tuwien.server.IServer;
 
@@ -33,6 +35,33 @@ public class Connection implements IConnection {
     public void supply(Part part) throws ConnectionException {
         try {
             server.supply(part);
+        } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void registerAssemblyRobot(IAssemblyRobotNotification assemblyRobotNotification) throws ConnectionException {
+        try {
+            server.registerAssemblyRobot(assemblyRobotNotification);
+        } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void moduleAssembled(Module module) throws ConnectionException {
+        try {
+            server.moduleAssembled(module);
+        } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void droneAssembled(Drone drone) throws ConnectionException {
+        try {
+            server.droneAssembled(drone);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
