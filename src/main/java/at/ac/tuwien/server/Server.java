@@ -52,12 +52,13 @@ public class Server extends UnicastRemoteObject implements IServer {
         else if(part.getPartType() == PartType.ROTOR){
             rotors.add(part);
         }
-        logger.info("Notify GUI: " + part + " has been supplied.");
+        logger.debug("Notify GUI: " + part + " has been supplied.");
     }
 
     @Override
     public void registerAssemblyRobot(IAssemblyRobotNotification assemblyRobotNotification) throws RemoteException {
         assemblyRobots.add(assemblyRobotNotification);
+        logger.debug("assembly robot is ready to do some work.");
     }
 
     @Override
@@ -68,13 +69,13 @@ public class Server extends UnicastRemoteObject implements IServer {
         else if(module.getModuleType() == ModuleType.MOTOR_ROTOR_PAIR){
             motorRotorPairs.add(module);
         }
-        logger.info("Notify GUI: " + module + " has been supplied.");
+        logger.debug("Notify GUI: " + module + " has been assembled.");
     }
 
     @Override
     public void droneAssembled(Drone drone) throws RemoteException {
         drones.add(drone);
-        logger.info("Notify GUI: " + drone + " has been supplied.");
+        logger.debug("Notify GUI: " + drone + " has been assembled.");
     }
 }
 
