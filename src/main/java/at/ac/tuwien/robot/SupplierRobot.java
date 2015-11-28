@@ -29,7 +29,7 @@ public class SupplierRobot implements Runnable {
         for(int i = 0; i<amount; i++){
             try {
                 connection.supply(new Part(id, partType));
-                Thread.sleep(1000);
+                Thread.sleep(INTERVAL);
             } catch (ConnectionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
