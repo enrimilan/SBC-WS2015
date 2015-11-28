@@ -1,6 +1,7 @@
 package at.ac.tuwien.server;
 
 import at.ac.tuwien.entity.Part;
+import at.ac.tuwien.entity.PartType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,18 +18,35 @@ public class Server extends UnicastRemoteObject implements IServer {
     private final static int PORT = 4444;
     private final static String NAME = "admin";
     private Registry registry;
-    private CopyOnWriteArrayList<Part> parts;
+    private CopyOnWriteArrayList<Part> cases;
+    private CopyOnWriteArrayList<Part> controlUnits;
+    private CopyOnWriteArrayList<Part> motors;
+    private CopyOnWriteArrayList<Part> rotors;
 
     public Server() throws RemoteException, AlreadyBoundException {
         super();
-        this.parts = new CopyOnWriteArrayList<Part>();
+        this.cases = new CopyOnWriteArrayList<Part>();
+        this.controlUnits = new CopyOnWriteArrayList<Part>();
+        this.motors = new CopyOnWriteArrayList<Part>();
+        this.rotors = new CopyOnWriteArrayList<Part>();
         registry = LocateRegistry.createRegistry(PORT);
         registry.bind(NAME, this);
     }
 
     @Override
     public void supply(Part part) throws RemoteException {
-        parts.add(part);
+        if(part.getPartType() == PartType.CASE){
+            cases.add(part);
+        }
+        else if(part.getPartType() == PartType.CONTROL_UNIT){
+            controlUnits.add(part);
+        }
+        else if(part.getPartType() == PartType.MOTOR){
+            motors.add(part);
+        }
+        else if(part.getPartType() == PartType.ROTOR){
+            rotors.add(part);
+        }
         logger.info("Notify GUI: " + part + " has been supplied.");
     }
 }
