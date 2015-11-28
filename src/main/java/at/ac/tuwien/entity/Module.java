@@ -1,9 +1,10 @@
 package at.ac.tuwien.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Module {
+public class Module implements Serializable {
 
     private UUID assemblerId;
     private UUID calibratorId;
