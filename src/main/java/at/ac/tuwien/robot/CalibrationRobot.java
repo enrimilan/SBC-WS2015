@@ -36,6 +36,7 @@ public class CalibrationRobot extends UnicastRemoteObject implements Runnable, I
 
     @Override
     public void calibrateMotorRotorPair(final Module module) throws RemoteException {
+        logger.debug("calibrating motor-rotor pair");
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -70,6 +71,7 @@ public class CalibrationRobot extends UnicastRemoteObject implements Runnable, I
                             value = value + motorRotorPair.getCalibrationValue();
                         }
                         else{
+                            logger.debug("calibrating motor-rotor pair in drone");
                             value = ThreadLocalRandom.current().nextInt(MIN_CALIBRATION_VALUE, MAX_CALIBRATION_VALUE + 1);
                             motorRotorPair.setCalibrationValue(value);
                             motorRotorPair.setCalibratorId(id);
@@ -81,6 +83,7 @@ public class CalibrationRobot extends UnicastRemoteObject implements Runnable, I
                         }
                     }
                     // if we got here, all of the 3 motor rotor pairs were already calibrated by some robots
+                    logger.debug("calibrating drone");
                     Module caseControlUnitPair = drone.getCaseControlUnitPair();
                     caseControlUnitPair.setCalibrationValue(value);
                     caseControlUnitPair.setCalibratorId(id);
