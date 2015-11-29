@@ -50,7 +50,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     @Override
-    public void supply(Part part) throws RemoteException {
+    public synchronized void supply(Part part) throws RemoteException {
         if(part.getPartType() == PartType.CASE){
             cases.add(part);
         }
@@ -73,7 +73,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     @Override
-    public void moduleAssembled(Module module) throws RemoteException {
+    public synchronized void moduleAssembled(Module module) throws RemoteException {
         if(module.getModuleType() == ModuleType.CASE_CONTROL_UNIT_PAIR){
             caseControlUnitPairs.add(module);
         }
@@ -84,25 +84,25 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     @Override
-    public void droneAssembled(Drone drone) throws RemoteException {
+    public synchronized void droneAssembled(Drone drone) throws RemoteException {
         drones.add(drone);
         logger.debug("Notify GUI: " + drone + " has been assembled.");
     }
 
     @Override
-    public void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws RemoteException {
+    public synchronized void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws RemoteException {
         calibrationRobots.add(calibrationRobotNotification);
         logger.debug("calibration robot is ready to do some work.");
     }
 
     @Override
-    public void motorRotorPairCalibrated(Module module) throws RemoteException {
+    public synchronized void motorRotorPairCalibrated(Module module) throws RemoteException {
         motorRotorPairs.add(0, module);
         logger.debug("Notify GUI: " + module + " has been calibrated.");
     }
 
     @Override
-    public void droneCalibrated(Drone drone) throws RemoteException {
+    public synchronized void droneCalibrated(Drone drone) throws RemoteException {
         if(drone.getStatus()==Status.CALIBRATED){
             drones.add(0, drone);
         }
@@ -113,13 +113,13 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     @Override
-    public void registerLogisticRobot(ILogisticRobotNotification logisticRobotNotification) throws RemoteException {
+    public synchronized void registerLogisticRobot(ILogisticRobotNotification logisticRobotNotification) throws RemoteException {
         logisticRobots.add(logisticRobotNotification);
         logger.debug("logistic robot is ready to do some work.");
     }
 
     @Override
-    public void droneTested(Drone drone) throws RemoteException {
+    public synchronized void droneTested(Drone drone) throws RemoteException {
         if(drone.getStatus() == Status.TESTED_GOOD){
             goodDrones.add(drone);
         }
