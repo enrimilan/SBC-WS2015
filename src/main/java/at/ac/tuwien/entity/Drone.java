@@ -17,7 +17,7 @@ public class Drone implements Serializable {
         this.status = Status.ASSEMBLED;
     }
 
-    public Module getCaseControlUnitPairs(){
+    public Module getCaseControlUnitPair(){
         return caseControlUnitPair;
     }
 
