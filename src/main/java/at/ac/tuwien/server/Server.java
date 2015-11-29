@@ -10,6 +10,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server extends UnicastRemoteObject implements IServer {
@@ -21,7 +25,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     private CopyOnWriteArrayList<Part> cases, controlUnits, motors, rotors;
     private CopyOnWriteArrayList<Module> caseControlUnitPairs, motorRotorPairs;
     private CopyOnWriteArrayList<Drone> drones;
-    private CopyOnWriteArrayList<IAssemblyRobotNotification> assemblyRobots;
+    private Queue<IAssemblyRobotNotification> assemblyRobots;
 
     public Server() throws RemoteException, AlreadyBoundException {
         super();
@@ -32,9 +36,10 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.caseControlUnitPairs = new CopyOnWriteArrayList<Module>();
         this.motorRotorPairs = new CopyOnWriteArrayList<Module>();
         this.drones = new CopyOnWriteArrayList<Drone>();
-        this.assemblyRobots = new CopyOnWriteArrayList<IAssemblyRobotNotification>();
+        this.assemblyRobots = new ConcurrentLinkedQueue<IAssemblyRobotNotification>();
         registry = LocateRegistry.createRegistry(PORT);
         registry.bind(NAME, this);
+        new Thread(new RequestHandler()).start();
     }
 
     @Override
@@ -55,7 +60,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     }
 
     @Override
-    public void registerAssemblyRobot(IAssemblyRobotNotification assemblyRobotNotification) throws RemoteException {
+    public synchronized void registerAssemblyRobot(IAssemblyRobotNotification assemblyRobotNotification) throws RemoteException {
         assemblyRobots.add(assemblyRobotNotification);
         logger.debug("assembly robot is ready to do some work.");
     }
@@ -76,5 +81,88 @@ public class Server extends UnicastRemoteObject implements IServer {
         drones.add(drone);
         logger.debug("Notify GUI: " + drone + " has been assembled.");
     }
+
+    class RequestHandler implements Runnable{
+
+        private boolean running = true;
+
+        @Override
+        public void run() {
+            logger.debug("Request handler started.");
+            while(running){
+
+                if(assemblyRobots.size()>0){
+                    //all necessary parts for a drone are available and were already assembled by the robots
+                    if(caseControlUnitPairs.size()>=1 && motorRotorPairs.size()>=3){
+                        IAssemblyRobotNotification assemblyRobotNotification = assemblyRobots.poll();
+                        Module caseControlUnitPair = caseControlUnitPairs.remove(0);
+                        ArrayList<Module> motorRotorPairModules = new ArrayList<Module>();
+                        int i = 0;
+                        while(i<3){
+                            motorRotorPairModules.add(motorRotorPairs.remove(0));
+                            i++;
+                        }
+                        try {
+                            assemblyRobotNotification.assembleDrone(caseControlUnitPair, motorRotorPairModules);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    //we still need some motor-rotor modules
+                    else if(motorRotorPairs.size()<3 && motors.size()>0 && rotors.size()>0){
+                        IAssemblyRobotNotification assemblyRobotNotification = assemblyRobots.poll();
+                        ArrayList<Part> motorParts = new ArrayList<Part>();
+                        ArrayList<Part> rotorParts = new ArrayList<Part>();
+                        int i = 0;
+                        while(i<3-motorRotorPairs.size() && motors.size()>0 && rotors.size()>0){
+                            motorParts.add(motors.remove(0));
+                            rotorParts.add(rotors.remove(0));
+                            i++;
+                        }
+                        try {
+                            assemblyRobotNotification.assembleMotorRotorPairs(motorParts, rotorParts);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    //assemble a case-control unit module
+                    else if(cases.size()>0 && controlUnits.size()>0){
+                        IAssemblyRobotNotification assemblyRobotNotification = assemblyRobots.poll();
+                        Part casePart = cases.remove(0);
+                        Part controlUnit = controlUnits.remove(0);
+                        try {
+                            assemblyRobotNotification.assembleCaseControlUnitPair(casePart, controlUnit);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    //assemble a motor-rotor module
+                    else if(motors.size()>0 && rotors.size()>0){
+                        IAssemblyRobotNotification assemblyRobotNotification = assemblyRobots.poll();
+                        ArrayList<Part> motorParts = new ArrayList<Part>();
+                        ArrayList<Part> rotorParts = new ArrayList<Part>();
+                        motorParts.add(motors.remove(0));
+                        rotorParts.add(rotors.remove(0));
+                        try {
+                            assemblyRobotNotification.assembleMotorRotorPairs(motorParts, rotorParts);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+            }
+        }
+
+        public void stopRunning(){
+            running = false;
+        }
+    }
 }
+
+
+
 
