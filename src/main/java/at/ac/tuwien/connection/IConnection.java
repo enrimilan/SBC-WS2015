@@ -5,6 +5,8 @@ import at.ac.tuwien.entity.Module;
 import at.ac.tuwien.entity.Part;
 import at.ac.tuwien.robot.IAssemblyRobotNotification;
 import at.ac.tuwien.robot.ICalibrationRobotNotification;
+import at.ac.tuwien.robot.ILogisticRobotNotification;
+import at.ac.tuwien.robot.LogisticRobot;
 
 public interface IConnection {
 
@@ -16,5 +18,6 @@ public interface IConnection {
     void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws ConnectionException;
     void motorRotorPairCalibrated(Module module) throws ConnectionException;
     void droneCalibrated(Drone drone) throws ConnectionException;
-
+    void registerLogisticRobot(ILogisticRobotNotification logisticRobotNotification) throws ConnectionException;
+    void droneTested(Drone drone) throws ConnectionException;
 }

@@ -3,6 +3,8 @@ package at.ac.tuwien.server;
 import at.ac.tuwien.robot.IAssemblyRobotNotification;
 import at.ac.tuwien.entity.*;
 import at.ac.tuwien.robot.ICalibrationRobotNotification;
+import at.ac.tuwien.robot.ILogisticRobotNotification;
+import at.ac.tuwien.robot.LogisticRobot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,9 +26,10 @@ public class Server extends UnicastRemoteObject implements IServer {
     private Registry registry;
     private CopyOnWriteArrayList<Part> cases, controlUnits, motors, rotors;
     private CopyOnWriteArrayList<Module> caseControlUnitPairs, motorRotorPairs;
-    private CopyOnWriteArrayList<Drone> drones;
+    private CopyOnWriteArrayList<Drone> drones, goodDrones, badDrones;
     private Queue<IAssemblyRobotNotification> assemblyRobots;
     private Queue<ICalibrationRobotNotification> calibrationRobots;
+    private Queue<ILogisticRobotNotification> logisticRobots;
 
     public Server() throws RemoteException, AlreadyBoundException {
         super();
@@ -37,8 +40,11 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.caseControlUnitPairs = new CopyOnWriteArrayList<Module>();
         this.motorRotorPairs = new CopyOnWriteArrayList<Module>();
         this.drones = new CopyOnWriteArrayList<Drone>();
+        this.goodDrones = new CopyOnWriteArrayList<Drone>();
+        this.badDrones =  new CopyOnWriteArrayList<Drone>();
         this.assemblyRobots = new ConcurrentLinkedQueue<IAssemblyRobotNotification>();
         this.calibrationRobots = new ConcurrentLinkedQueue<ICalibrationRobotNotification>();
+        this.logisticRobots = new ConcurrentLinkedQueue<ILogisticRobotNotification>();
         registry = LocateRegistry.createRegistry(PORT);
         registry.bind(NAME, this);
         new Thread(new RequestHandler()).start();
@@ -104,6 +110,24 @@ public class Server extends UnicastRemoteObject implements IServer {
         else{
             drones.add(drone);
         }
+    }
+
+    @Override
+    public void registerLogisticRobot(ILogisticRobotNotification logisticRobotNotification) throws RemoteException {
+        logisticRobots.add(logisticRobotNotification);
+        logger.debug("logistic robot is ready to do some work.");
+    }
+
+    @Override
+    public void droneTested(Drone drone) throws RemoteException {
+        if(drone.getStatus() == Status.TESTED_GOOD){
+            goodDrones.add(drone);
+        }
+        else{
+            badDrones.add(drone);
+        }
+
+        logger.debug("Notify GUI: " + drone + " has been tested.");
     }
 
     private class RequestHandler implements Runnable{
@@ -194,6 +218,15 @@ public class Server extends UnicastRemoteObject implements IServer {
                     Module motorRotorPair = motorRotorPairs.remove(motorRotorPairs.size()-1);
                     try {
                         calibrationRobotNotification.calibrateMotorRotorPair(motorRotorPair);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if(logisticRobots.size()>0 && drones.size()>0 && drones.get(0).getStatus() == Status.CALIBRATED){
+                    ILogisticRobotNotification logisticRobotNotification = logisticRobots.poll();
+                    try {
+                        logisticRobotNotification.testDrone(drones.remove(0));
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }

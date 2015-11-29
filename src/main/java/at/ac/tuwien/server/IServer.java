@@ -5,6 +5,8 @@ import at.ac.tuwien.entity.Drone;
 import at.ac.tuwien.entity.Module;
 import at.ac.tuwien.entity.Part;
 import at.ac.tuwien.robot.ICalibrationRobotNotification;
+import at.ac.tuwien.robot.ILogisticRobotNotification;
+import at.ac.tuwien.robot.LogisticRobot;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -18,4 +20,7 @@ public interface IServer extends Remote {
     void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws RemoteException;
     void motorRotorPairCalibrated(Module module) throws RemoteException;
     void droneCalibrated(Drone drone) throws RemoteException;
+    void registerLogisticRobot(ILogisticRobotNotification logisticRobotNotification) throws RemoteException;
+    void droneTested(Drone drone) throws RemoteException;
+
 }
