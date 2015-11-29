@@ -3,5 +3,6 @@ package at.ac.tuwien.entity;
 public enum Status {
     ASSEMBLED,
     CALIBRATED,
-    TESTED
+    TESTED_GOOD,
+    TESTED_BAD
 }
