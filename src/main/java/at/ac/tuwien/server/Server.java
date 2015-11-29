@@ -4,7 +4,6 @@ import at.ac.tuwien.robot.IAssemblyRobotNotification;
 import at.ac.tuwien.entity.*;
 import at.ac.tuwien.robot.ICalibrationRobotNotification;
 import at.ac.tuwien.robot.ILogisticRobotNotification;
-import at.ac.tuwien.robot.LogisticRobot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,6 +109,7 @@ public class Server extends UnicastRemoteObject implements IServer {
         else{
             drones.add(drone);
         }
+        logger.debug("Notify GUI: " + drone + " has been calibrated.");
     }
 
     @Override
@@ -202,7 +202,7 @@ public class Server extends UnicastRemoteObject implements IServer {
                     }
                 }
 
-                if(assemblyRobots.size()>0 && drones.size()>0 && drones.get(drones.size()-1).getStatus() == Status.ASSEMBLED){
+                if(calibrationRobots.size()>0 && drones.size()>0 && drones.get(drones.size()-1).getStatus() == Status.ASSEMBLED){
                         ICalibrationRobotNotification calibrationRobotNotification = calibrationRobots.poll();
                         Drone drone = drones.remove(drones.size()-1);
                         try {
@@ -213,7 +213,7 @@ public class Server extends UnicastRemoteObject implements IServer {
 
                 }
 
-                if(assemblyRobots.size()>0 && motorRotorPairs.size()>0 && motorRotorPairs.get(motorRotorPairs.size()-1).getStatus() == Status.ASSEMBLED){
+                if(calibrationRobots.size()>0 && motorRotorPairs.size()>0 && motorRotorPairs.get(motorRotorPairs.size()-1).getStatus() == Status.ASSEMBLED){
                     ICalibrationRobotNotification calibrationRobotNotification = calibrationRobots.poll();
                     Module motorRotorPair = motorRotorPairs.remove(motorRotorPairs.size()-1);
                     try {
