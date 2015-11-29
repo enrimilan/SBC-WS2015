@@ -1,9 +1,10 @@
 package at.ac.tuwien.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class Drone {
+public class Drone implements Serializable {
 
     private Module caseControlUnitPair;
     private ArrayList<Module> motorRotorPairs;
