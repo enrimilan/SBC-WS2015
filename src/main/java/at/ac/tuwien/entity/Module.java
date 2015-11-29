@@ -11,6 +11,7 @@ public class Module implements Serializable {
     private ModuleType moduleType;
     private ArrayList<Part> parts;
     private Status status;
+    private int calibrationValue;
 
     public Module(ModuleType moduleType, UUID assemblerId) {
         this.moduleType = moduleType;
@@ -47,6 +48,14 @@ public class Module implements Serializable {
         this.status = status;
     }
 
+    public int getCalibrationValue() {
+        return calibrationValue;
+    }
+
+    public void setCalibrationValue(int calibrationValue) {
+        this.calibrationValue = calibrationValue;
+    }
+
     @Override
     public String toString() {
         return "Module{" +
@@ -55,6 +64,7 @@ public class Module implements Serializable {
                 ", moduleType=" + moduleType +
                 ", parts=" + parts +
                 ", status=" + status +
+                ", calibrationValue=" + calibrationValue +
                 '}';
     }
 }
