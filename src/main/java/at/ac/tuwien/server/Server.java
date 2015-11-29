@@ -2,6 +2,7 @@ package at.ac.tuwien.server;
 
 import at.ac.tuwien.robot.IAssemblyRobotNotification;
 import at.ac.tuwien.entity.*;
+import at.ac.tuwien.robot.ICalibrationRobotNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     private CopyOnWriteArrayList<Module> caseControlUnitPairs, motorRotorPairs;
     private CopyOnWriteArrayList<Drone> drones;
     private Queue<IAssemblyRobotNotification> assemblyRobots;
+    private Queue<ICalibrationRobotNotification> calibrationRobots;
 
     public Server() throws RemoteException, AlreadyBoundException {
         super();
@@ -37,6 +39,7 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.motorRotorPairs = new CopyOnWriteArrayList<Module>();
         this.drones = new CopyOnWriteArrayList<Drone>();
         this.assemblyRobots = new ConcurrentLinkedQueue<IAssemblyRobotNotification>();
+        this.calibrationRobots = new ConcurrentLinkedQueue<ICalibrationRobotNotification>();
         registry = LocateRegistry.createRegistry(PORT);
         registry.bind(NAME, this);
         new Thread(new RequestHandler()).start();
@@ -82,7 +85,13 @@ public class Server extends UnicastRemoteObject implements IServer {
         logger.debug("Notify GUI: " + drone + " has been assembled.");
     }
 
-    class RequestHandler implements Runnable{
+    @Override
+    public void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws RemoteException {
+        calibrationRobots.add(calibrationRobotNotification);
+        logger.debug("calibration robot is ready to do some work.");
+    }
+
+    private class RequestHandler implements Runnable{
 
         private boolean running = true;
 

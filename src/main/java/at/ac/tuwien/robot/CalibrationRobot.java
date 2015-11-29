@@ -7,6 +7,7 @@ import at.ac.tuwien.entity.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -40,7 +41,14 @@ public class CalibrationRobot extends UnicastRemoteObject implements Runnable, I
 
     @Override
     public void run() {
-
+        try {
+            connection.registerCalibrationRobot(this);
+            while (System.in.read() != -1);
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args){

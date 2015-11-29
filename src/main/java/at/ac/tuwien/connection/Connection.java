@@ -4,6 +4,7 @@ import at.ac.tuwien.entity.Drone;
 import at.ac.tuwien.entity.Module;
 import at.ac.tuwien.entity.Part;
 import at.ac.tuwien.robot.IAssemblyRobotNotification;
+import at.ac.tuwien.robot.ICalibrationRobotNotification;
 import at.ac.tuwien.server.IServer;
 
 import java.rmi.NotBoundException;
@@ -63,6 +64,15 @@ public class Connection implements IConnection {
     public void droneAssembled(Drone drone) throws ConnectionException {
         try {
             server.droneAssembled(drone);
+        } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws ConnectionException {
+        try {
+            server.registerCalibrationRobot(calibrationRobotNotification);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
