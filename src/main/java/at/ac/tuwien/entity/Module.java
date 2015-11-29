@@ -44,6 +44,10 @@ public class Module implements Serializable {
         this.calibratorId = calibratorId;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
