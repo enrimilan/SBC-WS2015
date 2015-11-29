@@ -3,6 +3,8 @@ package at.ac.tuwien.robot;
 import at.ac.tuwien.connection.Connection;
 import at.ac.tuwien.connection.ConnectionException;
 import at.ac.tuwien.entity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -13,6 +15,7 @@ import java.util.UUID;
 
 public class AssemblyRobot extends UnicastRemoteObject implements Runnable, IAssemblyRobotNotification, Serializable {
 
+    private final static Logger logger = LoggerFactory.getLogger(AssemblyRobot.class);
     private final static int INTERVAL = 1000;
     private Connection connection;
     private UUID id;
@@ -40,6 +43,7 @@ public class AssemblyRobot extends UnicastRemoteObject implements Runnable, IAss
 
     @Override
     public void assembleMotorRotorPairs(final ArrayList<Part> motors, final ArrayList<Part> rotors) {
+        logger.debug("Assembling motor rotor pairs.");
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -65,6 +69,7 @@ public class AssemblyRobot extends UnicastRemoteObject implements Runnable, IAss
 
     @Override
     public void assembleCaseControlUnitPair(final Part casePart, final Part controlUnit) {
+        logger.debug("Assembling case control unit pairs.");
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -87,6 +92,7 @@ public class AssemblyRobot extends UnicastRemoteObject implements Runnable, IAss
 
     @Override
     public void assembleDrone(final Module caseControlUnitPair, final ArrayList<Module> motorRotorPairs) {
+        logger.debug("Assembling drone.");
         Thread thread = new Thread(){
             @Override
             public void run() {

@@ -5,11 +5,14 @@ import at.ac.tuwien.connection.ConnectionException;
 import at.ac.tuwien.entity.Part;
 import at.ac.tuwien.entity.PartType;
 import at.ac.tuwien.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
 public class SupplierRobot implements Runnable {
 
+    private final static Logger logger = LoggerFactory.getLogger(SupplierRobot.class);
     private final static int INTERVAL = 1000;
     private Connection connection;
     private PartType partType;
@@ -28,6 +31,7 @@ public class SupplierRobot implements Runnable {
     public void run() {
         for(int i = 0; i<amount; i++){
             try {
+                logger.debug("Supplying part.");
                 connection.supply(new Part(id, partType));
                 Thread.sleep(INTERVAL);
             } catch (ConnectionException e) {
