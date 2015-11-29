@@ -10,11 +10,13 @@ public class Module implements Serializable {
     private UUID calibratorId;
     private ModuleType moduleType;
     private ArrayList<Part> parts;
+    private Status status;
 
     public Module(ModuleType moduleType, UUID assemblerId) {
         this.moduleType = moduleType;
         this.assemblerId = assemblerId;
         this.parts = new ArrayList<Part>();
+        this.status = Status.ASSEMBLED;
     }
 
     public void addPart(Part part){
@@ -41,6 +43,10 @@ public class Module implements Serializable {
         this.calibratorId = calibratorId;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Module{" +
@@ -48,6 +54,7 @@ public class Module implements Serializable {
                 ", calibratorId=" + calibratorId +
                 ", moduleType=" + moduleType +
                 ", parts=" + parts +
+                ", status=" + status +
                 '}';
     }
 }
