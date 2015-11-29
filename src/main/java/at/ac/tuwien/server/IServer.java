@@ -16,4 +16,6 @@ public interface IServer extends Remote {
     void moduleAssembled(Module module) throws RemoteException;
     void droneAssembled(Drone drone) throws RemoteException;
     void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws RemoteException;
+    void motorRotorPairCalibrated(Module module) throws RemoteException;
+    void droneCalibrated(Drone drone) throws RemoteException;
 }

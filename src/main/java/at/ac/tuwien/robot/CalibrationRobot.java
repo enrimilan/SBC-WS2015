@@ -42,7 +42,7 @@ public class CalibrationRobot extends UnicastRemoteObject implements Runnable, I
             module.setCalibrationValue(value);
             module.setStatus(Status.CALIBRATED);
             Thread.sleep(INTERVAL);
-            //TODO notify the server
+            connection.motorRotorPairCalibrated(module);
             connection.registerCalibrationRobot(this);
         } catch (ConnectionException e) {
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class CalibrationRobot extends UnicastRemoteObject implements Runnable, I
                     motorRotorPair.setCalibrationValue(value);
                     motorRotorPair.setStatus(Status.CALIBRATED);
                     Thread.sleep(INTERVAL);
-                    //TODO notify the server
+                    connection.droneCalibrated(drone);
                     connection.registerCalibrationRobot(this);
                     return;
                 }
@@ -76,7 +76,7 @@ public class CalibrationRobot extends UnicastRemoteObject implements Runnable, I
             caseControlUnitPair.setStatus(Status.CALIBRATED);
             drone.setStatus(Status.CALIBRATED);
             Thread.sleep(INTERVAL);
-            //TODO notify the server
+            connection.droneCalibrated(drone);
             connection.registerCalibrationRobot(this);
         } catch (ConnectionException e) {
             e.printStackTrace();

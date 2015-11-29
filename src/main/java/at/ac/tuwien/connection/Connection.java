@@ -77,4 +77,22 @@ public class Connection implements IConnection {
             throw new ConnectionException(e.getMessage());
         }
     }
+
+    @Override
+    public void motorRotorPairCalibrated(Module module) throws ConnectionException {
+        try {
+            server.motorRotorPairCalibrated(module);
+        } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void droneCalibrated(Drone drone) throws ConnectionException {
+        try {
+            server.droneCalibrated(drone);
+        } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        }
+    }
 }

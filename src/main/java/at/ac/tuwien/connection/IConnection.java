@@ -14,5 +14,7 @@ public interface IConnection {
     void moduleAssembled(Module module) throws ConnectionException;
     void droneAssembled(Drone drone) throws ConnectionException;
     void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws ConnectionException;
+    void motorRotorPairCalibrated(Module module) throws ConnectionException;
+    void droneCalibrated(Drone drone) throws ConnectionException;
 
 }

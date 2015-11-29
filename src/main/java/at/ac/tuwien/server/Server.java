@@ -12,7 +12,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -91,6 +90,22 @@ public class Server extends UnicastRemoteObject implements IServer {
         logger.debug("calibration robot is ready to do some work.");
     }
 
+    @Override
+    public void motorRotorPairCalibrated(Module module) throws RemoteException {
+        motorRotorPairs.add(0, module);
+        logger.debug("Notify GUI: " + module + " has been calibrated.");
+    }
+
+    @Override
+    public void droneCalibrated(Drone drone) throws RemoteException {
+        if(drone.getStatus()==Status.CALIBRATED){
+            drones.add(0, drone);
+        }
+        else{
+            drones.add(drone);
+        }
+    }
+
     private class RequestHandler implements Runnable{
 
         private boolean running = true;
@@ -160,6 +175,27 @@ public class Server extends UnicastRemoteObject implements IServer {
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
+                    }
+                }
+
+                if(assemblyRobots.size()>0 && drones.size()>0 && drones.get(drones.size()-1).getStatus() == Status.ASSEMBLED){
+                        ICalibrationRobotNotification calibrationRobotNotification = calibrationRobots.poll();
+                        Drone drone = drones.remove(drones.size()-1);
+                        try {
+                            calibrationRobotNotification.calibrateModuleInDrone(drone);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+
+                }
+
+                if(assemblyRobots.size()>0 && motorRotorPairs.size()>0 && motorRotorPairs.get(motorRotorPairs.size()-1).getStatus() == Status.ASSEMBLED){
+                    ICalibrationRobotNotification calibrationRobotNotification = calibrationRobots.poll();
+                    Module motorRotorPair = motorRotorPairs.remove(motorRotorPairs.size()-1);
+                    try {
+                        calibrationRobotNotification.calibrateMotorRotorPair(motorRotorPair);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
                     }
                 }
 
