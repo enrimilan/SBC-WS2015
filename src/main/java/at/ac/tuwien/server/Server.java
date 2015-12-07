@@ -13,6 +13,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -30,6 +31,11 @@ public class Server extends UnicastRemoteObject implements IServer {
     private Queue<ICalibrationRobotNotification> calibrationRobots;
     private Queue<ILogisticRobotNotification> logisticRobots;
 
+    public static CopyOnWriteArrayList<Part> casesAll = new CopyOnWriteArrayList<Part>();
+
+    public static List<Part> retrunAllParts(){
+        return casesAll;
+    }
     public Server() throws RemoteException, AlreadyBoundException {
         super();
         this.cases = new CopyOnWriteArrayList<Part>();
@@ -53,6 +59,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     public synchronized void supply(Part part) throws RemoteException {
         if(part.getPartType() == PartType.CASE){
             cases.add(part);
+            casesAll.add(part);
         }
         else if(part.getPartType() == PartType.CONTROL_UNIT){
             controlUnits.add(part);
