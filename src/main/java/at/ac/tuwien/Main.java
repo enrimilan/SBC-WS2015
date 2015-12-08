@@ -1,5 +1,6 @@
 package at.ac.tuwien;
 
+import at.ac.tuwien.entity.Part;
 import at.ac.tuwien.entity.PartG;
 import at.ac.tuwien.server.Server;
 import at.ac.tuwien.view.NotificationCallback;
@@ -25,9 +26,9 @@ public class Main extends Application {
     private static Logger logger = LoggerFactory.getLogger(Main.class);
 
     private boolean isActive = true;
-    private ObservableList<PartG> partsData = FXCollections.observableArrayList();
+    private ObservableList<Part> partsData = FXCollections.observableArrayList();
     private Server s ;
-    public ObservableList<PartG> getPartsData() {
+    public ObservableList<Part> getPartsData() {
         return partsData;
     }
 
@@ -64,7 +65,7 @@ public class Main extends Application {
                 s =   new Server();
                 s.registerNotificatioCallback(new NotificationCallback() {
                     @Override
-                    public void notifyGUI(PartG part) {
+                    public void notifyGUI(Part part) {
                         partsData.add(part);
                     }
                 });

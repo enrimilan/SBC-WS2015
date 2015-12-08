@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class SupplyOverviewController {
 
@@ -22,13 +23,13 @@ public class SupplyOverviewController {
     private Main main;
 
     @FXML
-    private TableView<PartG> supplyTable;
+    private TableView<Part> supplyTable;
     @FXML
-    private TableColumn<PartG, String> id;
+    private TableColumn<Part, String> id;
     @FXML
-    private TableColumn<PartG, String> partType;
+    private TableColumn<Part, String> partType;
     @FXML
-    private TableColumn<PartG, String> supplierId;
+    private TableColumn<Part, String> supplierId;
     @FXML
     private Button supplyButton = new Button();
 
@@ -68,9 +69,9 @@ public class SupplyOverviewController {
     @FXML
     private void initialize() {
         supplyComboBox.setItems(supplyOptions);
-        id.setCellValueFactory(cellData -> cellData.getValue().partIdProperty().asString());
-        partType.setCellValueFactory(cellData -> cellData.getValue().partTypeProperty().asString());
-        supplierId.setCellValueFactory(cellData -> cellData.getValue().supplierIdProperty().asString());
+        id.setCellValueFactory(new PropertyValueFactory<>("partId"));
+        partType.setCellValueFactory(new PropertyValueFactory<>("partType"));
+        supplierId.setCellValueFactory(new PropertyValueFactory<>("supplierId"));
     }
 
     public void setMain(Main main) {

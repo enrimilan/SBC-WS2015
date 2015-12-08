@@ -87,7 +87,7 @@ public class Server extends UnicastRemoteObject implements IServer {
             rotors.add(part);
             collectAllParts.add(part);
         }
-        notificationCallback.notifyGUI(new PartG(part));
+        notificationCallback.notifyGUI(part);
         logger.debug("Notify GUI: " + part + " has been supplied.");
     }
 
