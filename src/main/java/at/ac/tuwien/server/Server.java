@@ -31,13 +31,19 @@ public class Server extends UnicastRemoteObject implements IServer {
     private Queue<ICalibrationRobotNotification> calibrationRobots;
     private Queue<ILogisticRobotNotification> logisticRobots;
 
-    public static CopyOnWriteArrayList<Part> casesAll = new CopyOnWriteArrayList<Part>();
+    private CopyOnWriteArrayList<Part> collectAllParts;
 
-    public static List<Part> retrunAllParts(){
-        return casesAll;
+    public  List<PartG> returnAllCases(){
+        List<Part> parts = new ArrayList<>(collectAllParts);
+        List<PartG> partsG = new ArrayList<>();
+        for(Part p: parts){
+            partsG.add(new PartG(p));
+        }
+        return partsG;
     }
     public Server() throws RemoteException, AlreadyBoundException {
         super();
+        this.collectAllParts = new CopyOnWriteArrayList<Part>();
         this.cases = new CopyOnWriteArrayList<Part>();
         this.controlUnits = new CopyOnWriteArrayList<Part>();
         this.motors = new CopyOnWriteArrayList<Part>();
@@ -59,16 +65,19 @@ public class Server extends UnicastRemoteObject implements IServer {
     public synchronized void supply(Part part) throws RemoteException {
         if(part.getPartType() == PartType.CASE){
             cases.add(part);
-            casesAll.add(part);
+            collectAllParts.add(part);
         }
         else if(part.getPartType() == PartType.CONTROL_UNIT){
             controlUnits.add(part);
+            collectAllParts.add(part);
         }
         else if(part.getPartType() == PartType.MOTOR){
             motors.add(part);
+            collectAllParts.add(part);
         }
         else if(part.getPartType() == PartType.ROTOR){
             rotors.add(part);
+            collectAllParts.add(part);
         }
         logger.debug("Notify GUI: " + part + " has been supplied.");
     }

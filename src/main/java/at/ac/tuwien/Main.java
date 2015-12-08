@@ -1,16 +1,17 @@
 package at.ac.tuwien;
 
-import at.ac.tuwien.entity.Part;
+import at.ac.tuwien.entity.PartG;
 import at.ac.tuwien.server.Server;
 import at.ac.tuwien.view.SupplyOverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,103 +23,57 @@ public class Main extends Application {
 
     private static Logger logger = LoggerFactory.getLogger(Main.class);
 
-    private Stage primaryStage;
-    private BorderPane rootLayout;
-
-    boolean isActive = true;
-
-
-    private ObservableList<Part> partsData = FXCollections.observableArrayList();
-
-
-    public Main() { }
-
-    public ObservableList<Part> getPartsData() {
+    private boolean isActive = true;
+    private ObservableList<PartG> partsData = FXCollections.observableArrayList();
+    private Server s ;
+    public ObservableList<PartG> getPartsData() {
         return partsData;
     }
 
 
     public static void main(String[] args) {
         logger.info("Application started.");
-        try {
-            new Server();
-           launch(args);
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (AlreadyBoundException e) {
-            e.printStackTrace();
-        }
-
+        launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Drone Factory");
+    public void start(Stage primaryStage) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader().getResource("OutputOverview.fxml"));
+        Parent root = loader.load();
 
-        initRootLayout();
-        showSuppliesOverview();
+        primaryStage.setTitle("Drone Factory");
+        primaryStage.setMaximized(true);
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+        primaryStage.setOnCloseRequest(we -> System.exit(0));
+
+        SupplyOverviewController controller = loader.getController();
+        controller.setMain(this);
 
         Updater u = new Updater();
         u.start();
     }
 
 
-    public void initRootLayout() {
-        try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getClassLoader().getResource("RootLayout.fxml"));
-            rootLayout = (BorderPane) loader.load();
-
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void showSuppliesOverview() {
-        try {
-
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getClassLoader().getResource("OutputOverview.fxml"));
-            AnchorPane personOverview = (AnchorPane) loader.load();
-            rootLayout.setCenter(personOverview);
-
-            SupplyOverviewController controller = loader.getController();
-            controller.setMain(this);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Returns the main stage.
-     * @return
-     */
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-
     private class Updater extends Thread {
         @Override
         public void run() {
+            try {
+                s =   new Server();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (AlreadyBoundException e) {
+                e.printStackTrace();
+            }
             while (isActive) {
                 try {
-                    partsData.addAll(Server.retrunAllParts());
+                    partsData.setAll(s.returnAllCases());
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                    logger.error(ex.toString());
                 }
             }
         }
-
     }
 }
