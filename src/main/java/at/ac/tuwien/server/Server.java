@@ -4,6 +4,7 @@ import at.ac.tuwien.robot.IAssemblyRobotNotification;
 import at.ac.tuwien.entity.*;
 import at.ac.tuwien.robot.ICalibrationRobotNotification;
 import at.ac.tuwien.robot.ILogisticRobotNotification;
+import at.ac.tuwien.view.NotificationCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,8 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     private CopyOnWriteArrayList<Part> collectAllParts;
 
+    private NotificationCallback notificationCallback;
+
     public  List<PartG> returnAllCases(){
         List<Part> parts = new ArrayList<>(collectAllParts);
         List<PartG> partsG = new ArrayList<>();
@@ -41,6 +44,11 @@ public class Server extends UnicastRemoteObject implements IServer {
         }
         return partsG;
     }
+
+    public void registerNotificatioCallback(NotificationCallback notificationCallback){
+        this.notificationCallback = notificationCallback;
+    }
+
     public Server() throws RemoteException, AlreadyBoundException {
         super();
         this.collectAllParts = new CopyOnWriteArrayList<Part>();
@@ -79,6 +87,7 @@ public class Server extends UnicastRemoteObject implements IServer {
             rotors.add(part);
             collectAllParts.add(part);
         }
+        notificationCallback.notifyGUI(new PartG(part));
         logger.debug("Notify GUI: " + part + " has been supplied.");
     }
 

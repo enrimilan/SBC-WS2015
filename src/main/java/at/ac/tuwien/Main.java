@@ -2,6 +2,7 @@ package at.ac.tuwien;
 
 import at.ac.tuwien.entity.PartG;
 import at.ac.tuwien.server.Server;
+import at.ac.tuwien.view.NotificationCallback;
 import at.ac.tuwien.view.SupplyOverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -61,19 +62,25 @@ public class Main extends Application {
         public void run() {
             try {
                 s =   new Server();
+                s.registerNotificatioCallback(new NotificationCallback() {
+                    @Override
+                    public void notifyGUI(PartG part) {
+                        partsData.add(part);
+                    }
+                });
             } catch (RemoteException e) {
                 e.printStackTrace();
             } catch (AlreadyBoundException e) {
                 e.printStackTrace();
             }
-            while (isActive) {
+            /*while (isActive) {
                 try {
                     partsData.setAll(s.returnAllCases());
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                    logger.error(ex.toString());
                 }
-            }
+            }*/
         }
     }
 }
