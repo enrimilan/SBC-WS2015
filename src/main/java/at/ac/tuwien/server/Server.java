@@ -32,18 +32,8 @@ public class Server extends UnicastRemoteObject implements IServer {
     private Queue<ICalibrationRobotNotification> calibrationRobots;
     private Queue<ILogisticRobotNotification> logisticRobots;
 
-    private CopyOnWriteArrayList<Part> collectAllParts;
-
     private NotificationCallback notificationCallback;
 
-    public  List<PartG> returnAllCases(){
-        List<Part> parts = new ArrayList<>(collectAllParts);
-        List<PartG> partsG = new ArrayList<>();
-        for(Part p: parts){
-            partsG.add(new PartG(p));
-        }
-        return partsG;
-    }
 
     public void registerNotificatioCallback(NotificationCallback notificationCallback){
         this.notificationCallback = notificationCallback;
@@ -51,7 +41,6 @@ public class Server extends UnicastRemoteObject implements IServer {
 
     public Server() throws RemoteException, AlreadyBoundException {
         super();
-        this.collectAllParts = new CopyOnWriteArrayList<Part>();
         this.cases = new CopyOnWriteArrayList<Part>();
         this.controlUnits = new CopyOnWriteArrayList<Part>();
         this.motors = new CopyOnWriteArrayList<Part>();
@@ -73,22 +62,18 @@ public class Server extends UnicastRemoteObject implements IServer {
     public synchronized void supply(Part part) throws RemoteException {
         if(part.getPartType() == PartType.CASE){
             cases.add(part);
-            collectAllParts.add(part);
         }
         else if(part.getPartType() == PartType.CONTROL_UNIT){
             controlUnits.add(part);
-            collectAllParts.add(part);
         }
         else if(part.getPartType() == PartType.MOTOR){
             motors.add(part);
-            collectAllParts.add(part);
         }
         else if(part.getPartType() == PartType.ROTOR){
             rotors.add(part);
-            collectAllParts.add(part);
         }
-        notificationCallback.notifyGUI(part);
-        logger.debug("Notify GUI: " + part + " has been supplied.");
+        notificationCallback.supplyNotifier(part);
+//        logger.debug("Notify GUI: " + part + " has been supplied.");
     }
 
     @Override
@@ -111,7 +96,8 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized void droneAssembled(Drone drone) throws RemoteException {
         drones.add(drone);
-        logger.debug("Notify GUI: " + drone + " has been assembled.");
+        notificationCallback.droneNotifier(drones);
+//        logger.debug("Notify GUI: " + drone + " has been assembled.");
     }
 
     @Override
@@ -123,7 +109,7 @@ public class Server extends UnicastRemoteObject implements IServer {
     @Override
     public synchronized void motorRotorPairCalibrated(Module module) throws RemoteException {
         motorRotorPairs.add(0, module);
-        logger.debug("Notify GUI: " + module + " has been calibrated.");
+//        logger.debug("Notify GUI: " + module + " has been calibrated.");
     }
 
     @Override
@@ -134,7 +120,8 @@ public class Server extends UnicastRemoteObject implements IServer {
         else{
             drones.add(drone);
         }
-        logger.debug("Notify GUI: " + drone + " has been calibrated.");
+//        logger.debug("Notify GUI: " + drone + " has been calibrated.");
+        notificationCallback.droneNotifier(drones);
     }
 
     @Override
@@ -147,12 +134,14 @@ public class Server extends UnicastRemoteObject implements IServer {
     public synchronized void droneTested(Drone drone) throws RemoteException {
         if(drone.getStatus() == Status.TESTED_GOOD){
             goodDrones.add(drone);
+            notificationCallback.testGoodDroneNotifier(goodDrones);
         }
         else{
             badDrones.add(drone);
+            notificationCallback.testBadDroneNotifier(badDrones);
         }
 
-        logger.debug("Notify GUI: " + drone + " has been tested.");
+//        logger.debug("Notify GUI: " + drone + " has been tested.");
     }
 
     private class RequestHandler implements Runnable{

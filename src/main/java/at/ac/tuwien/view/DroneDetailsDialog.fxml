@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="949.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.view.DroneDetailsDialogController">
+   <children>
+      <Label layoutX="25.0" layoutY="16.0" text="Drone UUID :" />
+      <Label layoutX="567.0" layoutY="15.0" text="Drone Status:" />
+      <Label fx:id="label_droneStatus" layoutX="567.0" layoutY="32.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="label_droneId" layoutX="25.0" layoutY="33.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Separator layoutX="27.0" layoutY="52.0" prefHeight="3.0" prefWidth="899.0" />
+      <Label layoutX="444.0" layoutY="73.0" text="PARTS">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="27.0" layoutY="94.0" text="Module {Case - ControlUnit}">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="131.0" layoutY="126.0" text="Case UUID:" />
+      <Label fx:id="label_droneCaseId" layoutX="131.0" layoutY="143.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="131.0" layoutY="207.0" text="ControlUnit UUID:" />
+      <Label fx:id="label_droneCUId" layoutX="131.0" layoutY="224.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="149.0" layoutY="162.0" text="Supplied by robot with UUID:">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="label_droneCaseSupplierId" layoutX="149.0" layoutY="180.0" text="N/A">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="149.0" layoutY="244.0" text="Supplied by robot with UUID:">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="label_droneCUSupplierId" layoutX="149.0" layoutY="261.0" text="N/A">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Separator layoutX="464.0" layoutY="138.0" orientation="VERTICAL" prefHeight="102.0" prefWidth="5.0" />
+      <Label layoutX="552.0" layoutY="125.0" text="Module assembled by robot with UUID:" />
+      <Label fx:id="label_droneModuleCCUassemblerId" layoutX="552.0" layoutY="141.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="552.0" layoutY="171.0" text="Module calibrated by robot with UUID:" />
+      <Label fx:id="label_droneModuleCCUcalibratorId" layoutX="552.0" layoutY="188.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="552.0" layoutY="216.0" text="Module calibration value:" />
+      <Label fx:id="label_droneModuleCCUcalibrationValue" layoutX="552.0" layoutY="233.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="36.0" layoutY="301.0" text="Module {Motor - Rotor Pair 1}">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="35.0" layoutY="321.0" text="Motor UUID:" />
+      <Label fx:id="lbl_CP1_MotorId" layoutX="35.0" layoutY="338.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="35.0" layoutY="402.0" text="Rotor UUID:" />
+      <Label fx:id="lbl_CP1_RotorId" layoutX="35.0" layoutY="419.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="53.0" layoutY="357.0" text="Supplied by robot with UUID:">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_CP1_MotorSupplierId" layoutX="53.0" layoutY="375.0" text="N/A">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="53.0" layoutY="439.0" text="Supplied by robot with UUID:">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_CP1_RotorSupplierId" layoutX="53.0" layoutY="456.0" text="N/A">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="36.0" layoutY="486.0" text="Module assembled by robot with UUID:" />
+      <Label fx:id="lbl_CP1_AssemblerId" layoutX="36.0" layoutY="502.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="36.0" layoutY="521.0" text="Module calibrated by robot with UUID:" />
+      <Label fx:id="lbl_CP1_CalibratorId" layoutX="36.0" layoutY="538.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="36.0" layoutY="555.0" text="Module calibration value:" />
+      <Label fx:id="lbl_CP1_CalibrationVlue" layoutX="36.0" layoutY="572.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="326.0" layoutY="301.0" text="Module {Motor - Rotor Pair 2}">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="330.0" layoutY="322.0" text="Motor UUID:" />
+      <Label fx:id="lbl_CP2_MotorId" layoutX="330.0" layoutY="339.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_CP2_RotorId" layoutX="330.0" layoutY="420.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="348.0" layoutY="358.0" text="Supplied by robot with UUID:">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_CP2_MotorSupplierId" layoutX="348.0" layoutY="376.0" text="N/A">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="348.0" layoutY="440.0" text="Supplied by robot with UUID:">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_CP2_RotorSupplierId" layoutX="348.0" layoutY="457.0" text="N/A">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="330.0" layoutY="484.0" text="Module assembled by robot with UUID:" />
+      <Label fx:id="lbl_CP2_AssemblerId" layoutX="330.0" layoutY="500.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="330.0" layoutY="519.0" text="Module calibrated by robot with UUID:" />
+      <Label fx:id="lbl_CP2_CalibratorId" layoutX="330.0" layoutY="536.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="330.0" layoutY="553.0" text="Module calibration value:" />
+      <Label fx:id="lbl_CP2_CalibrationVlue" layoutX="330.0" layoutY="570.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="630.0" layoutY="302.0" text="Module {Motor - Rotor Pair 3}">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="630.0" layoutY="324.0" text="Motor UUID:" />
+      <Label fx:id="lbl_CP3_MotorId" layoutX="630.0" layoutY="341.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_CP3_RotorId" layoutX="630.0" layoutY="422.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="648.0" layoutY="360.0" text="Supplied by robot with UUID:">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_CP3_MotorSupplierId" layoutX="648.0" layoutY="378.0" text="N/A">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="648.0" layoutY="442.0" text="Supplied by robot with UUID:">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_CP3_RotorSupplierId" layoutX="648.0" layoutY="459.0" text="N/A">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="630.0" layoutY="484.0" text="Module assembled by robot with UUID:" />
+      <Label fx:id="lbl_CP3_AssemblerId" layoutX="630.0" layoutY="500.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="630.0" layoutY="519.0" text="Module calibrated by robot with UUID:" />
+      <Label fx:id="lbl_CP3_CalibratorId" layoutX="630.0" layoutY="536.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="630.0" layoutY="553.0" text="Module calibration value:" />
+      <Label fx:id="lbl_CP3_CalibrationVlue" layoutX="630.0" layoutY="570.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="330.0" layoutY="403.0" text="Rotor UUID:" />
+      <Label layoutX="630.0" layoutY="403.0" text="Rotor UUID:" />
+      <Separator layoutX="25.0" layoutY="287.0" prefHeight="3.0" prefWidth="899.0" />
+   </children>
+</Pane>
