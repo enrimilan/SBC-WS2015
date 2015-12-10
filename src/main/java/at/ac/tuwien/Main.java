@@ -1,10 +1,11 @@
 package at.ac.tuwien;
 
 import at.ac.tuwien.entity.Drone;
+import at.ac.tuwien.entity.Module;
 import at.ac.tuwien.entity.Part;
 import at.ac.tuwien.server.Server;
 import at.ac.tuwien.view.DroneDetailsDialogController;
-import at.ac.tuwien.view.NotificationCallback;
+import at.ac.tuwien.view.INotificationCallback;
 import at.ac.tuwien.view.OverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -26,20 +27,24 @@ public class Main extends Application {
 
     private static Logger logger = LoggerFactory.getLogger(Main.class);
 
+    private Server s ;
     private Stage primaryStage;
+
     private ObservableList<Part> partsData = FXCollections.observableArrayList();
     private ObservableList<Drone> dronesData = FXCollections.observableArrayList();
-    private ObservableList<Drone> assembledData = FXCollections.observableArrayList();
-
+    private ObservableList<Module> modulesData = FXCollections.observableArrayList();
     private ObservableList<Drone> goodDronesData = FXCollections.observableArrayList();
     private ObservableList<Drone> badDronesData = FXCollections.observableArrayList();
 
-    private Server s ;
     public ObservableList<Part> getPartsData() {
         return partsData;
     }
     public ObservableList<Drone> getDronesData() {
         return dronesData;
+    }
+
+    public ObservableList<Module> getModulesData() {
+        return modulesData;
     }
 
     public ObservableList<Drone> getGoodDronesData() {
@@ -48,10 +53,6 @@ public class Main extends Application {
 
     public ObservableList<Drone> getBadDronesData() {
         return badDronesData;
-    }
-
-    public ObservableList<Drone> getAssembledData() {
-        return assembledData;
     }
 
 
@@ -118,10 +119,15 @@ public class Main extends Application {
         public void run() {
             try {
                 s =   new Server();
-                s.registerNotificatioCallback(new NotificationCallback() {
+                s.registerNotificatioCallback(new INotificationCallback() {
                     @Override
-                    public void supplyNotifier(Part part) {
-                        partsData.add(part);
+                    public void supplyNotifier(CopyOnWriteArrayList<Part> cases, CopyOnWriteArrayList<Part> controlUnits, CopyOnWriteArrayList<Part> motors, CopyOnWriteArrayList<Part> rotors) {
+                        CopyOnWriteArrayList<Part> allParts = new CopyOnWriteArrayList<Part>();
+                        allParts.addAll(cases);
+                        allParts.addAll(controlUnits);
+                        allParts.addAll(motors);
+                        allParts.addAll(rotors);
+                        partsData.setAll(allParts);
                     }
 
                     @Override
@@ -137,6 +143,14 @@ public class Main extends Application {
                     @Override
                     public void testBadDroneNotifier(CopyOnWriteArrayList<Drone> drones) {
                         badDronesData.setAll(drones);
+                    }
+
+                    @Override
+                    public void modulesNotifier(CopyOnWriteArrayList<Module> cu, CopyOnWriteArrayList<Module> mr) {
+                        CopyOnWriteArrayList<Module> allModules = new CopyOnWriteArrayList<Module>();
+                        allModules.addAll(mr);
+                        allModules.addAll(cu);
+                        modulesData.setAll(allModules);
                     }
 
                 });

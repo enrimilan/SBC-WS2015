@@ -6,8 +6,12 @@ package at.ac.tuwien.view;
 import at.ac.tuwien.Main;
 import at.ac.tuwien.connection.ConnectionException;
 import at.ac.tuwien.entity.Drone;
+import at.ac.tuwien.entity.Module;
 import at.ac.tuwien.entity.Part;
 import at.ac.tuwien.entity.PartType;
+import at.ac.tuwien.robot.AssemblyRobot;
+import at.ac.tuwien.robot.CalibrationRobot;
+import at.ac.tuwien.robot.LogisticRobot;
 import at.ac.tuwien.robot.SupplierRobot;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,21 +21,46 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
+import java.rmi.RemoteException;
+
 public class OverviewController {
 
     public OverviewController() {}
     private Main main;
 
+
+    @FXML
+    private Label lbl_StockSize;
+    @FXML
+    private Label lbl_GoodDrones;
+    @FXML
+    private Label lbl_BadDrones;
+
+
     @FXML
     private TableView<Part> supplyTable;
     @FXML
-    private TableColumn<Part, String> id;
+    private TableColumn<Part, String> partId_supplyTable;
     @FXML
-    private TableColumn<Part, String> partType;
+    private TableColumn<Part, String> partType_supplyTable;
     @FXML
-    private TableColumn<Part, String> supplierId;
+    private TableColumn<Part, String> supplierId_supplyTable;
+
+
+
     @FXML
-    private Button supplyButton = new Button();
+    private Button supplyButton;
+    @FXML
+    private Button startAssemblerButton;
+    @FXML
+    private Button startCalibratorButton;
+    @FXML
+    private TextField calibrationValueMIN_textfield;
+    @FXML
+    private TextField calibrationValueMAX_textfield;
+
+    @FXML
+    private Button startTesterButton;
 
     @FXML
     private TextField supplyTxtField;
@@ -66,30 +95,55 @@ public class OverviewController {
         }
     }
 
+    @FXML
+    private void handleAssemblerButtonAction(){
+        try {
+            AssemblyRobot aR = new AssemblyRobot();
+            Thread threadAssemble = new Thread(aR);
+            threadAssemble.start();
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
 
-    ////////////////////////
+    @FXML
+    private void handleCalibratorButtonAction(){
+        try {
+            CalibrationRobot cR = new CalibrationRobot();
+            Thread threadCalibrate = new Thread(cR);
+            threadCalibrate.start();
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleTesterButtonAction(){
+        try {
+            int min = Integer.parseInt(calibrationValueMIN_textfield.getCharacters().toString());
+            int max = Integer.parseInt(calibrationValueMAX_textfield.getCharacters().toString());
+            LogisticRobot lR = new LogisticRobot(min, max);
+            Thread threadTester = new Thread(lR);
+            threadTester.start();
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /////////Drones Table //////////
 
     @FXML
     private TableView<Drone> dronesTable;
-
-
-
     @FXML
     private TableColumn<Drone, String> droneId;
     @FXML
     private TableColumn<Drone, String> droneStatus;
-    @FXML
-    private TableColumn<Drone, String> droneCalibrationSum;
-
-    @FXML
-    private Label label_droneId;
-
-    @FXML
-    private Label label_droneStatus;
-
-    @FXML
-    private Label label_moduleCaseControlUnitPair;
-
 
     private void showDroneDetails(Drone selectedDrone) {
 
@@ -106,70 +160,44 @@ public class OverviewController {
 
             alert.showAndWait();
         }
-
     }
 
-
-
-
-    ////  Asmebly ///
+    ////  Modules ///
 
     @FXML
-    private TableView<Drone> assemblyTable;
-
+    private TableView<Module> moduleTableView;
     @FXML
-    private TableColumn<Drone, String> droneId_assemblyTable;
-
+    private TableColumn<Module, String> moduleType_moduleTableView;
     @FXML
-    private TableColumn<Drone, String> partId_assembyTable;
-
+    private TableColumn<Module, String> moduleStatus_moduleTableView;
     @FXML
-    private TableColumn<Drone, String> partType_assembyTable;
-
+    private TableColumn<Module, Integer> moduleCalibrationValue_moduleTableView;
     @FXML
-    private TableColumn<Drone, String> assemblerId_assembyTable;
-
+    private TableColumn<Module, String> moduleAssemblerId_moduleTableView;
+    @FXML
+    private TableColumn<Module, String> moduleCalibratorrId_moduleTableView;
 
 
     @FXML
     private RadioButton rbGoodDrones;
-
     @FXML
     private RadioButton rbBadDrones;
 
 
     ////  Good Drones ///
-
     @FXML
     private TableView<Drone> goodDronesTable;
-
-    @FXML
-    private TableColumn<Drone, String> calibrationMinValue_goodDronesTable;
-
-    @FXML
-    private TableColumn<Drone, String> calibrationMaxValue_goodDronesTable;
-
     @FXML
     private TableColumn<Drone, String> droneId_goodDronesTable;
-
     @FXML
     private TableColumn<Drone, String> assemblerId_goodDronesTable;
 
 
-    ////  Good Drones ///
-
+    ////  Bad Drones ///
     @FXML
     private TableView<Drone> badDronesTable;
-
-    @FXML
-    private TableColumn<Drone, String> calibrationMinValue_badDronesTable;
-
-    @FXML
-    private TableColumn<Drone, String> calibrationMaxValue_badDronesTable;
-
     @FXML
     private TableColumn<Drone, String> droneId_badDronesTable;
-
     @FXML
     private TableColumn<Drone, String> assemblerId_badDronesTable;
 
@@ -177,10 +205,12 @@ public class OverviewController {
 
     @FXML
     private void initialize() {
+        badDronesTable.setVisible(false);
         supplyComboBox.setItems(supplyOptions);
-        id.setCellValueFactory(new PropertyValueFactory<>("partId"));
-        partType.setCellValueFactory(new PropertyValueFactory<>("partType"));
-        supplierId.setCellValueFactory(new PropertyValueFactory<>("supplierId"));
+
+        partId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partId"));
+        partType_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partType"));
+        supplierId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("supplierId"));
 
         droneId.setCellValueFactory(new PropertyValueFactory<>("droneId"));
         droneStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
@@ -191,23 +221,27 @@ public class OverviewController {
 
         droneId_badDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneId"));
         assemblerId_badDronesTable.setCellValueFactory(new PropertyValueFactory<>("assemblerId"));
-        badDronesTable.setVisible(false);
 
-//        droneId_assemblyTable.setCellValueFactory(new PropertyValueFactory<>("droneId"));
-//        partId_assembyTable.setCellValueFactory(new PropertyValueFactory<>("partId"));
-//        partType_assembyTable.setCellValueFactory(new PropertyValueFactory<>("partType"));
-//        assemblerId_assembyTable.setCellValueFactory(new PropertyValueFactory<>("assemblerId"));
+        moduleType_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("moduleType"));
+        moduleStatus_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("status"));
+        moduleCalibrationValue_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("calibrationValue"));
+        moduleAssemblerId_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("assemblerId"));
+        moduleCalibratorrId_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("calibratorId"));
 
+
+        lbl_StockSize.setText(String.valueOf(supplyTable.getItems().size()));
+        lbl_GoodDrones.setText(String.valueOf(goodDronesTable.getItems().size()));
+        lbl_BadDrones.setText(String.valueOf(badDronesTable.getItems().size()));
     }
 
     public void setMain(Main main) {
         this.main = main;
+
         supplyTable.setItems(main.getPartsData());
         dronesTable.setItems(main.getDronesData());
-
+        moduleTableView.setItems(main.getModulesData());
         goodDronesTable.setItems(main.getGoodDronesData());
         badDronesTable.setItems(main.getBadDronesData());
-//        assemblyTable.setItems(main.g);
 
         dronesTable.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -249,7 +283,6 @@ public class OverviewController {
             public void handle(MouseEvent event) {
                 goodDronesTable.setVisible(false);
                 badDronesTable.setVisible(true);
-
             }
         });
 

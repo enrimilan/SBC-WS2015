@@ -15,7 +15,6 @@ public class Drone implements Serializable {
     public Drone(Module caseControlUnitPair, UUID assemblerId) {
         this.droneId = UUID.randomUUID();
         this.caseControlUnitPair = caseControlUnitPair;
-
         this.assemblerId = assemblerId;
         this.status = Status.ASSEMBLED;
     }
