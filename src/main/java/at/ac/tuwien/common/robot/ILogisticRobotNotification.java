@@ -1,6 +1,6 @@
-package at.ac.tuwien.robot;
+package at.ac.tuwien.common.robot;
 
-import at.ac.tuwien.entity.Drone;
+import at.ac.tuwien.common.entity.Drone;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

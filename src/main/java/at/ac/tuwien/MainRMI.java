@@ -1,12 +1,12 @@
 package at.ac.tuwien;
 
-import at.ac.tuwien.entity.Drone;
-import at.ac.tuwien.entity.Module;
-import at.ac.tuwien.entity.Part;
-import at.ac.tuwien.server.Server;
-import at.ac.tuwien.view.DroneDetailsDialogController;
-import at.ac.tuwien.view.INotificationCallback;
-import at.ac.tuwien.view.OverviewController;
+import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Module;
+import at.ac.tuwien.common.entity.Part;
+import at.ac.tuwien.rmi.Server;
+import at.ac.tuwien.common.view.DroneDetailsDialogController;
+import at.ac.tuwien.common.view.INotificationCallback;
+import at.ac.tuwien.common.view.OverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,9 +23,9 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Main extends Application {
+public class MainRMI extends Application {
 
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
+    private static Logger logger = LoggerFactory.getLogger(MainRMI.class);
 
     private Server s ;
     private Stage primaryStage;

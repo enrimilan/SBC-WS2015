@@ -1,9 +1,9 @@
-package at.ac.tuwien.robot;
+package at.ac.tuwien.common.robot;
 
-import at.ac.tuwien.connection.Connection;
-import at.ac.tuwien.connection.ConnectionException;
-import at.ac.tuwien.entity.Drone;
-import at.ac.tuwien.entity.Status;
+import at.ac.tuwien.rmi.RmiConnection;
+import at.ac.tuwien.common.connection.ConnectionException;
+import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +17,7 @@ public class LogisticRobot extends UnicastRemoteObject implements Runnable, ILog
 
     private final static Logger logger = LoggerFactory.getLogger(LogisticRobot.class);
     private final static int INTERVAL = 1000;
-    private Connection connection;
+    private RmiConnection connection;
     private UUID id;
     private LogisticRobot logisticRobot;
     private int minCalibrationValue;
@@ -27,7 +27,7 @@ public class LogisticRobot extends UnicastRemoteObject implements Runnable, ILog
         super();
         this.minCalibrationValue = minCalibrationValue;
         this.maxCalibrationValue = maxCalibrationValue;
-        this.connection = new Connection();
+        this.connection = new RmiConnection();
         connection.establish();
         this.id = UUID.randomUUID();
         this.logisticRobot = this;

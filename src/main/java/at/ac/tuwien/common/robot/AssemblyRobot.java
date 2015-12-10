@@ -1,8 +1,10 @@
-package at.ac.tuwien.robot;
+package at.ac.tuwien.common.robot;
 
-import at.ac.tuwien.connection.Connection;
-import at.ac.tuwien.connection.ConnectionException;
-import at.ac.tuwien.entity.*;
+import at.ac.tuwien.rmi.RmiConnection;
+import at.ac.tuwien.common.connection.ConnectionException;
+import at.ac.tuwien.common.connection.IConnection;
+import at.ac.tuwien.common.entity.*;
+import at.ac.tuwien.xvsm.XVSMConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,13 +19,13 @@ public class AssemblyRobot extends UnicastRemoteObject implements Runnable, IAss
 
     private final static Logger logger = LoggerFactory.getLogger(AssemblyRobot.class);
     private final static int INTERVAL = 1000;
-    private Connection connection;
+    private IConnection connection;
     private UUID id;
     private AssemblyRobot assemblyRobot;
 
-    public AssemblyRobot() throws ConnectionException, RemoteException {
+    public AssemblyRobot(IConnection connection) throws ConnectionException, RemoteException {
         super();
-        this.connection = new Connection();
+        this.connection = new RmiConnection();
         connection.establish();
         this.id = UUID.randomUUID();
         this.assemblyRobot = this;
@@ -113,12 +115,18 @@ public class AssemblyRobot extends UnicastRemoteObject implements Runnable, IAss
     }
 
     public static void main(String[] args){
-        if(args.length != 0){
-            throw new IllegalArgumentException("Usage: AssemblyRobot");
+        if(args.length != 1){
+            throw new IllegalArgumentException("Usage: AssemblyRobot rmi|xvsm");
         }
-
         try {
-            AssemblyRobot assemblyRobot = new AssemblyRobot();
+            IConnection connection;
+            if(args[0].equals("rmi")){
+                connection = new RmiConnection();
+            }
+            else{
+                connection = new XVSMConnection();
+            }
+            AssemblyRobot assemblyRobot = new AssemblyRobot(connection);
             assemblyRobot.run();
         } catch (ConnectionException e) {
             e.printStackTrace();

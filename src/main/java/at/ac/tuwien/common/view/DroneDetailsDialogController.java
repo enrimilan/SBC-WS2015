@@ -1,7 +1,7 @@
-package at.ac.tuwien.view;
+package at.ac.tuwien.common.view;
 
-import at.ac.tuwien.entity.Drone;
-import at.ac.tuwien.entity.PartType;
+import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.PartType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;

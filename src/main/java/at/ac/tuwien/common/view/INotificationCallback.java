@@ -1,8 +1,8 @@
-package at.ac.tuwien.view;
+package at.ac.tuwien.common.view;
 
-import at.ac.tuwien.entity.Drone;
-import at.ac.tuwien.entity.Module;
-import at.ac.tuwien.entity.Part;
+import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Module;
+import at.ac.tuwien.common.entity.Part;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 

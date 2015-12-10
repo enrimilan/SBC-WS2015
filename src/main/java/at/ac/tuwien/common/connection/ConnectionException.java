@@ -1,4 +1,4 @@
-package at.ac.tuwien.connection;
+package at.ac.tuwien.common.connection;
 
 public class ConnectionException extends Exception {
     public ConnectionException() {

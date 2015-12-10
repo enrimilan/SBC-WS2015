@@ -1,18 +1,20 @@
-package at.ac.tuwien.view;
+package at.ac.tuwien.common.view;
 
 /**
  * Created by Arber on 07.12.2015.
  */
-import at.ac.tuwien.Main;
-import at.ac.tuwien.connection.ConnectionException;
-import at.ac.tuwien.entity.Drone;
-import at.ac.tuwien.entity.Module;
-import at.ac.tuwien.entity.Part;
-import at.ac.tuwien.entity.PartType;
-import at.ac.tuwien.robot.AssemblyRobot;
-import at.ac.tuwien.robot.CalibrationRobot;
-import at.ac.tuwien.robot.LogisticRobot;
-import at.ac.tuwien.robot.SupplierRobot;
+import at.ac.tuwien.MainRMI;
+import at.ac.tuwien.common.connection.ConnectionException;
+import at.ac.tuwien.rmi.RmiConnection;
+import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Module;
+import at.ac.tuwien.common.entity.Part;
+import at.ac.tuwien.common.entity.PartType;
+import at.ac.tuwien.common.robot.AssemblyRobot;
+import at.ac.tuwien.common.robot.CalibrationRobot;
+import at.ac.tuwien.common.robot.LogisticRobot;
+import at.ac.tuwien.common.robot.SupplierRobot;
+import at.ac.tuwien.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -26,7 +28,7 @@ import java.rmi.RemoteException;
 public class OverviewController {
 
     public OverviewController() {}
-    private Main main;
+    private MainRMI main;
 
 
     @FXML
@@ -84,7 +86,7 @@ public class OverviewController {
                 supplyTxtField.clear();
                 if (amount > 0) {
                     if ( partType != null) {
-                        SupplierRobot sR = new SupplierRobot(partType, amount);
+                        SupplierRobot sR = new SupplierRobot(Utils.getConnection("rmi"), partType, amount);
                         Thread threadSupply = new Thread(sR);
                         threadSupply.start();
                     }
@@ -98,7 +100,7 @@ public class OverviewController {
     @FXML
     private void handleAssemblerButtonAction(){
         try {
-            AssemblyRobot aR = new AssemblyRobot();
+            AssemblyRobot aR = new AssemblyRobot(new RmiConnection());
             Thread threadAssemble = new Thread(aR);
             threadAssemble.start();
         } catch (ConnectionException e) {
@@ -234,7 +236,7 @@ public class OverviewController {
         lbl_BadDrones.setText(String.valueOf(badDronesTable.getItems().size()));
     }
 
-    public void setMain(Main main) {
+    public void setMain(MainRMI main) {
         this.main = main;
 
         supplyTable.setItems(main.getPartsData());

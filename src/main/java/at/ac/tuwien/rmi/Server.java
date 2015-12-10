@@ -1,10 +1,10 @@
-package at.ac.tuwien.server;
+package at.ac.tuwien.rmi;
 
-import at.ac.tuwien.robot.IAssemblyRobotNotification;
-import at.ac.tuwien.entity.*;
-import at.ac.tuwien.robot.ICalibrationRobotNotification;
-import at.ac.tuwien.robot.ILogisticRobotNotification;
-import at.ac.tuwien.view.INotificationCallback;
+import at.ac.tuwien.common.robot.IAssemblyRobotNotification;
+import at.ac.tuwien.common.entity.*;
+import at.ac.tuwien.common.robot.ICalibrationRobotNotification;
+import at.ac.tuwien.common.robot.ILogisticRobotNotification;
+import at.ac.tuwien.common.view.INotificationCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package at.ac.tuwien.entity;
+package at.ac.tuwien.common.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;

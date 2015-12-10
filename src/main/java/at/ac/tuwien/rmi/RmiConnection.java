@@ -1,20 +1,20 @@
-package at.ac.tuwien.connection;
+package at.ac.tuwien.rmi;
 
-import at.ac.tuwien.entity.Drone;
-import at.ac.tuwien.entity.Module;
-import at.ac.tuwien.entity.Part;
-import at.ac.tuwien.robot.IAssemblyRobotNotification;
-import at.ac.tuwien.robot.ICalibrationRobotNotification;
-import at.ac.tuwien.robot.ILogisticRobotNotification;
-import at.ac.tuwien.robot.LogisticRobot;
-import at.ac.tuwien.server.IServer;
+import at.ac.tuwien.common.connection.ConnectionException;
+import at.ac.tuwien.common.connection.IConnection;
+import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Module;
+import at.ac.tuwien.common.entity.Part;
+import at.ac.tuwien.common.robot.IAssemblyRobotNotification;
+import at.ac.tuwien.common.robot.ICalibrationRobotNotification;
+import at.ac.tuwien.common.robot.ILogisticRobotNotification;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-public class Connection implements IConnection {
+public class RmiConnection implements IConnection {
 
     private final static int PORT = 4444;
     private final static String NAME = "admin";

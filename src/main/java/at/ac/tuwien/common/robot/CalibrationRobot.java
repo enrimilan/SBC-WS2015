@@ -1,10 +1,10 @@
-package at.ac.tuwien.robot;
+package at.ac.tuwien.common.robot;
 
-import at.ac.tuwien.connection.Connection;
-import at.ac.tuwien.connection.ConnectionException;
-import at.ac.tuwien.entity.Drone;
-import at.ac.tuwien.entity.Module;
-import at.ac.tuwien.entity.Status;
+import at.ac.tuwien.rmi.RmiConnection;
+import at.ac.tuwien.common.connection.ConnectionException;
+import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Module;
+import at.ac.tuwien.common.entity.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,13 +22,13 @@ public class CalibrationRobot extends UnicastRemoteObject implements Runnable, I
     private final static int INTERVAL = 1000;
     private final static int MIN_CALIBRATION_VALUE = -10;
     private final static int MAX_CALIBRATION_VALUE = 10;
-    private Connection connection;
+    private RmiConnection connection;
     private UUID id;
     private CalibrationRobot calibrationRobot;
 
     public CalibrationRobot() throws RemoteException, ConnectionException {
         super();
-        this.connection = new Connection();
+        this.connection = new RmiConnection();
         connection.establish();
         this.id = UUID.randomUUID();
         this.calibrationRobot = this;

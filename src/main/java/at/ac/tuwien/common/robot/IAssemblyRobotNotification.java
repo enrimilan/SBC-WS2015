@@ -1,7 +1,7 @@
-package at.ac.tuwien.robot;
+package at.ac.tuwien.common.robot;
 
-import at.ac.tuwien.entity.Module;
-import at.ac.tuwien.entity.Part;
+import at.ac.tuwien.common.entity.Module;
+import at.ac.tuwien.common.entity.Part;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -1,12 +1,11 @@
-package at.ac.tuwien.server;
+package at.ac.tuwien.rmi;
 
-import at.ac.tuwien.robot.IAssemblyRobotNotification;
-import at.ac.tuwien.entity.Drone;
-import at.ac.tuwien.entity.Module;
-import at.ac.tuwien.entity.Part;
-import at.ac.tuwien.robot.ICalibrationRobotNotification;
-import at.ac.tuwien.robot.ILogisticRobotNotification;
-import at.ac.tuwien.robot.LogisticRobot;
+import at.ac.tuwien.common.robot.IAssemblyRobotNotification;
+import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Module;
+import at.ac.tuwien.common.entity.Part;
+import at.ac.tuwien.common.robot.ICalibrationRobotNotification;
+import at.ac.tuwien.common.robot.ILogisticRobotNotification;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

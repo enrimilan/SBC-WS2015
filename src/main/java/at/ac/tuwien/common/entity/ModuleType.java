@@ -1,4 +1,4 @@
-package at.ac.tuwien.entity;
+package at.ac.tuwien.common.entity;
 
 public enum ModuleType {
     MOTOR_ROTOR_PAIR,
