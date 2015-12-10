@@ -59,7 +59,7 @@ public class Utils {
             ArrayList<Coordinator> obligatoryCoords = new ArrayList<>();
             obligatoryCoords.add(new FifoCoordinator());
             try {
-                logger.debug("Container " + containerName + "not found. Creating a new one");
+                logger.debug("Container " + containerName + " not found. Creating a new one");
                 cref = capi.createContainer(containerName, spaceUri, MzsConstants.Container.UNBOUNDED, obligatoryCoords, null, null);
             } catch (MzsCoreException e1) {
                 logger.debug(e.getMessage());
