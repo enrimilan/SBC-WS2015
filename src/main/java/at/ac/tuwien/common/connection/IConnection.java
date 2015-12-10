@@ -23,4 +23,6 @@ public interface IConnection {
 
     void registerLogisticRobot(ILogisticRobotNotification logisticRobotNotification) throws ConnectionException;
     void droneTested(Drone drone) throws ConnectionException;
+
+    void end() throws ConnectionException;
 }

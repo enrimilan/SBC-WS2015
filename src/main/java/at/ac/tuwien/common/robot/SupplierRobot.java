@@ -27,16 +27,17 @@ public class SupplierRobot extends AbstractRobot implements Runnable {
 
     @Override
     public void run() {
-        for(int i = 0; i<amount; i++){
-            try {
+        try {
+            for(int i = 0; i<amount; i++){
                 logger.debug("Supplying part.");
                 connection.supply(new Part(id, partType));
                 Thread.sleep(INTERVAL);
-            } catch (ConnectionException e) {
-                logger.debug(e.getMessage());
-            } catch (InterruptedException e) {
-                logger.debug(e.getMessage());
             }
+            connection.end();
+        } catch (ConnectionException e) {
+            logger.debug(e.getMessage());
+        } catch (InterruptedException e) {
+            logger.debug(e.getMessage());
         }
     }
 

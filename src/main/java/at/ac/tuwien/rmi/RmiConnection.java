@@ -8,6 +8,7 @@ import at.ac.tuwien.common.entity.Part;
 import at.ac.tuwien.common.robot.IAssemblyRobotNotification;
 import at.ac.tuwien.common.robot.ICalibrationRobotNotification;
 import at.ac.tuwien.common.robot.ILogisticRobotNotification;
+import at.ac.tuwien.utils.Constants;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -16,18 +17,14 @@ import java.rmi.registry.Registry;
 
 public class RmiConnection implements IConnection {
 
-    private final static int PORT = 4444;
-    private final static String NAME = "admin";
-    private final static String HOST = "127.0.0.1";
     private IServer server;
     private Registry registry;
-
 
     @Override
     public void establish() throws ConnectionException {
         try {
-            registry = LocateRegistry.getRegistry(HOST,PORT);
-            server = (IServer) registry.lookup(NAME);
+            registry = LocateRegistry.getRegistry(Constants.SERVER_HOST, Constants.SERVER_PORT);
+            server = (IServer) registry.lookup(Constants.SERVER_HOST);
         } catch (RemoteException e) {
            throw new ConnectionException(e.getMessage());
         } catch (NotBoundException e) {
@@ -112,6 +109,17 @@ public class RmiConnection implements IConnection {
         try {
             server.droneTested(drone);
         } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void end() throws ConnectionException {
+        try {
+            registry.unbind(Constants.SERVER_HOST);
+        } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        } catch (NotBoundException e) {
             throw new ConnectionException(e.getMessage());
         }
     }

@@ -5,6 +5,7 @@ import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.common.robot.ICalibrationRobotNotification;
 import at.ac.tuwien.common.robot.ILogisticRobotNotification;
 import at.ac.tuwien.common.view.INotificationCallback;
+import at.ac.tuwien.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +22,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Server extends UnicastRemoteObject implements IServer {
 
     private final static Logger logger = LoggerFactory.getLogger(Server.class);
-    private final static int PORT = 4444;
-    private final static String NAME = "admin";
     private Registry registry;
     private CopyOnWriteArrayList<Part> cases, controlUnits, motors, rotors;
     private CopyOnWriteArrayList<Module> caseControlUnitPairs, motorRotorPairs;
@@ -52,8 +51,8 @@ public class Server extends UnicastRemoteObject implements IServer {
         this.assemblyRobots = new ConcurrentLinkedQueue<IAssemblyRobotNotification>();
         this.calibrationRobots = new ConcurrentLinkedQueue<ICalibrationRobotNotification>();
         this.logisticRobots = new ConcurrentLinkedQueue<ILogisticRobotNotification>();
-        registry = LocateRegistry.createRegistry(PORT);
-        registry.bind(NAME, this);
+        registry = LocateRegistry.createRegistry(Constants.SERVER_PORT);
+        registry.bind(Constants.SERVER_HOST, this);
         new Thread(new RequestHandler()).start();
     }
 
