@@ -5,9 +5,9 @@ import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.Module;
 import at.ac.tuwien.common.entity.Part;
-import at.ac.tuwien.common.robot.IAssemblyRobotNotification;
-import at.ac.tuwien.common.robot.ICalibrationRobotNotification;
-import at.ac.tuwien.common.robot.ILogisticRobotNotification;
+import at.ac.tuwien.common.robot.notification.IAssembledNotification;
+import at.ac.tuwien.common.robot.notification.ICalibratedNotification;
+import at.ac.tuwien.common.robot.notification.ITestedNotification;
 import at.ac.tuwien.utils.Constants;
 
 import java.rmi.NotBoundException;
@@ -17,14 +17,14 @@ import java.rmi.registry.Registry;
 
 public class RmiConnection implements IConnection {
 
-    private IServer server;
+    private IRMIServer server;
     private Registry registry;
 
     @Override
     public void establish() throws ConnectionException {
         try {
             registry = LocateRegistry.getRegistry(Constants.SERVER_HOST, Constants.SERVER_PORT);
-            server = (IServer) registry.lookup(Constants.SERVER_HOST);
+            server = (IRMIServer) registry.lookup(Constants.SERVER_NAME);
         } catch (RemoteException e) {
            throw new ConnectionException(e.getMessage());
         } catch (NotBoundException e) {
@@ -42,8 +42,9 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void registerAssemblyRobot(IAssemblyRobotNotification assemblyRobotNotification) throws ConnectionException {
+    public void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException {
         try {
+            //UnicastRemoteObject.exportObject(assemblyRobotNotification, Constants.SERVER_PORT);
             server.registerAssemblyRobot(assemblyRobotNotification);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
@@ -69,7 +70,7 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws ConnectionException {
+    public void registerCalibrationRobot(ICalibratedNotification calibrationRobotNotification) throws ConnectionException {
         try {
             server.registerCalibrationRobot(calibrationRobotNotification);
         } catch (RemoteException e) {
@@ -96,7 +97,7 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void registerLogisticRobot(ILogisticRobotNotification logisticRobotNotification) throws ConnectionException {
+    public void registerLogisticRobot(ITestedNotification logisticRobotNotification) throws ConnectionException {
         try {
             server.registerLogisticRobot(logisticRobotNotification);
         } catch (RemoteException e) {

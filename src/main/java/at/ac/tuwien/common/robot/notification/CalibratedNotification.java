@@ -1,0 +1,99 @@
+package at.ac.tuwien.common.robot.notification;
+
+import at.ac.tuwien.common.connection.ConnectionException;
+import at.ac.tuwien.common.connection.IConnection;
+import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Module;
+import at.ac.tuwien.common.entity.Status;
+import at.ac.tuwien.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class CalibratedNotification implements ICalibratedNotification, Serializable {
+
+    private final static Logger logger = LoggerFactory.getLogger(CalibratedNotification.class);
+    private final static int INTERVAL = 1000;
+    private final static int MIN_CALIBRATION_VALUE = -10;
+    private final static int MAX_CALIBRATION_VALUE = 10;
+    private UUID calibratorRobotId;
+
+    public CalibratedNotification(UUID calibratorRobotId) {
+        this.calibratorRobotId = calibratorRobotId;
+    }
+
+    @Override
+    public void calibrateMotorRotorPair(Module module) throws RemoteException {
+        logger.debug("calibrating motor-rotor pair");
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    int value = ThreadLocalRandom.current().nextInt(MIN_CALIBRATION_VALUE, MAX_CALIBRATION_VALUE + 1);
+                    module.setCalibrationValue(value);
+                    module.setCalibratorId(calibratorRobotId);
+                    module.setStatus(Status.CALIBRATED);
+                    Thread.sleep(INTERVAL);
+                    IConnection connection = Utils.getConnectionInstance();
+                    connection.motorRotorPairCalibrated(module);
+                    connection.registerCalibrationRobot(CalibratedNotification.this);
+                } catch (ConnectionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
+
+    @Override
+    public void calibrateModuleInDrone(Drone drone) throws RemoteException {
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    IConnection connection = Utils.getConnectionInstance();
+                    ArrayList<Module> motorRotorPairs = drone.getMotorRotorPairs();
+                    int value = 0;
+                    for(Module motorRotorPair: motorRotorPairs){
+                        if(motorRotorPair.getStatus() == Status.CALIBRATED){
+                            value = value + motorRotorPair.getCalibrationValue();
+                        }
+                        else{
+                            logger.debug("calibrating motor-rotor pair in drone");
+                            value = ThreadLocalRandom.current().nextInt(MIN_CALIBRATION_VALUE, MAX_CALIBRATION_VALUE + 1);
+                            motorRotorPair.setCalibrationValue(value);
+                            motorRotorPair.setCalibratorId(calibratorRobotId);
+                            motorRotorPair.setStatus(Status.CALIBRATED);
+                            Thread.sleep(INTERVAL);
+                            connection.droneCalibrated(drone);
+                            connection.registerCalibrationRobot(CalibratedNotification.this);
+                            return;
+                        }
+                    }
+                    // if we got here, all of the 3 motor rotor pairs were already calibrated by some robots
+                    logger.debug("calibrating drone");
+                    Module caseControlUnitPair = drone.getCaseControlUnitPair();
+                    caseControlUnitPair.setCalibrationValue(value);
+                    caseControlUnitPair.setCalibratorId(calibratorRobotId);
+                    caseControlUnitPair.setStatus(Status.CALIBRATED);
+                    drone.setStatus(Status.CALIBRATED);
+                    Thread.sleep(INTERVAL);
+                    connection.droneCalibrated(drone);
+                    connection.registerCalibrationRobot(CalibratedNotification.this);
+                } catch (ConnectionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
+}

@@ -3,9 +3,7 @@ package at.ac.tuwien.common.view;
 /**
  * Created by Arber on 07.12.2015.
  */
-import at.ac.tuwien.MainRMI;
 import at.ac.tuwien.common.connection.ConnectionException;
-import at.ac.tuwien.rmi.RmiConnection;
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.Module;
 import at.ac.tuwien.common.entity.Part;
@@ -28,7 +26,7 @@ import java.rmi.RemoteException;
 public class OverviewController {
 
     public OverviewController() {}
-    private MainRMI main;
+    private GUI gui;
 
 
     @FXML
@@ -86,7 +84,7 @@ public class OverviewController {
                 supplyTxtField.clear();
                 if (amount > 0) {
                     if ( partType != null) {
-                        SupplierRobot sR = new SupplierRobot(Utils.getConnection("rmi"), partType, amount);
+                        SupplierRobot sR = new SupplierRobot(Utils.getConnectionInstance(), partType, amount);
                         Thread threadSupply = new Thread(sR);
                         threadSupply.start();
                     }
@@ -100,12 +98,10 @@ public class OverviewController {
     @FXML
     private void handleAssemblerButtonAction(){
         try {
-            AssemblyRobot aR = new AssemblyRobot(new RmiConnection());
+            AssemblyRobot aR = new AssemblyRobot(Utils.getConnectionInstance());
             Thread threadAssemble = new Thread(aR);
             threadAssemble.start();
         } catch (ConnectionException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
@@ -113,7 +109,7 @@ public class OverviewController {
     @FXML
     private void handleCalibratorButtonAction(){
         try {
-            CalibrationRobot cR = new CalibrationRobot();
+            CalibrationRobot cR = new CalibrationRobot(Utils.getConnectionInstance());
             Thread threadCalibrate = new Thread(cR);
             threadCalibrate.start();
         } catch (ConnectionException e) {
@@ -128,7 +124,7 @@ public class OverviewController {
         try {
             int min = Integer.parseInt(calibrationValueMIN_textfield.getCharacters().toString());
             int max = Integer.parseInt(calibrationValueMAX_textfield.getCharacters().toString());
-            LogisticRobot lR = new LogisticRobot(min, max);
+            LogisticRobot lR = new LogisticRobot(Utils.getConnectionInstance(), min, max);
             Thread threadTester = new Thread(lR);
             threadTester.start();
         } catch (ConnectionException e) {
@@ -150,12 +146,12 @@ public class OverviewController {
     private void showDroneDetails(Drone selectedDrone) {
 
         if (selectedDrone != null) {
-            main.showDroneDetailsDialog(selectedDrone);
+            gui.showDroneDetailsDialog(selectedDrone);
 
         } else {
             // Nothing selected.
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(main.getPrimaryStage());
+            alert.initOwner(gui.getPrimaryStage());
             alert.setTitle("No Selection");
             alert.setHeaderText("No Drone Selected");
             alert.setContentText("Please select a drone in the table.");
@@ -236,14 +232,14 @@ public class OverviewController {
         lbl_BadDrones.setText(String.valueOf(badDronesTable.getItems().size()));
     }
 
-    public void setMain(MainRMI main) {
-        this.main = main;
+    public void setGui(GUI gui) {
+        this.gui = gui;
 
-        supplyTable.setItems(main.getPartsData());
-        dronesTable.setItems(main.getDronesData());
-        moduleTableView.setItems(main.getModulesData());
-        goodDronesTable.setItems(main.getGoodDronesData());
-        badDronesTable.setItems(main.getBadDronesData());
+        supplyTable.setItems(gui.getPartsData());
+        dronesTable.setItems(gui.getDronesData());
+        moduleTableView.setItems(gui.getModulesData());
+        goodDronesTable.setItems(gui.getGoodDronesData());
+        badDronesTable.setItems(gui.getBadDronesData());
 
         dronesTable.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override

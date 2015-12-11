@@ -1,10 +1,14 @@
 package at.ac.tuwien.common.robot;
 
+import at.ac.tuwien.common.connection.IConnection;
+import at.ac.tuwien.common.robot.notification.CalibratedNotification;
+import at.ac.tuwien.common.robot.notification.ICalibratedNotification;
 import at.ac.tuwien.rmi.RmiConnection;
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.Module;
 import at.ac.tuwien.common.entity.Status;
+import at.ac.tuwien.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,96 +20,18 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class CalibrationRobot extends UnicastRemoteObject implements Runnable, ICalibrationRobotNotification, Serializable {
+public class CalibrationRobot extends AbstractRobot implements Runnable {
 
     private final static Logger logger = LoggerFactory.getLogger(CalibrationRobot.class);
-    private final static int INTERVAL = 1000;
-    private final static int MIN_CALIBRATION_VALUE = -10;
-    private final static int MAX_CALIBRATION_VALUE = 10;
-    private RmiConnection connection;
-    private UUID id;
-    private CalibrationRobot calibrationRobot;
 
-    public CalibrationRobot() throws RemoteException, ConnectionException {
-        super();
-        this.connection = new RmiConnection();
-        connection.establish();
-        this.id = UUID.randomUUID();
-        this.calibrationRobot = this;
-    }
-
-    @Override
-    public void calibrateMotorRotorPair(final Module module) throws RemoteException {
-        logger.debug("calibrating motor-rotor pair");
-        Thread thread = new Thread(){
-            @Override
-            public void run() {
-                try {
-                    int value = ThreadLocalRandom.current().nextInt(MIN_CALIBRATION_VALUE, MAX_CALIBRATION_VALUE + 1);
-                    module.setCalibrationValue(value);
-                    module.setCalibratorId(id);
-                    module.setStatus(Status.CALIBRATED);
-                    Thread.sleep(INTERVAL);
-                    connection.motorRotorPairCalibrated(module);
-                    connection.registerCalibrationRobot(calibrationRobot);
-                } catch (ConnectionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
-    }
-
-    @Override
-    public void calibrateModuleInDrone(final Drone drone) throws RemoteException {
-        Thread thread = new Thread(){
-            @Override
-            public void run() {
-                try {
-                    ArrayList<Module> motorRotorPairs = drone.getMotorRotorPairs();
-                    int value = 0;
-                    for(Module motorRotorPair: motorRotorPairs){
-                        if(motorRotorPair.getStatus() == Status.CALIBRATED){
-                            value = value + motorRotorPair.getCalibrationValue();
-                        }
-                        else{
-                            logger.debug("calibrating motor-rotor pair in drone");
-                            value = ThreadLocalRandom.current().nextInt(MIN_CALIBRATION_VALUE, MAX_CALIBRATION_VALUE + 1);
-                            motorRotorPair.setCalibrationValue(value);
-                            motorRotorPair.setCalibratorId(id);
-                            motorRotorPair.setStatus(Status.CALIBRATED);
-                            Thread.sleep(INTERVAL);
-                            connection.droneCalibrated(drone);
-                            connection.registerCalibrationRobot(calibrationRobot);
-                            return;
-                        }
-                    }
-                    // if we got here, all of the 3 motor rotor pairs were already calibrated by some robots
-                    logger.debug("calibrating drone");
-                    Module caseControlUnitPair = drone.getCaseControlUnitPair();
-                    caseControlUnitPair.setCalibrationValue(value);
-                    caseControlUnitPair.setCalibratorId(id);
-                    caseControlUnitPair.setStatus(Status.CALIBRATED);
-                    drone.setStatus(Status.CALIBRATED);
-                    Thread.sleep(INTERVAL);
-                    connection.droneCalibrated(drone);
-                    connection.registerCalibrationRobot(calibrationRobot);
-                } catch (ConnectionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
+    public CalibrationRobot(IConnection connection) throws RemoteException, ConnectionException {
+        super(connection);
     }
 
     @Override
     public void run() {
         try {
-            connection.registerCalibrationRobot(this);
+            connection.registerCalibrationRobot(new CalibratedNotification(id));
             while (System.in.read() != -1);
         } catch (ConnectionException e) {
             e.printStackTrace();
@@ -115,12 +41,13 @@ public class CalibrationRobot extends UnicastRemoteObject implements Runnable, I
     }
 
     public static void main(String[] args){
-        if(args.length != 0){
-            throw new IllegalArgumentException("Usage: CalibrationRobot");
+        if(args.length != 1){
+            throw new IllegalArgumentException("Usage: CalibrationRobot rmi|xvsm");
         }
 
+        IConnection connection = Utils.getConnectionInstance(args[0]);
         try {
-            CalibrationRobot calibrationRobot = new CalibrationRobot();
+            CalibrationRobot calibrationRobot = new CalibrationRobot(connection);
             calibrationRobot.run();
         } catch (ConnectionException e) {
             e.printStackTrace();

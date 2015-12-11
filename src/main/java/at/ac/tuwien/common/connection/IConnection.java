@@ -3,9 +3,9 @@ package at.ac.tuwien.common.connection;
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.Module;
 import at.ac.tuwien.common.entity.Part;
-import at.ac.tuwien.common.robot.IAssemblyRobotNotification;
-import at.ac.tuwien.common.robot.ICalibrationRobotNotification;
-import at.ac.tuwien.common.robot.ILogisticRobotNotification;
+import at.ac.tuwien.common.robot.notification.IAssembledNotification;
+import at.ac.tuwien.common.robot.notification.ICalibratedNotification;
+import at.ac.tuwien.common.robot.notification.ITestedNotification;
 
 public interface IConnection {
 
@@ -13,15 +13,15 @@ public interface IConnection {
 
     void supply(Part part) throws ConnectionException;
 
-    void registerAssemblyRobot(IAssemblyRobotNotification assemblyRobotNotification) throws ConnectionException;
+    void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException;
     void moduleAssembled(Module module) throws ConnectionException;
     void droneAssembled(Drone drone) throws ConnectionException;
 
-    void registerCalibrationRobot(ICalibrationRobotNotification calibrationRobotNotification) throws ConnectionException;
+    void registerCalibrationRobot(ICalibratedNotification calibrationRobotNotification) throws ConnectionException;
     void motorRotorPairCalibrated(Module module) throws ConnectionException;
     void droneCalibrated(Drone drone) throws ConnectionException;
 
-    void registerLogisticRobot(ILogisticRobotNotification logisticRobotNotification) throws ConnectionException;
+    void registerLogisticRobot(ITestedNotification logisticRobotNotification) throws ConnectionException;
     void droneTested(Drone drone) throws ConnectionException;
 
     void end() throws ConnectionException;
