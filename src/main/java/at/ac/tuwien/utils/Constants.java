@@ -13,4 +13,5 @@ public class Constants {
     public final static String ASSEMBLED_NOTIFICATIONS = "assembled_notifications";
     public final static String CALIBRATED_NOTIFICATIONS = "calibrated_notifications";
     public final static String TESTED_NOTIFICATIONS = "tested_notifications";
+    public final static int TRANSACTION_TIME_TO_LIVE = 10000;
 }
