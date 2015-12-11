@@ -3,6 +3,7 @@ package at.ac.tuwien.utils;
 public class Constants {
 
     public final static String SERVER_HOST = "localhost";
+    public final static String SERVER_NAME = "server";
     public final static int SERVER_PORT = 1337;
     public final static int RANDOM_FREE_PORT = 0;
     public final static String MOTORS_CONTAINER_NAME = "motors";

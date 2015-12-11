@@ -51,6 +51,10 @@ public class Utils {
         return connection;
     }
 
+    public static IConnection getConnectionInstance(){
+        return connection;
+    }
+
 
     public static ContainerReference getOrCreateContainer(String containerName, Capi capi) {
         ContainerReference cref = null;
