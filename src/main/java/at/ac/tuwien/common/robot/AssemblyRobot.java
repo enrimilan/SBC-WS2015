@@ -2,7 +2,7 @@ package at.ac.tuwien.common.robot;
 
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
-import at.ac.tuwien.common.robot.notification.AssembledNotification;
+import at.ac.tuwien.common.notification.AssembledNotification;
 import at.ac.tuwien.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

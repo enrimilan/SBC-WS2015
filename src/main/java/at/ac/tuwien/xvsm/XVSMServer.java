@@ -2,7 +2,7 @@ package at.ac.tuwien.xvsm;
 
 import at.ac.tuwien.common.server.IServer;
 import at.ac.tuwien.common.entity.Part;
-import at.ac.tuwien.common.robot.notification.AssembledNotification;
+import at.ac.tuwien.common.notification.AssembledNotification;
 import at.ac.tuwien.common.view.INotificationCallback;
 import at.ac.tuwien.utils.Constants;
 import at.ac.tuwien.utils.Utils;

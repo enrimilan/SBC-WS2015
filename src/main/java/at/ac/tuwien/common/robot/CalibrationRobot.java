@@ -1,24 +1,14 @@
 package at.ac.tuwien.common.robot;
 
 import at.ac.tuwien.common.connection.IConnection;
-import at.ac.tuwien.common.robot.notification.CalibratedNotification;
-import at.ac.tuwien.common.robot.notification.ICalibratedNotification;
-import at.ac.tuwien.rmi.RmiConnection;
+import at.ac.tuwien.common.notification.CalibratedNotification;
 import at.ac.tuwien.common.connection.ConnectionException;
-import at.ac.tuwien.common.entity.Drone;
-import at.ac.tuwien.common.entity.Module;
-import at.ac.tuwien.common.entity.Status;
 import at.ac.tuwien.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class CalibrationRobot extends AbstractRobot implements Runnable {
 

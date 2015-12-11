@@ -1,21 +1,14 @@
 package at.ac.tuwien.common.robot;
 
 import at.ac.tuwien.common.connection.IConnection;
-import at.ac.tuwien.common.robot.notification.ITestedNotification;
-import at.ac.tuwien.common.robot.notification.TestedNotification;
-import at.ac.tuwien.rmi.RmiConnection;
+import at.ac.tuwien.common.notification.TestedNotification;
 import at.ac.tuwien.common.connection.ConnectionException;
-import at.ac.tuwien.common.entity.Drone;
-import at.ac.tuwien.common.entity.Status;
 import at.ac.tuwien.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.UUID;
 
 public class LogisticRobot extends AbstractRobot implements Runnable{
 

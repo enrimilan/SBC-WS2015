@@ -1,11 +1,11 @@
 package at.ac.tuwien.rmi;
 
-import at.ac.tuwien.common.robot.notification.IAssembledNotification;
+import at.ac.tuwien.common.notification.IAssembledNotification;
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.Module;
 import at.ac.tuwien.common.entity.Part;
-import at.ac.tuwien.common.robot.notification.ICalibratedNotification;
-import at.ac.tuwien.common.robot.notification.ITestedNotification;
+import at.ac.tuwien.common.notification.ICalibratedNotification;
+import at.ac.tuwien.common.notification.ITestedNotification;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

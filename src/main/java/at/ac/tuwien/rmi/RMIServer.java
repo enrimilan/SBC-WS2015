@@ -1,10 +1,10 @@
 package at.ac.tuwien.rmi;
 
 import at.ac.tuwien.common.server.IServer;
-import at.ac.tuwien.common.robot.notification.IAssembledNotification;
+import at.ac.tuwien.common.notification.IAssembledNotification;
 import at.ac.tuwien.common.entity.*;
-import at.ac.tuwien.common.robot.notification.ICalibratedNotification;
-import at.ac.tuwien.common.robot.notification.ITestedNotification;
+import at.ac.tuwien.common.notification.ICalibratedNotification;
+import at.ac.tuwien.common.notification.ITestedNotification;
 import at.ac.tuwien.common.view.INotificationCallback;
 import at.ac.tuwien.utils.Constants;
 import org.slf4j.Logger;

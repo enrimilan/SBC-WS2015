@@ -1,4 +1,4 @@
-package at.ac.tuwien.common.robot.notification;
+package at.ac.tuwien.common.notification;
 
 import at.ac.tuwien.common.entity.Drone;
 
