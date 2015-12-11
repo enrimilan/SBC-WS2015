@@ -2,10 +2,7 @@ package at.ac.tuwien.common.notification;
 
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
-import at.ac.tuwien.common.entity.Drone;
-import at.ac.tuwien.common.entity.Module;
-import at.ac.tuwien.common.entity.ModuleType;
-import at.ac.tuwien.common.entity.Part;
+import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +22,7 @@ public class AssembledNotification implements IAssembledNotification, Serializab
     }
 
     @Override
-    public void assembleMotorRotorPairs(ArrayList<Part> motors, ArrayList<Part> rotors) {
+    public void assembleMotorRotorPairs(ArrayList<Part> motors, ArrayList<Part> rotors, Job job) {
         logger.debug("Assembling motor rotor pairs.");
         Thread thread = new Thread(){
             @Override
@@ -52,7 +49,7 @@ public class AssembledNotification implements IAssembledNotification, Serializab
     }
 
     @Override
-    public void assembleCaseControlUnitPair(Part casePart, Part controlUnit) {
+    public void assembleCaseControlUnitPair(Part casePart, Part controlUnit, Job job) {
         logger.debug("Assembling case control unit pairs.");
         Thread thread = new Thread(){
             @Override
@@ -76,7 +73,7 @@ public class AssembledNotification implements IAssembledNotification, Serializab
     }
 
     @Override
-    public void assembleDrone(Module caseControlUnitPair, ArrayList<Module> motorRotorPairs) {
+    public void assembleDrone(Module caseControlUnitPair, ArrayList<Module> motorRotorPairs, Job job) {
         logger.debug("Assembling drone.");
         Thread thread = new Thread(){
             @Override

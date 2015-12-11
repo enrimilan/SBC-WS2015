@@ -16,9 +16,11 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServer {
 
@@ -30,7 +32,8 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     private Queue<IAssembledNotification> assemblyRobots;
     private Queue<ICalibratedNotification> calibrationRobots;
     private Queue<ITestedNotification> logisticRobots;
-
+    private final AtomicReference<Integer> jobId;
+    private HashMap<Job,Transaction> jobs;
     private INotificationCallback notificationCallback;
 
     @Override
@@ -54,6 +57,8 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         this.logisticRobots = new ConcurrentLinkedQueue<ITestedNotification>();
         registry = LocateRegistry.createRegistry(Constants.SERVER_PORT);
         registry.bind(Constants.SERVER_NAME, this);
+        this.jobId = new AtomicReference<>();
+        this.jobs = new HashMap<>();
         new Thread(new RequestHandler()).start();
     }
 
@@ -176,7 +181,9 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                             i++;
                         }
                         try {
-                            assemblyRobotNotification.assembleDrone(caseControlUnitPair, motorRotorPairModules);
+                            jobId.set(jobId.get()+1);
+                            assemblyRobotNotification.assembleDrone(caseControlUnitPair, motorRotorPairModules,
+                                    new Job(jobId.get()));
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
@@ -194,7 +201,9 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                             i++;
                         }
                         try {
-                            assemblyRobotNotification.assembleMotorRotorPairs(motorParts, rotorParts);
+                            jobId.set(jobId.get()+1);
+                            assemblyRobotNotification.assembleMotorRotorPairs(motorParts, rotorParts,
+                                    new Job(jobId.get()));
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
@@ -206,7 +215,9 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                         Part casePart = cases.remove(0);
                         Part controlUnit = controlUnits.remove(0);
                         try {
-                            assemblyRobotNotification.assembleCaseControlUnitPair(casePart, controlUnit);
+                            jobId.set(jobId.get()+1);
+                            assemblyRobotNotification.assembleCaseControlUnitPair(casePart, controlUnit,
+                                    new Job(jobId.get()));
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
@@ -220,7 +231,8 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                         motorParts.add(motors.remove(0));
                         rotorParts.add(rotors.remove(0));
                         try {
-                            assemblyRobotNotification.assembleMotorRotorPairs(motorParts, rotorParts);
+                            jobId.set(jobId.get()+1);
+                            assemblyRobotNotification.assembleMotorRotorPairs(motorParts, rotorParts, new Job(jobId.get()));
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
@@ -231,7 +243,8 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                         ICalibratedNotification calibrationRobotNotification = calibrationRobots.poll();
                         Drone drone = drones.remove(drones.size()-1);
                         try {
-                            calibrationRobotNotification.calibrateModuleInDrone(drone);
+                            jobId.set(jobId.get()+1);
+                            calibrationRobotNotification.calibrateModuleInDrone(drone, new Job(jobId.get()));
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
@@ -242,7 +255,8 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                     ICalibratedNotification calibrationRobotNotification = calibrationRobots.poll();
                     Module motorRotorPair = motorRotorPairs.remove(motorRotorPairs.size()-1);
                     try {
-                        calibrationRobotNotification.calibrateMotorRotorPair(motorRotorPair);
+                        jobId.set(jobId.get()+1);
+                        calibrationRobotNotification.calibrateMotorRotorPair(motorRotorPair, new Job(jobId.get()));
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
@@ -251,7 +265,8 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                 if(logisticRobots.size()>0 && drones.size()>0 && drones.get(0).getStatus() == Status.CALIBRATED){
                     ITestedNotification logisticRobotNotification = logisticRobots.poll();
                     try {
-                        logisticRobotNotification.testDrone(drones.remove(0));
+                        jobId.set(jobId.get()+1);
+                        logisticRobotNotification.testDrone(drones.remove(0), new Job(jobId.get()));
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }

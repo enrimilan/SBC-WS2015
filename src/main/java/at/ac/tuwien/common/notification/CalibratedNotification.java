@@ -3,6 +3,7 @@ package at.ac.tuwien.common.notification;
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Job;
 import at.ac.tuwien.common.entity.Module;
 import at.ac.tuwien.common.entity.Status;
 import at.ac.tuwien.utils.Utils;
@@ -28,7 +29,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
     }
 
     @Override
-    public void calibrateMotorRotorPair(Module module) throws RemoteException {
+    public void calibrateMotorRotorPair(Module module, Job job) throws RemoteException {
         logger.debug("calibrating motor-rotor pair");
         Thread thread = new Thread(){
             @Override
@@ -53,7 +54,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
     }
 
     @Override
-    public void calibrateModuleInDrone(Drone drone) throws RemoteException {
+    public void calibrateModuleInDrone(Drone drone, Job job) throws RemoteException {
         Thread thread = new Thread(){
             @Override
             public void run() {

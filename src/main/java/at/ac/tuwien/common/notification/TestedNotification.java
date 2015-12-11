@@ -3,6 +3,7 @@ package at.ac.tuwien.common.notification;
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Job;
 import at.ac.tuwien.common.entity.Status;
 import at.ac.tuwien.utils.Utils;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class TestedNotification implements ITestedNotification, Serializable {
     }
 
     @Override
-    public void testDrone(Drone drone) throws RemoteException {
+    public void testDrone(Drone drone, Job job) throws RemoteException {
         logger.debug("testing drone.");
         Thread thread = new Thread(){
             @Override
