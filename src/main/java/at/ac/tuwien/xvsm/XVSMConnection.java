@@ -2,10 +2,7 @@ package at.ac.tuwien.xvsm;
 
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
-import at.ac.tuwien.common.entity.Drone;
-import at.ac.tuwien.common.entity.Module;
-import at.ac.tuwien.common.entity.Part;
-import at.ac.tuwien.common.entity.PartType;
+import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.common.notification.AssembledNotification;
 import at.ac.tuwien.common.notification.IAssembledNotification;
 import at.ac.tuwien.common.notification.ICalibratedNotification;
@@ -71,12 +68,12 @@ public class XVSMConnection implements IConnection {
     }
 
     @Override
-    public void moduleAssembled(Module module) throws ConnectionException {
+    public void moduleAssembled(Module module, Job job) throws ConnectionException {
 
     }
 
     @Override
-    public void droneAssembled(Drone drone) throws ConnectionException {
+    public void droneAssembled(Drone drone, Job job) throws ConnectionException {
 
     }
 
@@ -86,12 +83,12 @@ public class XVSMConnection implements IConnection {
     }
 
     @Override
-    public void motorRotorPairCalibrated(Module module) throws ConnectionException {
+    public void motorRotorPairCalibrated(Module module, Job job) throws ConnectionException {
 
     }
 
     @Override
-    public void droneCalibrated(Drone drone) throws ConnectionException {
+    public void droneCalibrated(Drone drone, Job job) throws ConnectionException {
 
     }
 
@@ -101,7 +98,7 @@ public class XVSMConnection implements IConnection {
     }
 
     @Override
-    public void droneTested(Drone drone) throws ConnectionException {
+    public void droneTested(Drone drone, Job job) throws ConnectionException {
 
     }
 

@@ -3,6 +3,7 @@ package at.ac.tuwien.rmi;
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Job;
 import at.ac.tuwien.common.entity.Module;
 import at.ac.tuwien.common.entity.Part;
 import at.ac.tuwien.common.notification.IAssembledNotification;
@@ -52,7 +53,7 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void moduleAssembled(Module module) throws ConnectionException {
+    public void moduleAssembled(Module module, Job job) throws ConnectionException {
         try {
             server.moduleAssembled(module);
         } catch (RemoteException e) {
@@ -61,7 +62,7 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void droneAssembled(Drone drone) throws ConnectionException {
+    public void droneAssembled(Drone drone, Job job) throws ConnectionException {
         try {
             server.droneAssembled(drone);
         } catch (RemoteException e) {
@@ -79,7 +80,7 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void motorRotorPairCalibrated(Module module) throws ConnectionException {
+    public void motorRotorPairCalibrated(Module module, Job job) throws ConnectionException {
         try {
             server.motorRotorPairCalibrated(module);
         } catch (RemoteException e) {
@@ -88,7 +89,7 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void droneCalibrated(Drone drone) throws ConnectionException {
+    public void droneCalibrated(Drone drone, Job job) throws ConnectionException {
         try {
             server.droneCalibrated(drone);
         } catch (RemoteException e) {
@@ -106,7 +107,7 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void droneTested(Drone drone) throws ConnectionException {
+    public void droneTested(Drone drone, Job job) throws ConnectionException {
         try {
             server.droneTested(drone);
         } catch (RemoteException e) {

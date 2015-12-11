@@ -63,7 +63,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     @Override
-    public void start(){
+    public void start() {
 
     }
 

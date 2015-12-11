@@ -35,7 +35,7 @@ public class AssembledNotification implements IAssembledNotification, Serializab
                     try {
                         Thread.sleep(INTERVAL);
                         IConnection connection = Utils.getConnectionInstance();
-                        connection.moduleAssembled(module);
+                        connection.moduleAssembled(module, job);
                         connection.registerAssemblyRobot(AssembledNotification.this);
                     } catch (InterruptedException e) {
                         logger.debug(e.getMessage());
@@ -60,7 +60,7 @@ public class AssembledNotification implements IAssembledNotification, Serializab
                 try {
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
-                    connection.moduleAssembled(module);
+                    connection.moduleAssembled(module, job);
                     connection.registerAssemblyRobot(AssembledNotification.this);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -83,7 +83,7 @@ public class AssembledNotification implements IAssembledNotification, Serializab
                 try {
                     Thread.sleep(3*INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
-                    connection.droneAssembled(drone);
+                    connection.droneAssembled(drone, job);
                     connection.registerAssemblyRobot(AssembledNotification.this);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

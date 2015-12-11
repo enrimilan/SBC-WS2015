@@ -43,7 +43,7 @@ public class TestedNotification implements ITestedNotification, Serializable {
                     }
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
-                    connection.droneTested(drone);
+                    connection.droneTested(drone, job);
                     connection.registerLogisticRobot(TestedNotification.this);
                 } catch (ConnectionException e) {
                     e.printStackTrace();

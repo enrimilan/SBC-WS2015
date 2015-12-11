@@ -72,7 +72,7 @@ public class XVSMServer implements IServer {
             ArrayList<Part> rotors = capi.read(rotorsContainer, selector, MzsConstants.RequestTimeout.DEFAULT, tx);
             if(!motors.isEmpty() && !rotors.isEmpty()){
                 capi.commitTransaction(tx);
-                notifications.get(0).assembleMotorRotorPairs(motors, rotors);
+                //notifications.get(0).assembleMotorRotorPairs(motors, rotors);
             }
             else{
                 capi.rollbackTransaction(tx);

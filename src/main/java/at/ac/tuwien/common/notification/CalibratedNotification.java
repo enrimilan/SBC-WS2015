@@ -41,7 +41,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
                     module.setStatus(Status.CALIBRATED);
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
-                    connection.motorRotorPairCalibrated(module);
+                    connection.motorRotorPairCalibrated(module, job);
                     connection.registerCalibrationRobot(CalibratedNotification.this);
                 } catch (ConnectionException e) {
                     e.printStackTrace();
@@ -73,7 +73,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
                             motorRotorPair.setCalibratorId(calibratorRobotId);
                             motorRotorPair.setStatus(Status.CALIBRATED);
                             Thread.sleep(INTERVAL);
-                            connection.droneCalibrated(drone);
+                            connection.droneCalibrated(drone, job);
                             connection.registerCalibrationRobot(CalibratedNotification.this);
                             return;
                         }
@@ -86,7 +86,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
                     caseControlUnitPair.setStatus(Status.CALIBRATED);
                     drone.setStatus(Status.CALIBRATED);
                     Thread.sleep(INTERVAL);
-                    connection.droneCalibrated(drone);
+                    connection.droneCalibrated(drone, job);
                     connection.registerCalibrationRobot(CalibratedNotification.this);
                 } catch (ConnectionException e) {
                     e.printStackTrace();
