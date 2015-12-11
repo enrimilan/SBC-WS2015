@@ -19,6 +19,7 @@ import java.util.ArrayList;
 public class Utils {
 
     private static Logger logger = LoggerFactory.getLogger(Utils.class);
+    private static IConnection connection = null;
 
     public static PartType getPartType(String id){
         if(id.equals("A")){
@@ -38,13 +39,16 @@ public class Utils {
         }
     }
 
-    public static IConnection getConnection(String type){
-        if(type.equals("rmi")){
-            return new RmiConnection();
+    public static IConnection getConnectionInstance(String type){
+
+        if(type.equals("rmi") && connection == null){
+            connection = new RmiConnection();
         }
-        else{
-            return new XVSMConnection();
+        else if(type.equals("xvsm") && connection == null){
+            connection = new XVSMConnection();
         }
+
+        return connection;
     }
 
 
