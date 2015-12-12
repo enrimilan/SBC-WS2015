@@ -16,6 +16,7 @@ import org.mozartspaces.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -58,7 +59,7 @@ public class XVSMConnection implements IConnection {
     @Override
     public void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException {
         try {
-            capi.write(assembledNotifications, new Entry(new AssembledNotification(UUID.randomUUID())));
+            capi.write(assembledNotifications, new Entry((Serializable) assemblyRobotNotification));
         } catch (MzsCoreException e) {
             throw new ConnectionException(e.getMessage());
         }
