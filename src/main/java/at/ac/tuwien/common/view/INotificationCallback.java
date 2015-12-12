@@ -15,6 +15,7 @@ public interface INotificationCallback {
     void onModuleRemoved(Module module);
 
     void onDroneAdded(Drone drone);
+    void onDroneUpdated(Drone drone);
     void onDroneRemoved(Drone drone);
 
     void onGoodDroneTested(Drone drone);

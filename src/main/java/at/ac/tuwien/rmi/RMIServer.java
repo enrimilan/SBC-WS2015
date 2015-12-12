@@ -197,12 +197,12 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
 
         if(drone.getStatus()==Status.CALIBRATED){
             drones.add(0, drone);
-            notificationCallback.onDroneAdded(drone);
+            notificationCallback.onDroneUpdated(drone);
             checkForWorkWithDroneForLogisticRobot();
         }
         else{
             drones.add(drone);
-            notificationCallback.onDroneAdded(drone);
+            notificationCallback.onDroneUpdated(drone);
             checkForWorkWithDroneForCalibrationRobot();
         }
     }
@@ -229,10 +229,12 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         }
 
         if(drone.getStatus() == Status.TESTED_GOOD){
+            notificationCallback.onDroneRemoved(drone);
             goodDrones.add(drone);
             notificationCallback.onGoodDroneTested(drone);
         }
         else{
+            notificationCallback.onDroneRemoved(drone);
             badDrones.add(drone);
             notificationCallback.onBadDroneTested(drone);
         }
@@ -372,7 +374,6 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                 return false;
             }
             Drone drone = drones.remove(drones.size()-1);
-            notificationCallback.onDroneRemoved(drone);
             jobId.set(jobId.get()+1);
             Job job = new Job(jobId.get());
             Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
@@ -425,7 +426,6 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             jobId.set(jobId.get()+1);
             Job job = new Job(jobId.get());
             Drone drone = drones.remove(0);
-            notificationCallback.onDroneRemoved(drone);
             Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
             t.addDrone(drone);
             jobs.put(job, t);

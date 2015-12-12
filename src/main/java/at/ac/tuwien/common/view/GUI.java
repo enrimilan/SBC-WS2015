@@ -122,6 +122,12 @@ public class GUI{
                     }
 
                     @Override
+                    public void onDroneUpdated(Drone drone) {
+                        int i = dronesData.indexOf(drone);
+                        dronesData.set(i, drone);
+                    }
+
+                    @Override
                     public void onDroneRemoved(Drone drone) {
                         dronesData.remove(drone);
                     }

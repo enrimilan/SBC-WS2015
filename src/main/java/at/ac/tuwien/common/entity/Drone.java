@@ -64,4 +64,20 @@ public class Drone implements Serializable {
                 ", status=" + status +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Drone drone = (Drone) o;
+
+        return droneId.equals(drone.droneId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return droneId.hashCode();
+    }
 }
