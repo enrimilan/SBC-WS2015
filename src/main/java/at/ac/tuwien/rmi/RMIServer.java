@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -36,40 +37,53 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     private HashMap<Job,Transaction> jobs;
     private INotificationCallback notificationCallback;
 
+    public RMIServer() throws RemoteException {
+        super();
+        this.cases = new CopyOnWriteArrayList<>();
+        this.controlUnits = new CopyOnWriteArrayList<>();
+        this.motors = new CopyOnWriteArrayList<>();
+        this.rotors = new CopyOnWriteArrayList<>();
+        this.caseControlUnitPairs = new CopyOnWriteArrayList<>();
+        this.motorRotorPairs = new CopyOnWriteArrayList<>();
+        this.drones = new CopyOnWriteArrayList<>();
+        this.goodDrones = new CopyOnWriteArrayList<>();
+        this.badDrones =  new CopyOnWriteArrayList<>();
+        this.assemblyRobots = new ConcurrentLinkedQueue<>();
+        this.calibrationRobots = new ConcurrentLinkedQueue<>();
+        this.logisticRobots = new ConcurrentLinkedQueue<>();
+        this.jobId = new AtomicReference<>();
+        jobId.set(0);
+        this.jobs = new HashMap<>();
+    }
+
     @Override
     public void registerGUINotificationCallback(INotificationCallback notificationCallback){
         this.notificationCallback = notificationCallback;
     }
 
-    public RMIServer() throws RemoteException, AlreadyBoundException {
-        super();
-        this.cases = new CopyOnWriteArrayList<Part>();
-        this.controlUnits = new CopyOnWriteArrayList<Part>();
-        this.motors = new CopyOnWriteArrayList<Part>();
-        this.rotors = new CopyOnWriteArrayList<Part>();
-        this.caseControlUnitPairs = new CopyOnWriteArrayList<Module>();
-        this.motorRotorPairs = new CopyOnWriteArrayList<Module>();
-        this.drones = new CopyOnWriteArrayList<Drone>();
-        this.goodDrones = new CopyOnWriteArrayList<Drone>();
-        this.badDrones =  new CopyOnWriteArrayList<Drone>();
-        this.assemblyRobots = new ConcurrentLinkedQueue<IAssembledNotification>();
-        this.calibrationRobots = new ConcurrentLinkedQueue<ICalibratedNotification>();
-        this.logisticRobots = new ConcurrentLinkedQueue<ITestedNotification>();
-        registry = LocateRegistry.createRegistry(Constants.SERVER_PORT);
-        registry.bind(Constants.SERVER_NAME, this);
-        this.jobId = new AtomicReference<>();
-        this.jobs = new HashMap<>();
-        new Thread(new RequestHandler()).start();
-    }
-
     @Override
     public void start() {
-
+        try {
+            registry = LocateRegistry.createRegistry(Constants.SERVER_PORT);
+            registry.bind(Constants.SERVER_NAME, this);
+            new Thread(new RequestHandler()).start();
+        } catch (RemoteException e) {
+            logger.error(e.getMessage());
+        } catch (AlreadyBoundException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @Override
     public void stop() {
-
+        try {
+            UnicastRemoteObject.unexportObject(this,true);
+            registry.unbind(Constants.SERVER_NAME);
+        } catch (RemoteException e) {
+            logger.error(e.getMessage());
+        } catch (NotBoundException e) {
+            logger.error(e.getMessage());
+        }
     }
 
     @Override
