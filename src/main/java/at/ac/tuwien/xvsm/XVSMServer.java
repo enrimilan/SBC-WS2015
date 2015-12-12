@@ -27,6 +27,15 @@ public class XVSMServer implements IServer {
     private Capi capi;
     private ContainerReference motorsContainer, rotorsContainer, casesContainer, controlUnitsContainer;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
+
+    public INotificationCallback getNotificationCallback() {
+        return notificationCallback;
+    }
+
+    public void setNotificationCallback(INotificationCallback notificationCallback) {
+        this.notificationCallback = notificationCallback;
+    }
+
     private INotificationCallback notificationCallback;
 
     public XVSMServer(){
@@ -84,6 +93,11 @@ public class XVSMServer implements IServer {
                 capi.rollbackTransaction(tx);
             }
         }
+    }
+
+
+    public void supply(Entry part)throws MzsCoreException {
+        notificationCallback.onPartAdded((Part) part.getValue());
     }
 
 
