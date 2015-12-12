@@ -52,7 +52,6 @@ public class GUI{
     public GUI(Stage primaryStage, IServer server) throws IOException {
         this.primaryStage = primaryStage;
         this.server = server;
-        server.start();
         Updater u = new Updater();
         u.start();
     }
@@ -143,6 +142,7 @@ public class GUI{
                     }
 
                 });
+            server.start();
 
         }
     }
