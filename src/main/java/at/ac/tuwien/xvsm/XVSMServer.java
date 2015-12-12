@@ -7,7 +7,9 @@ import at.ac.tuwien.common.view.INotificationCallback;
 import at.ac.tuwien.utils.Constants;
 import at.ac.tuwien.utils.Utils;
 import at.ac.tuwien.xvsm.aspect.PartsAspect;
+import org.mozartspaces.capi3.Coordinator;
 import org.mozartspaces.capi3.FifoCoordinator;
+import org.mozartspaces.capi3.QueryCoordinator;
 import org.mozartspaces.capi3.Selector;
 import org.mozartspaces.core.*;
 import org.mozartspaces.core.aspects.ContainerIPoint;
@@ -38,14 +40,18 @@ public class XVSMServer implements IServer {
         this.capi = new Capi(core);
         logger.debug("XVSMServer started");
 
+        List<Coordinator> coordinators = new ArrayList<Coordinator>();
+        coordinators.add(new QueryCoordinator());
+        coordinators.add(new FifoCoordinator());
+
         //create the containers
-        this.motorsContainer = Utils.getOrCreateContainer(Constants.MOTORS_CONTAINER_NAME, capi);
-        this.rotorsContainer = Utils.getOrCreateContainer(Constants.ROTORS_CONTAINER_NAME, capi);
-        this.casesContainer = Utils.getOrCreateContainer(Constants.CASES_CONTAINER_NAME, capi);
-        this.controlUnitsContainer = Utils.getOrCreateContainer(Constants.CONTROL_UNITS_CONTAINER_NAME, capi);
-        this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi);
-        this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi);
-        this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi);
+        this.motorsContainer = Utils.getOrCreateContainer(Constants.MOTORS_CONTAINER_NAME, capi, coordinators);
+        this.rotorsContainer = Utils.getOrCreateContainer(Constants.ROTORS_CONTAINER_NAME, capi, coordinators);
+        this.casesContainer = Utils.getOrCreateContainer(Constants.CASES_CONTAINER_NAME, capi, coordinators);
+        this.controlUnitsContainer = Utils.getOrCreateContainer(Constants.CONTROL_UNITS_CONTAINER_NAME, capi, coordinators);
+        this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators);
+        this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators);
+        this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
         try {
             PartsAspect partsAspect = new PartsAspect(this);
             capi.addContainerAspect(partsAspect, motorsContainer, ContainerIPoint.POST_WRITE);
