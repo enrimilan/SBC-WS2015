@@ -48,18 +48,7 @@ public class XVSMConnection implements IConnection {
     @Override
     public void supply(Part part) throws ConnectionException {
         try{
-            if(part.getPartType() == PartType.MOTOR){
-                capi.write(partsContainer, new Entry(part));
-            }
-            if(part.getPartType() == PartType.ROTOR){
-                capi.write(partsContainer, new Entry(part));
-            }
-            if(part.getPartType() == PartType.CASE){
-                capi.write(partsContainer, new Entry(part));
-            }
-            if(part.getPartType() == PartType.CONTROL_UNIT){
-                capi.write(partsContainer, new Entry(part));
-            }
+            capi.write(partsContainer, new Entry(part));
         }
         catch (MzsCoreException e) {
             throw new ConnectionException(e.getMessage());
