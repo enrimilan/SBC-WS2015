@@ -9,10 +9,15 @@ import at.ac.tuwien.common.notification.ICalibratedNotification;
 import at.ac.tuwien.common.notification.ITestedNotification;
 import at.ac.tuwien.utils.Constants;
 import at.ac.tuwien.utils.Utils;
+import org.mozartspaces.capi3.Coordinator;
+import org.mozartspaces.capi3.FifoCoordinator;
+import org.mozartspaces.capi3.QueryCoordinator;
 import org.mozartspaces.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class XVSMConnection implements IConnection {
@@ -27,13 +32,18 @@ public class XVSMConnection implements IConnection {
     public void establish() throws ConnectionException {
         this.core = DefaultMzsCore.newInstance(Constants.RANDOM_FREE_PORT);
         this.capi = new Capi(core);
-        this.motorsContainer = Utils.getOrCreateContainer(Constants.MOTORS_CONTAINER_NAME, capi);
-        this.rotorsContainer = Utils.getOrCreateContainer(Constants.ROTORS_CONTAINER_NAME, capi);
-        this.casesContainer = Utils.getOrCreateContainer(Constants.CASES_CONTAINER_NAME, capi);
-        this.controlUnitsContainer = Utils.getOrCreateContainer(Constants.CONTROL_UNITS_CONTAINER_NAME, capi);
-        this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi);
-        this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi);
-        this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi);
+
+        List<Coordinator> coordinators = new ArrayList<Coordinator>();
+        coordinators.add(new QueryCoordinator());
+        coordinators.add(new FifoCoordinator());
+
+        this.motorsContainer = Utils.getOrCreateContainer(Constants.MOTORS_CONTAINER_NAME, capi, coordinators);
+        this.rotorsContainer = Utils.getOrCreateContainer(Constants.ROTORS_CONTAINER_NAME, capi, coordinators);
+        this.casesContainer = Utils.getOrCreateContainer(Constants.CASES_CONTAINER_NAME, capi, coordinators);
+        this.controlUnitsContainer = Utils.getOrCreateContainer(Constants.CONTROL_UNITS_CONTAINER_NAME, capi, coordinators);
+        this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators);
+        this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators);
+        this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
         logger.debug("Connection established.");
     }
 
