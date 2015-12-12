@@ -27,21 +27,25 @@ public class AssembledNotification implements IAssembledNotification, Serializab
         Thread thread = new Thread(){
             @Override
             public void run() {
-
+                IConnection connection = Utils.getConnectionInstance();
                 for(int i = 0; i<motors.size(); i++){
                     Module module = new Module(ModuleType.MOTOR_ROTOR_PAIR, assemblyRobotId);
                     module.addPart(motors.get(i));
                     module.addPart(rotors.get(i));
                     try {
                         Thread.sleep(INTERVAL);
-                        IConnection connection = Utils.getConnectionInstance();
+
                         connection.moduleAssembled(module, job);
-                        connection.registerAssemblyRobot(AssembledNotification.this);
                     } catch (InterruptedException e) {
                         logger.debug(e.getMessage());
                     } catch (ConnectionException e) {
                         e.printStackTrace();
                     }
+                }
+                try {
+                    connection.registerAssemblyRobot(AssembledNotification.this);
+                } catch (ConnectionException e) {
+                    e.printStackTrace();
                 }
             }
         };
