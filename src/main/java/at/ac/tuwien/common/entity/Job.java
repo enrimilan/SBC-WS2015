@@ -27,4 +27,20 @@ public class Job implements Serializable {
     public void setStatus(JobStatus status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Job job = (Job) o;
+
+        return id == job.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }
