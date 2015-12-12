@@ -34,7 +34,10 @@ public class AssembledNotification implements IAssembledNotification, Serializab
                     module.addPart(rotors.get(i));
                     try {
                         Thread.sleep(INTERVAL);
-
+                        if(i==motors.size()-1){
+                            //this the last element, the mark the job as done
+                            job.setStatus(JobStatus.DONE);
+                        }
                         connection.moduleAssembled(module, job);
                     } catch (InterruptedException e) {
                         logger.debug(e.getMessage());
