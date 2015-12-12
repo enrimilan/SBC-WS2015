@@ -6,6 +6,7 @@ import at.ac.tuwien.common.entity.PartType;
 import at.ac.tuwien.xvsm.XVSMConnection;
 import org.mozartspaces.capi3.Coordinator;
 import org.mozartspaces.capi3.FifoCoordinator;
+import org.mozartspaces.capi3.QueryCoordinator;
 import org.mozartspaces.core.Capi;
 import org.mozartspaces.core.ContainerReference;
 import org.mozartspaces.core.MzsConstants;
@@ -56,7 +57,7 @@ public class Utils {
     }
 
 
-    public static ContainerReference getOrCreateContainer(String containerName, Capi capi) {
+    public static ContainerReference getOrCreateContainer(String containerName, Capi capi, ArrayList<Coordinator> obligatoryCoords) {
         ContainerReference cref = null;
         URI spaceUri = getSpaceUri(Constants.SERVER_HOST, Constants.SERVER_PORT);
         try {
@@ -64,8 +65,9 @@ public class Utils {
             logger.debug("created container: "+ containerName);
         } catch (MzsCoreException e) {
             // Container doesn't exist, so create a new one
-            ArrayList<Coordinator> obligatoryCoords = new ArrayList<>();
-            obligatoryCoords.add(new FifoCoordinator());
+//            ArrayList<Coordinator> obligatoryCoords = new ArrayList<>();
+//            obligatoryCoords.add(new QueryCoordinator());
+//            obligatoryCoords.add(new FifoCoordinator());
             try {
                 logger.debug("Container " + containerName + " not found. Creating a new one");
                 cref = capi.createContainer(containerName, spaceUri, MzsConstants.Container.UNBOUNDED, obligatoryCoords, null, null);
