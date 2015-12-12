@@ -342,6 +342,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                 return false;
             }
             Module caseControlUnitPair = caseControlUnitPairs.remove(0);
+            notificationCallback.onModuleRemoved(caseControlUnitPair);
             ArrayList<Module> motorRotorPairModules = new ArrayList<Module>();
             Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
             int i = 0;
