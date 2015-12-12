@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
 
@@ -57,7 +58,7 @@ public class Utils {
     }
 
 
-    public static ContainerReference getOrCreateContainer(String containerName, Capi capi, ArrayList<Coordinator> obligatoryCoords) {
+    public static ContainerReference getOrCreateContainer(String containerName, Capi capi, List<Coordinator> obligatoryCoords) {
         ContainerReference cref = null;
         URI spaceUri = getSpaceUri(Constants.SERVER_HOST, Constants.SERVER_PORT);
         try {
@@ -65,9 +66,6 @@ public class Utils {
             logger.debug("created container: "+ containerName);
         } catch (MzsCoreException e) {
             // Container doesn't exist, so create a new one
-//            ArrayList<Coordinator> obligatoryCoords = new ArrayList<>();
-//            obligatoryCoords.add(new QueryCoordinator());
-//            obligatoryCoords.add(new FifoCoordinator());
             try {
                 logger.debug("Container " + containerName + " not found. Creating a new one");
                 cref = capi.createContainer(containerName, spaceUri, MzsConstants.Container.UNBOUNDED, obligatoryCoords, null, null);
