@@ -4,6 +4,7 @@ import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.Job;
+import at.ac.tuwien.common.entity.JobStatus;
 import at.ac.tuwien.common.entity.Status;
 import at.ac.tuwien.utils.Utils;
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ public class TestedNotification implements ITestedNotification, Serializable {
                     }
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
+                    job.setStatus(JobStatus.DONE);
                     connection.droneTested(drone, job);
                     connection.registerLogisticRobot(TestedNotification.this);
                 } catch (ConnectionException e) {

@@ -2,10 +2,7 @@ package at.ac.tuwien.common.notification;
 
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
-import at.ac.tuwien.common.entity.Drone;
-import at.ac.tuwien.common.entity.Job;
-import at.ac.tuwien.common.entity.Module;
-import at.ac.tuwien.common.entity.Status;
+import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +38,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
                     module.setStatus(Status.CALIBRATED);
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
+                    job.setStatus(JobStatus.DONE);
                     connection.motorRotorPairCalibrated(module, job);
                     connection.registerCalibrationRobot(CalibratedNotification.this);
                 } catch (ConnectionException e) {
@@ -73,6 +71,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
                             motorRotorPair.setCalibratorId(calibratorRobotId);
                             motorRotorPair.setStatus(Status.CALIBRATED);
                             Thread.sleep(INTERVAL);
+                            job.setStatus(JobStatus.DONE);
                             connection.droneCalibrated(drone, job);
                             connection.registerCalibrationRobot(CalibratedNotification.this);
                             return;
@@ -86,6 +85,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
                     caseControlUnitPair.setStatus(Status.CALIBRATED);
                     drone.setStatus(Status.CALIBRATED);
                     Thread.sleep(INTERVAL);
+                    job.setStatus(JobStatus.DONE);
                     connection.droneCalibrated(drone, job);
                     connection.registerCalibrationRobot(CalibratedNotification.this);
                 } catch (ConnectionException e) {

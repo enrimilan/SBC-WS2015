@@ -67,6 +67,7 @@ public class AssembledNotification implements IAssembledNotification, Serializab
                 try {
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
+                    job.setStatus(JobStatus.DONE);
                     connection.moduleAssembled(module, job);
                     connection.registerAssemblyRobot(AssembledNotification.this);
                 } catch (InterruptedException e) {
@@ -90,6 +91,7 @@ public class AssembledNotification implements IAssembledNotification, Serializab
                 try {
                     Thread.sleep(3*INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
+                    job.setStatus(JobStatus.DONE);
                     connection.droneAssembled(drone, job);
                     connection.registerAssemblyRobot(AssembledNotification.this);
                 } catch (InterruptedException e) {
