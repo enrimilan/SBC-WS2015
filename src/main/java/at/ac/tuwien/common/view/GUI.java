@@ -95,37 +95,45 @@ public class GUI{
         public void run() {
 
                 server.registerGUINotificationCallback(new INotificationCallback() {
+
                     @Override
-                    public void supplyNotifier(CopyOnWriteArrayList<Part> cases, CopyOnWriteArrayList<Part> controlUnits, CopyOnWriteArrayList<Part> motors, CopyOnWriteArrayList<Part> rotors) {
-                        CopyOnWriteArrayList<Part> allParts = new CopyOnWriteArrayList<Part>();
-                        allParts.addAll(cases);
-                        allParts.addAll(controlUnits);
-                        allParts.addAll(motors);
-                        allParts.addAll(rotors);
-                        partsData.setAll(allParts);
+                    public void onPartAdded(Part part) {
+                        partsData.add(part);
                     }
 
                     @Override
-                    public void droneNotifier(CopyOnWriteArrayList<Drone> drones) {
-                        dronesData.setAll(drones);
+                    public void onPartRemoved(Part part) {
+                        partsData.remove(part);
                     }
 
                     @Override
-                    public void testGoodDroneNotifier(CopyOnWriteArrayList<Drone> drones) {
-                        goodDronesData.setAll(drones);
+                    public void onModuleAdded(Module module) {
+                        modulesData.add(module);
                     }
 
                     @Override
-                    public void testBadDroneNotifier(CopyOnWriteArrayList<Drone> drones) {
-                        badDronesData.setAll(drones);
+                    public void onModuleRemoved(Module module) {
+                        modulesData.remove(module);
                     }
 
                     @Override
-                    public void modulesNotifier(CopyOnWriteArrayList<Module> cu, CopyOnWriteArrayList<Module> mr) {
-                        CopyOnWriteArrayList<Module> allModules = new CopyOnWriteArrayList<Module>();
-                        allModules.addAll(mr);
-                        allModules.addAll(cu);
-                        modulesData.setAll(allModules);
+                    public void onDroneAdded(Drone drone) {
+                        dronesData.add(drone);
+                    }
+
+                    @Override
+                    public void onDroneRemoved(Drone drone) {
+                        dronesData.remove(drone);
+                    }
+
+                    @Override
+                    public void onGoodDroneTested(Drone drone) {
+                        goodDronesData.add(drone);
+                    }
+
+                    @Override
+                    public void onBadDroneTested(Drone drone) {
+                        badDronesData.add(drone);
                     }
 
                 });

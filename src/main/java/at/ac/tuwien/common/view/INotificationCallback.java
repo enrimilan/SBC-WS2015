@@ -8,10 +8,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface INotificationCallback {
 
-    void supplyNotifier(CopyOnWriteArrayList<Part> cases, CopyOnWriteArrayList<Part> controlUnits, CopyOnWriteArrayList<Part>  motors, CopyOnWriteArrayList<Part>  rotors );
-    void droneNotifier(CopyOnWriteArrayList<Drone> drones);
-    void testGoodDroneNotifier(CopyOnWriteArrayList<Drone> drones);
-    void testBadDroneNotifier(CopyOnWriteArrayList<Drone> drones);
+    void onPartAdded(Part part);
+    void onPartRemoved(Part part);
 
-    void modulesNotifier(CopyOnWriteArrayList<Module> mr, CopyOnWriteArrayList<Module> cu);
+    void onModuleAdded(Module module);
+    void onModuleRemoved(Module module);
+
+    void onDroneAdded(Drone drone);
+    void onDroneRemoved(Drone drone);
+
+    void onGoodDroneTested(Drone drone);
+    void onBadDroneTested(Drone drone);
 }

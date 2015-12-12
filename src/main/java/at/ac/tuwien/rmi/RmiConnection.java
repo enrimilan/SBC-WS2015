@@ -45,7 +45,6 @@ public class RmiConnection implements IConnection {
     @Override
     public void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException {
         try {
-            //UnicastRemoteObject.exportObject(assemblyRobotNotification, Constants.SERVER_PORT);
             server.registerAssemblyRobot(assemblyRobotNotification);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
@@ -55,7 +54,7 @@ public class RmiConnection implements IConnection {
     @Override
     public void moduleAssembled(Module module, Job job) throws ConnectionException {
         try {
-            server.moduleAssembled(module);
+            server.moduleAssembled(module, job);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
@@ -64,7 +63,7 @@ public class RmiConnection implements IConnection {
     @Override
     public void droneAssembled(Drone drone, Job job) throws ConnectionException {
         try {
-            server.droneAssembled(drone);
+            server.droneAssembled(drone, job);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
@@ -82,7 +81,7 @@ public class RmiConnection implements IConnection {
     @Override
     public void motorRotorPairCalibrated(Module module, Job job) throws ConnectionException {
         try {
-            server.motorRotorPairCalibrated(module);
+            server.motorRotorPairCalibrated(module, job);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
@@ -91,7 +90,7 @@ public class RmiConnection implements IConnection {
     @Override
     public void droneCalibrated(Drone drone, Job job) throws ConnectionException {
         try {
-            server.droneCalibrated(drone);
+            server.droneCalibrated(drone, job);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
@@ -109,7 +108,7 @@ public class RmiConnection implements IConnection {
     @Override
     public void droneTested(Drone drone, Job job) throws ConnectionException {
         try {
-            server.droneTested(drone);
+            server.droneTested(drone, job);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
