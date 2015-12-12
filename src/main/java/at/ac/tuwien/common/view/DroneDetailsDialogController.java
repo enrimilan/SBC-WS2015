@@ -2,6 +2,7 @@ package at.ac.tuwien.common.view;
 
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.PartType;
+import at.ac.tuwien.common.entity.Status;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -126,49 +127,96 @@ public class DroneDetailsDialogController {
            label_droneCUSupplierId.setText(drone.getCaseControlUnitPair().getParts().get(0).getSupplierId().toString());
        }
 
-        label_droneModuleCCUassemblerId.setText(drone.getCaseControlUnitPair().getAssemblerId().toString());
-        label_droneModuleCCUcalibratorId.setText(drone.getCaseControlUnitPair().getCalibratorId().toString());
-        label_droneModuleCCUcalibrationValue.setText(String.valueOf(drone.getCaseControlUnitPair().getCalibrationValue()));
+        if(drone.getStatus() == Status.ASSEMBLED){
+
+            label_droneModuleCCUassemblerId.setText(drone.getCaseControlUnitPair().getAssemblerId().toString());
+            label_droneModuleCCUcalibratorId.setText("N/A");
+            label_droneModuleCCUcalibrationValue.setText("N/A");
 
 
-        //TODO: Assumed 0 is Motor, 1 is Rotor
-        /*** CP1 ***/
+            //TODO: Assumed 0 is Motor, 1 is Rotor
+            /*** CP1 ***/
 
-        lbl_CP1_MotorId.setText(drone.getMotorRotorPairs().get(0).getParts().get(0).getPartId().toString());
-        lbl_CP1_MotorSupplierId.setText(drone.getMotorRotorPairs().get(0).getParts().get(0).getSupplierId().toString());
+            lbl_CP1_MotorId.setText(drone.getMotorRotorPairs().get(0).getParts().get(0).getPartId().toString());
+            lbl_CP1_MotorSupplierId.setText(drone.getMotorRotorPairs().get(0).getParts().get(0).getSupplierId().toString());
 
-        lbl_CP1_RotorId.setText(drone.getMotorRotorPairs().get(0).getParts().get(1).getPartId().toString());
-        lbl_CP1_RotorSupplierId.setText(drone.getMotorRotorPairs().get(0).getParts().get(1).getSupplierId().toString());
+            lbl_CP1_RotorId.setText(drone.getMotorRotorPairs().get(0).getParts().get(1).getPartId().toString());
+            lbl_CP1_RotorSupplierId.setText(drone.getMotorRotorPairs().get(0).getParts().get(1).getSupplierId().toString());
 
-        lbl_CP1_AssemblerId.setText(drone.getMotorRotorPairs().get(0).getAssemblerId().toString());
-        lbl_CP1_CalibratorId.setText(drone.getMotorRotorPairs().get(0).getCalibratorId().toString());
-        lbl_CP1_CalibrationVlue.setText(String.valueOf(drone.getMotorRotorPairs().get(0).getCalibrationValue()));
+            lbl_CP1_AssemblerId.setText(drone.getMotorRotorPairs().get(0).getAssemblerId().toString());
+            lbl_CP1_CalibratorId.setText("N/A");
+            lbl_CP1_CalibrationVlue.setText("N/A");
 
-        /*** CP2 ***/
+            /*** CP2 ***/
 
-        lbl_CP2_MotorId.setText(drone.getMotorRotorPairs().get(1).getParts().get(0).getPartId().toString());
-        lbl_CP2_MotorSupplierId.setText(drone.getMotorRotorPairs().get(1).getParts().get(0).getSupplierId().toString());
+            lbl_CP2_MotorId.setText(drone.getMotorRotorPairs().get(1).getParts().get(0).getPartId().toString());
+            lbl_CP2_MotorSupplierId.setText(drone.getMotorRotorPairs().get(1).getParts().get(0).getSupplierId().toString());
 
-        lbl_CP2_RotorId.setText(drone.getMotorRotorPairs().get(1).getParts().get(1).getPartId().toString());
-        lbl_CP2_RotorSupplierId.setText(drone.getMotorRotorPairs().get(1).getParts().get(1).getSupplierId().toString());
+            lbl_CP2_RotorId.setText(drone.getMotorRotorPairs().get(1).getParts().get(1).getPartId().toString());
+            lbl_CP2_RotorSupplierId.setText(drone.getMotorRotorPairs().get(1).getParts().get(1).getSupplierId().toString());
 
-        lbl_CP2_AssemblerId.setText(drone.getMotorRotorPairs().get(1).getAssemblerId().toString());
-        lbl_CP2_CalibratorId.setText(drone.getMotorRotorPairs().get(1).getCalibratorId().toString());
-        lbl_CP2_CalibrationVlue.setText(String.valueOf(drone.getMotorRotorPairs().get(1).getCalibrationValue()));
+            lbl_CP2_AssemblerId.setText(drone.getMotorRotorPairs().get(1).getAssemblerId().toString());
+            lbl_CP2_CalibratorId.setText("N/A");
+            lbl_CP2_CalibrationVlue.setText("N/A");
 
 
-        /*** CP3 ***/
+            /*** CP3 ***/
 
-        lbl_CP3_MotorId.setText(drone.getMotorRotorPairs().get(2).getParts().get(0).getPartId().toString());
-        lbl_CP3_MotorSupplierId.setText(drone.getMotorRotorPairs().get(2).getParts().get(0).getSupplierId().toString());
+            lbl_CP3_MotorId.setText(drone.getMotorRotorPairs().get(2).getParts().get(0).getPartId().toString());
+            lbl_CP3_MotorSupplierId.setText(drone.getMotorRotorPairs().get(2).getParts().get(0).getSupplierId().toString());
 
-        lbl_CP3_RotorId.setText(drone.getMotorRotorPairs().get(2).getParts().get(1).getPartId().toString());
-        lbl_CP3_RotorSupplierId.setText(drone.getMotorRotorPairs().get(2).getParts().get(1).getSupplierId().toString());
+            lbl_CP3_RotorId.setText(drone.getMotorRotorPairs().get(2).getParts().get(1).getPartId().toString());
+            lbl_CP3_RotorSupplierId.setText(drone.getMotorRotorPairs().get(2).getParts().get(1).getSupplierId().toString());
 
-        lbl_CP3_AssemblerId.setText(drone.getMotorRotorPairs().get(2).getAssemblerId().toString());
-        lbl_CP3_CalibratorId.setText(drone.getMotorRotorPairs().get(2).getCalibratorId().toString());
-        lbl_CP3_CalibrationVlue.setText(String.valueOf(drone.getMotorRotorPairs().get(2).getCalibrationValue()));
+            lbl_CP3_AssemblerId.setText(drone.getMotorRotorPairs().get(2).getAssemblerId().toString());
+            lbl_CP3_CalibratorId.setText("N/A");
+            lbl_CP3_CalibrationVlue.setText("N/A");
 
+        } else {
+
+            label_droneModuleCCUassemblerId.setText(drone.getCaseControlUnitPair().getAssemblerId().toString());
+            label_droneModuleCCUcalibratorId.setText(drone.getCaseControlUnitPair().getCalibratorId().toString());
+            label_droneModuleCCUcalibrationValue.setText(String.valueOf(drone.getCaseControlUnitPair().getCalibrationValue()));
+
+
+            //TODO: Assumed 0 is Motor, 1 is Rotor
+            /*** CP1 ***/
+
+            lbl_CP1_MotorId.setText(drone.getMotorRotorPairs().get(0).getParts().get(0).getPartId().toString());
+            lbl_CP1_MotorSupplierId.setText(drone.getMotorRotorPairs().get(0).getParts().get(0).getSupplierId().toString());
+
+            lbl_CP1_RotorId.setText(drone.getMotorRotorPairs().get(0).getParts().get(1).getPartId().toString());
+            lbl_CP1_RotorSupplierId.setText(drone.getMotorRotorPairs().get(0).getParts().get(1).getSupplierId().toString());
+
+            lbl_CP1_AssemblerId.setText(drone.getMotorRotorPairs().get(0).getAssemblerId().toString());
+            lbl_CP1_CalibratorId.setText(drone.getMotorRotorPairs().get(0).getCalibratorId().toString());
+            lbl_CP1_CalibrationVlue.setText(String.valueOf(drone.getMotorRotorPairs().get(0).getCalibrationValue()));
+
+            /*** CP2 ***/
+
+            lbl_CP2_MotorId.setText(drone.getMotorRotorPairs().get(1).getParts().get(0).getPartId().toString());
+            lbl_CP2_MotorSupplierId.setText(drone.getMotorRotorPairs().get(1).getParts().get(0).getSupplierId().toString());
+
+            lbl_CP2_RotorId.setText(drone.getMotorRotorPairs().get(1).getParts().get(1).getPartId().toString());
+            lbl_CP2_RotorSupplierId.setText(drone.getMotorRotorPairs().get(1).getParts().get(1).getSupplierId().toString());
+
+            lbl_CP2_AssemblerId.setText(drone.getMotorRotorPairs().get(1).getAssemblerId().toString());
+            lbl_CP2_CalibratorId.setText(drone.getMotorRotorPairs().get(1).getCalibratorId().toString());
+            lbl_CP2_CalibrationVlue.setText(String.valueOf(drone.getMotorRotorPairs().get(1).getCalibrationValue()));
+
+
+            /*** CP3 ***/
+
+            lbl_CP3_MotorId.setText(drone.getMotorRotorPairs().get(2).getParts().get(0).getPartId().toString());
+            lbl_CP3_MotorSupplierId.setText(drone.getMotorRotorPairs().get(2).getParts().get(0).getSupplierId().toString());
+
+            lbl_CP3_RotorId.setText(drone.getMotorRotorPairs().get(2).getParts().get(1).getPartId().toString());
+            lbl_CP3_RotorSupplierId.setText(drone.getMotorRotorPairs().get(2).getParts().get(1).getSupplierId().toString());
+
+            lbl_CP3_AssemblerId.setText(drone.getMotorRotorPairs().get(2).getAssemblerId().toString());
+            lbl_CP3_CalibratorId.setText(drone.getMotorRotorPairs().get(2).getCalibratorId().toString());
+            lbl_CP3_CalibrationVlue.setText(String.valueOf(drone.getMotorRotorPairs().get(2).getCalibrationValue()));
+        }
     }
 
     public boolean isOkClicked() {
