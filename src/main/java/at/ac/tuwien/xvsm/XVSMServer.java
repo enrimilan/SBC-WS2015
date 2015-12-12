@@ -25,7 +25,7 @@ public class XVSMServer implements IServer {
     private final static Logger logger = LoggerFactory.getLogger(XVSMServer.class);
     private MzsCore core;
     private Capi capi;
-    private ContainerReference partsContainer;
+    private ContainerReference partsContainer, modulesContainer;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
 
 
@@ -48,6 +48,7 @@ public class XVSMServer implements IServer {
 
         //create the containers
         this.partsContainer = Utils.getOrCreateContainer(Constants.PARTS_CONTAINER, capi, coordinators);
+        modulesContainer = Utils.getOrCreateContainer(Constants.MODULES_CONTAINER, capi, coordinators);
         this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators);
         this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators);
         this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
