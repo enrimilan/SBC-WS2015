@@ -25,7 +25,7 @@ public class XVSMConnection implements IConnection {
     private final static Logger logger = LoggerFactory.getLogger(XVSMConnection.class);
     private MzsCore core;
     private Capi capi;
-    private ContainerReference motorsContainer, rotorsContainer, casesContainer, controlUnitsContainer;
+    private ContainerReference partsContainer;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
 
     @Override
@@ -37,10 +37,7 @@ public class XVSMConnection implements IConnection {
         coordinators.add(new QueryCoordinator());
         coordinators.add(new FifoCoordinator());
 
-        this.motorsContainer = Utils.getOrCreateContainer(Constants.MOTORS_CONTAINER_NAME, capi, coordinators);
-        this.rotorsContainer = Utils.getOrCreateContainer(Constants.ROTORS_CONTAINER_NAME, capi, coordinators);
-        this.casesContainer = Utils.getOrCreateContainer(Constants.CASES_CONTAINER_NAME, capi, coordinators);
-        this.controlUnitsContainer = Utils.getOrCreateContainer(Constants.CONTROL_UNITS_CONTAINER_NAME, capi, coordinators);
+        this.partsContainer = Utils.getOrCreateContainer(Constants.PARTS_CONTAINER, capi, coordinators);
         this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators);
         this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators);
         this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
@@ -51,16 +48,16 @@ public class XVSMConnection implements IConnection {
     public void supply(Part part) throws ConnectionException {
         try{
             if(part.getPartType() == PartType.MOTOR){
-                capi.write(motorsContainer, new Entry(part));
+                capi.write(partsContainer, new Entry(part));
             }
             if(part.getPartType() == PartType.ROTOR){
-                capi.write(rotorsContainer, new Entry(part));
+                capi.write(partsContainer, new Entry(part));
             }
             if(part.getPartType() == PartType.CASE){
-                capi.write(casesContainer, new Entry(part));
+                capi.write(partsContainer, new Entry(part));
             }
             if(part.getPartType() == PartType.CONTROL_UNIT){
-                capi.write(controlUnitsContainer, new Entry(part));
+                capi.write(partsContainer, new Entry(part));
             }
         }
         catch (MzsCoreException e) {

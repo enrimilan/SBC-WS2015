@@ -25,16 +25,9 @@ public class XVSMServer implements IServer {
     private final static Logger logger = LoggerFactory.getLogger(XVSMServer.class);
     private MzsCore core;
     private Capi capi;
-    private ContainerReference motorsContainer, rotorsContainer, casesContainer, controlUnitsContainer;
+    private ContainerReference partsContainer;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
 
-    public INotificationCallback getNotificationCallback() {
-        return notificationCallback;
-    }
-
-    public void setNotificationCallback(INotificationCallback notificationCallback) {
-        this.notificationCallback = notificationCallback;
-    }
 
     private INotificationCallback notificationCallback;
 
@@ -54,19 +47,13 @@ public class XVSMServer implements IServer {
         coordinators.add(new FifoCoordinator());
 
         //create the containers
-        this.motorsContainer = Utils.getOrCreateContainer(Constants.MOTORS_CONTAINER_NAME, capi, coordinators);
-        this.rotorsContainer = Utils.getOrCreateContainer(Constants.ROTORS_CONTAINER_NAME, capi, coordinators);
-        this.casesContainer = Utils.getOrCreateContainer(Constants.CASES_CONTAINER_NAME, capi, coordinators);
-        this.controlUnitsContainer = Utils.getOrCreateContainer(Constants.CONTROL_UNITS_CONTAINER_NAME, capi, coordinators);
+        this.partsContainer = Utils.getOrCreateContainer(Constants.PARTS_CONTAINER, capi, coordinators);
         this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators);
         this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators);
         this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
         try {
-            PartsAspect partsAspect = new PartsAspect(this);
-            capi.addContainerAspect(partsAspect, motorsContainer, ContainerIPoint.POST_WRITE);
-            capi.addContainerAspect(partsAspect, rotorsContainer, ContainerIPoint.POST_WRITE);
-            capi.addContainerAspect(partsAspect, casesContainer, ContainerIPoint.POST_WRITE);
-            capi.addContainerAspect(partsAspect, controlUnitsContainer, ContainerIPoint.POST_WRITE);
+            PartsAspect partsAspect = new PartsAspect(this, notificationCallback);
+            capi.addContainerAspect(partsAspect, partsContainer, ContainerIPoint.POST_WRITE);
         } catch (MzsCoreException e) {
             e.printStackTrace();
         }
@@ -74,31 +61,26 @@ public class XVSMServer implements IServer {
         logger.debug("created containers");
     }
 
-    public void onNewPart(Entry part) throws MzsCoreException {
-        TransactionReference tx = capi.createTransaction(3000, null);
-        logger.debug("GUI new part");
-        List<Selector> notificationSelector = Arrays.asList(FifoCoordinator.newSelector(1));
-        ArrayList<AssembledNotification> notifications = capi.take(assembledNotifications, notificationSelector,
-                MzsConstants.RequestTimeout.DEFAULT, tx);
-        if(!notifications.isEmpty()){
-            List<Selector> selector = Arrays.asList(FifoCoordinator.newSelector(3), FifoCoordinator.newSelector(2),
-                    FifoCoordinator.newSelector(1), FifoCoordinator.newSelector(0));
-            ArrayList<Part> motors = capi.read(motorsContainer, selector, MzsConstants.RequestTimeout.DEFAULT, tx);
-            ArrayList<Part> rotors = capi.read(rotorsContainer, selector, MzsConstants.RequestTimeout.DEFAULT, tx);
-            if(!motors.isEmpty() && !rotors.isEmpty()){
-                capi.commitTransaction(tx);
-                //notifications.get(0).assembleMotorRotorPairs(motors, rotors);
-            }
-            else{
-                capi.rollbackTransaction(tx);
-            }
-        }
-    }
-
-
-    public void supply(Entry part)throws MzsCoreException {
-        notificationCallback.onPartAdded((Part) part.getValue());
-    }
+//    public void onNewPart(Entry part) throws MzsCoreException {
+//        TransactionReference tx = capi.createTransaction(3000, null);
+//        logger.debug("GUI new part");
+//        List<Selector> notificationSelector = Arrays.asList(FifoCoordinator.newSelector(1));
+//        ArrayList<AssembledNotification> notifications = capi.take(assembledNotifications, notificationSelector,
+//                MzsConstants.RequestTimeout.DEFAULT, tx);
+//        if(!notifications.isEmpty()){
+//            List<Selector> selector = Arrays.asList(FifoCoordinator.newSelector(3), FifoCoordinator.newSelector(2),
+//                    FifoCoordinator.newSelector(1), FifoCoordinator.newSelector(0));
+//            ArrayList<Part> motors = capi.read(motorsContainer, selector, MzsConstants.RequestTimeout.DEFAULT, tx);
+//            ArrayList<Part> rotors = capi.read(rotorsContainer, selector, MzsConstants.RequestTimeout.DEFAULT, tx);
+//            if(!motors.isEmpty() && !rotors.isEmpty()){
+//                capi.commitTransaction(tx);
+//                //notifications.get(0).assembleMotorRotorPairs(motors, rotors);
+//            }
+//            else{
+//                capi.rollbackTransaction(tx);
+//            }
+//        }
+//    }
 
 
     @Override

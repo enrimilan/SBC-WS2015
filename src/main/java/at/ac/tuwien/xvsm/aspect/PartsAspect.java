@@ -16,20 +16,22 @@ import java.util.List;
 public class PartsAspect extends AbstractContainerAspect {
 
     private XVSMServer server;
+    private INotificationCallback notificationCallback;
 
-    public PartsAspect(XVSMServer server) throws MzsCoreException {
+    public PartsAspect(XVSMServer server, INotificationCallback notificationCallback) throws MzsCoreException {
         this.server = server;
+        this.notificationCallback = notificationCallback;
     }
 
     @Override
     public AspectResult postWrite(WriteEntriesRequest request, Transaction tx, SubTransaction stx, Capi3AspectPort capi3, int executionCount) {
         List<Entry> entries = request.getEntries();
-        try {
+//        try {
 //            server.onNewPart(entries.get(0));
-            server.supply(entries.get(0));
-        } catch (MzsCoreException e) {
-            e.printStackTrace();
-        }
+            notificationCallback.onPartAdded((Part) entries.get(0).getValue());
+//        } catch (MzsCoreException e) {
+//            e.printStackTrace();
+//        }
         return AspectResult.OK;
     }
 }
