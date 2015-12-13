@@ -33,7 +33,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     private Queue<IAssembledNotification> assemblyRobots;
     private Queue<ICalibratedNotification> calibrationRobots;
     private Queue<ITestedNotification> logisticRobots;
-    private final AtomicReference<Integer> jobId;
+    private AtomicReference<Integer> jobId;
     private ConcurrentHashMap<Job,Transaction> jobs;
     private INotificationCallback notificationCallback;
 
