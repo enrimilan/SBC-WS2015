@@ -96,48 +96,48 @@ public class GUI{
                 server.registerGUINotificationCallback(new INotificationCallback() {
 
                     @Override
-                    public void onPartAdded(Part part) {
+                    public synchronized void onPartAdded(Part part) {
                         partsData.add(part);
                     }
 
                     @Override
-                    public void onPartRemoved(Part part) {
+                    public synchronized void onPartRemoved(Part part) {
                         partsData.remove(part);
                     }
 
                     @Override
-                    public void onModuleAdded(Module module) {
+                    public synchronized void onModuleAdded(Module module) {
                         modulesData.add(module);
                     }
 
                     @Override
-                    public void onModuleRemoved(Module module) {
+                    public synchronized void onModuleRemoved(Module module) {
                         modulesData.remove(module);
                     }
 
                     @Override
-                    public void onDroneAdded(Drone drone) {
+                    public synchronized void onDroneAdded(Drone drone) {
                         dronesData.add(drone);
                     }
 
                     @Override
-                    public void onDroneUpdated(Drone drone) {
+                    public synchronized void onDroneUpdated(Drone drone) {
                         int i = dronesData.indexOf(drone);
                         dronesData.set(i, drone);
                     }
 
                     @Override
-                    public void onDroneRemoved(Drone drone) {
+                    public synchronized void onDroneRemoved(Drone drone) {
                         dronesData.remove(drone);
                     }
 
                     @Override
-                    public void onGoodDroneTested(Drone drone) {
+                    public synchronized void onGoodDroneTested(Drone drone) {
                         goodDronesData.add(drone);
                     }
 
                     @Override
-                    public void onBadDroneTested(Drone drone) {
+                    public synchronized void onBadDroneTested(Drone drone) {
                         badDronesData.add(drone);
                     }
 
