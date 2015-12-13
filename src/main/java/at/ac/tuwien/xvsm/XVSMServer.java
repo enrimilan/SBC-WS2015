@@ -51,7 +51,7 @@ public class XVSMServer implements IServer {
         this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
         try {
             PartsAspect partsAspect = new PartsAspect(this, notificationCallback);
-            NotificationsAspect notificationsAspect = new NotificationsAspect();
+            NotificationsAspect notificationsAspect = new NotificationsAspect(this, notificationCallback);
             capi.addContainerAspect(notificationsAspect, assembledNotifications, ContainerIPoint.POST_WRITE);
             capi.addContainerAspect(notificationsAspect, calibratedNotifications, ContainerIPoint.POST_WRITE);
             capi.addContainerAspect(notificationsAspect, testedNotifications, ContainerIPoint.POST_WRITE);
