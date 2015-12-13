@@ -370,7 +370,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     private synchronized boolean checkForWorkWithDroneForCalibrationRobot(){
-        if(drones.size()>0 && drones.get(drones.size()-1).getStatus() == Status.ASSEMBLED ){
+        if(drones.size()>0 && drones.get(drones.size()-1).getStatus() != Status.CALIBRATED ){
             ICalibratedNotification calibrationRobotNotification = calibrationRobots.poll();
             if (calibrationRobotNotification == null) {
                 return false;
