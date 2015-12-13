@@ -26,7 +26,7 @@ public class XVSMConnection implements IConnection {
     private final static Logger logger = LoggerFactory.getLogger(XVSMConnection.class);
     private MzsCore core;
     private Capi capi;
-    private ContainerReference partsContainer, modulesContainer;
+    private ContainerReference partsContainer, modulesContainer, dronesContainer, testedDronesContainer;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
 
     @Override
@@ -40,6 +40,8 @@ public class XVSMConnection implements IConnection {
 
         this.partsContainer = Utils.getOrCreateContainer(Constants.PARTS_CONTAINER, capi, coordinators);
         this.modulesContainer = Utils.getOrCreateContainer(Constants.MODULES_CONTAINER, capi, coordinators);
+        this.dronesContainer = Utils.getOrCreateContainer(Constants.DRONES_CONTAINER, capi, coordinators);
+        this.testedDronesContainer = Utils.getOrCreateContainer(Constants.TESTED_DRONES_CONTAINER, capi, coordinators);
         this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators);
         this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators);
         this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
@@ -67,12 +69,22 @@ public class XVSMConnection implements IConnection {
 
     @Override
     public void moduleAssembled(Module module, Job job) throws ConnectionException {
-
+        try{
+            capi.write(modulesContainer, new Entry(module));
+        }
+        catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
     public void droneAssembled(Drone drone, Job job) throws ConnectionException {
-
+        try{
+            capi.write(dronesContainer, new Entry(drone));
+        }
+        catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
@@ -86,12 +98,22 @@ public class XVSMConnection implements IConnection {
 
     @Override
     public void motorRotorPairCalibrated(Module module, Job job) throws ConnectionException {
-
+        try{
+            capi.write(modulesContainer, new Entry(module));
+        }
+        catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
     public void droneCalibrated(Drone drone, Job job) throws ConnectionException {
-
+        try{
+            capi.write(dronesContainer, new Entry(drone));
+        }
+        catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
@@ -105,7 +127,12 @@ public class XVSMConnection implements IConnection {
 
     @Override
     public void droneTested(Drone drone, Job job) throws ConnectionException {
-
+        try{
+            capi.write(testedDronesContainer, new Entry(drone));
+        }
+        catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
