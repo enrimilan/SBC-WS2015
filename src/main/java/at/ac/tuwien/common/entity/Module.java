@@ -12,8 +12,10 @@ public class Module implements Serializable {
     private ArrayList<Part> parts;
     private Status status;
     private int calibrationValue;
+    private UUID id;
 
     public Module(ModuleType moduleType, UUID assemblerId) {
+        this.id = UUID.randomUUID();
         this.moduleType = moduleType;
         this.assemblerId = assemblerId;
         this.parts = new ArrayList<Part>();
@@ -60,6 +62,10 @@ public class Module implements Serializable {
         this.calibrationValue = calibrationValue;
     }
 
+    public UUID getId(){
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Module{" +
@@ -70,5 +76,21 @@ public class Module implements Serializable {
                 ", status=" + status +
                 ", calibrationValue=" + calibrationValue +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Module module = (Module) o;
+
+        return id.equals(module.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
