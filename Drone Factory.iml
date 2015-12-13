@@ -14,11 +14,11 @@
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.1.3" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.1.3" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
-    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-runtime:2.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-core-common:2.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-capi3-api:2.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-capi3-javanative:2.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-core-api:2.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-runtime:2.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-core-common:2.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-capi3-api:2.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-capi3-javanative:2.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-core-api:2.3-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: commons-configuration:commons-configuration:1.6" level="project" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.4" level="project" />
@@ -27,8 +27,8 @@
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.7.0" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils-core:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: net.jcip:jcip-annotations:1.0" level="project" />
-    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-notifications:2.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-xvsmp-jaxb:2.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-notifications:2.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.mozartspaces:mozartspaces-xvsmp-jaxb:2.3-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.thoughtworks.xstream:xstream:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: xmlpull:xmlpull:1.1.3.1" level="project" />
     <orderEntry type="library" name="Maven: xpp3:xpp3_min:1.1.4c" level="project" />
