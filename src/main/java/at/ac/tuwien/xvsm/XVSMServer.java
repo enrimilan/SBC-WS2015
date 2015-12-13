@@ -1,23 +1,20 @@
 package at.ac.tuwien.xvsm;
 
 import at.ac.tuwien.common.server.IServer;
-import at.ac.tuwien.common.entity.Part;
-import at.ac.tuwien.common.notification.AssembledNotification;
 import at.ac.tuwien.common.view.INotificationCallback;
 import at.ac.tuwien.utils.Constants;
 import at.ac.tuwien.utils.Utils;
+import at.ac.tuwien.xvsm.aspect.NotificationsAspect;
 import at.ac.tuwien.xvsm.aspect.PartsAspect;
 import org.mozartspaces.capi3.Coordinator;
 import org.mozartspaces.capi3.FifoCoordinator;
 import org.mozartspaces.capi3.QueryCoordinator;
-import org.mozartspaces.capi3.Selector;
 import org.mozartspaces.core.*;
 import org.mozartspaces.core.aspects.ContainerIPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class XVSMServer implements IServer {
@@ -54,6 +51,10 @@ public class XVSMServer implements IServer {
         this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
         try {
             PartsAspect partsAspect = new PartsAspect(this, notificationCallback);
+            NotificationsAspect notificationsAspect = new NotificationsAspect();
+            capi.addContainerAspect(notificationsAspect, assembledNotifications, ContainerIPoint.POST_WRITE);
+            capi.addContainerAspect(notificationsAspect, calibratedNotifications, ContainerIPoint.POST_WRITE);
+            capi.addContainerAspect(notificationsAspect, testedNotifications, ContainerIPoint.POST_WRITE);
             capi.addContainerAspect(partsAspect, partsContainer, ContainerIPoint.POST_WRITE);
         } catch (MzsCoreException e) {
             e.printStackTrace();

@@ -77,7 +77,11 @@ public class XVSMConnection implements IConnection {
 
     @Override
     public void registerCalibrationRobot(ICalibratedNotification calibrationRobotNotification) throws ConnectionException {
-
+        try {
+            capi.write(calibratedNotifications, new Entry((Serializable) calibrationRobotNotification));
+        } catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
@@ -92,7 +96,11 @@ public class XVSMConnection implements IConnection {
 
     @Override
     public void registerLogisticRobot(ITestedNotification logisticRobotNotification) throws ConnectionException {
-
+        try {
+            capi.write(testedNotifications, new Entry((Serializable) logisticRobotNotification));
+        } catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
