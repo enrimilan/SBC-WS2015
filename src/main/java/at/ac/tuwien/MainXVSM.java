@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 public class MainXVSM extends Application {
 
-    private static Logger logger = LoggerFactory.getLogger(MainRMI.class);
+    private static Logger logger = LoggerFactory.getLogger(MainXVSM.class);
 
     public static void main(String[] args) {
         logger.info("Application started.");
