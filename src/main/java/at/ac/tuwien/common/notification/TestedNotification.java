@@ -29,7 +29,7 @@ public class TestedNotification implements ITestedNotification, Serializable {
     }
 
     @Override
-    public void testDrone(Drone drone, Job job) throws RemoteException {
+    public void testDrone(Drone drone, Job job) {
         logger.debug("testing drone.");
         Thread thread = new Thread(){
             @Override

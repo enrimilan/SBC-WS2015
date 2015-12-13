@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -26,7 +25,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
     }
 
     @Override
-    public void calibrateMotorRotorPair(Module module, Job job) throws RemoteException {
+    public void calibrateMotorRotorPair(Module module, Job job) {
         logger.debug("calibrating motor-rotor pair");
         Thread thread = new Thread(){
             @Override
@@ -52,7 +51,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
     }
 
     @Override
-    public void calibrateModuleInDrone(Drone drone, Job job) throws RemoteException {
+    public void calibrateModuleInDrone(Drone drone, Job job) {
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -66,6 +65,7 @@ public class CalibratedNotification implements ICalibratedNotification, Serializ
                         }
                         else{
                             logger.debug("calibrating motor-rotor pair in drone");
+                            drone.setStatus(Status.CALIBRATING);
                             value = ThreadLocalRandom.current().nextInt(MIN_CALIBRATION_VALUE, MAX_CALIBRATION_VALUE + 1);
                             motorRotorPair.setCalibrationValue(value);
                             motorRotorPair.setCalibratorId(calibratorRobotId);
