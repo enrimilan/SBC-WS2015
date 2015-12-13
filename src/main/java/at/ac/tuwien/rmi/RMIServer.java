@@ -345,6 +345,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             notificationCallback.onModuleRemoved(caseControlUnitPair);
             ArrayList<Module> motorRotorPairModules = new ArrayList<Module>();
             Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
+            t.addModule(caseControlUnitPair);
             int i = 0;
             while(i<3){
                 Module mr = motorRotorPairs.remove(0);
