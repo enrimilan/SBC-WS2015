@@ -29,7 +29,7 @@ public class SupplierRobot extends AbstractRobot implements Runnable {
                 connection.supply(new Part(id, partType));
                 Thread.sleep(INTERVAL);
             }
-            //connection.end();
+            stopRobot();
         } catch (ConnectionException e) {
             logger.debug(e.getMessage());
         } catch (InterruptedException e) {

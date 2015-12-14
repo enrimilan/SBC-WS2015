@@ -7,7 +7,9 @@ import at.ac.tuwien.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 
 public class CalibrationRobot extends AbstractRobot implements Runnable {
@@ -22,10 +24,8 @@ public class CalibrationRobot extends AbstractRobot implements Runnable {
     public void run() {
         try {
             connection.registerCalibrationRobot(new CalibratedNotification(id));
-            while (System.in.read() != -1);
+            startRobot();
         } catch (ConnectionException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }

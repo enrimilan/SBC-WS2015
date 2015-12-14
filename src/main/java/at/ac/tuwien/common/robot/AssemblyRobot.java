@@ -22,10 +22,8 @@ public class AssemblyRobot extends AbstractRobot implements Runnable {
     public void run() {
         try {
             connection.registerAssemblyRobot(new AssembledNotification(UUID.randomUUID()));
-            while (System.in.read() != -1);
+            startRobot();
         } catch (ConnectionException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }

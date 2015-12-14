@@ -27,10 +27,8 @@ public class LogisticRobot extends AbstractRobot implements Runnable{
     public void run() {
         try {
             connection.registerLogisticRobot(new TestedNotification(id, minCalibrationValue, maxCalibrationValue));
-            while (System.in.read() != -1);
+            startRobot();
         } catch (ConnectionException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }
