@@ -1,5 +1,4 @@
 @ECHO OFF
-set arg1=%1
 ECHO.
 set /P usageArg= Usage: PART_TYPE AMOUNT
 ECHO.
