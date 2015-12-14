@@ -24,13 +24,19 @@ public class ModulesListener implements NotificationListener{
     @Override
     public void entryOperationFinished(Notification notification, Operation operation, List<? extends Serializable> list) {
 
-        Entry entry = (Entry) list.get(0);
-        Module m = (Module) entry.getValue();
-
         if(operation == Operation.WRITE){
-            notificationCallback.onModuleAdded(m);
+            for(Object o : list){
+                Entry entry = (Entry) o;
+                Module m = (Module) entry.getValue();
+                notificationCallback.onModuleAdded(m);
+            }
             server.checkForWorkWithModulesForAssemblyRobot();
             server.checkForWorkWithMotorRotorPairForCalibrationRobot();
+        }
+        if(operation == Operation.TAKE){
+            for(Object o : list){
+                notificationCallback.onModuleRemoved((Module) o);
+            }
         }
     }
 }

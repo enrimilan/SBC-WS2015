@@ -23,12 +23,19 @@ public class PartsListener implements NotificationListener {
 
     @Override
     public void entryOperationFinished(Notification notification, Operation operation, List<? extends Serializable> list) {
-        Entry entry = (Entry) list.get(0);
-        Part p = (Part) entry.getValue();
 
         if(operation == Operation.WRITE){
-            notificationCallback.onPartAdded(p);
+            for(Object o : list){
+                Entry entry = (Entry) o;
+                Part p = (Part) entry.getValue();
+                notificationCallback.onPartAdded(p);
+            }
             server.checkForWorkWithPartsForAssemblyRobot();
+        }
+        if(operation == Operation.TAKE){
+            for(Object o : list){
+                notificationCallback.onPartRemoved((Part) o);
+            }
         }
     }
 }

@@ -6,23 +6,20 @@ import at.ac.tuwien.common.notification.CalibratedNotification;
 import at.ac.tuwien.common.notification.TestedNotification;
 import at.ac.tuwien.common.server.IServer;
 import at.ac.tuwien.common.view.INotificationCallback;
-import at.ac.tuwien.rmi.Transaction;
 import at.ac.tuwien.utils.Constants;
 import at.ac.tuwien.utils.Utils;
+import at.ac.tuwien.xvsm.aspect.SpaceAspect;
 import at.ac.tuwien.xvsm.listener.*;
-import org.apache.commons.collections.ArrayStack;
 import org.mozartspaces.capi3.*;
 import org.mozartspaces.core.*;
+import org.mozartspaces.core.aspects.SpaceIPoint;
 import org.mozartspaces.notifications.NotificationManager;
 import org.mozartspaces.notifications.Operation;
-import org.mozartspaces.util.parser.sql.javacc.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class XVSMServer implements IServer {
 
@@ -31,15 +28,7 @@ public class XVSMServer implements IServer {
     private Capi capi;
     private ContainerReference partsContainer, modulesContainer, dronesContainer, testedDronesContainer;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
-    private AtomicReference<Integer> jobId;
-    private ConcurrentHashMap<Job,Transaction> jobs;
     private INotificationCallback notificationCallback;
-
-    public XVSMServer(){
-        this.jobId = new AtomicReference<>();
-        jobId.set(0);
-        this.jobs = new ConcurrentHashMap<>();
-    }
 
     @Override
     public void registerGUINotificationCallback(INotificationCallback notificationCallback) {
@@ -67,15 +56,19 @@ public class XVSMServer implements IServer {
         this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators);
         this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
         try {
+            //add a space aspect for aborting transactions
+            capi.addSpaceAspect(new SpaceAspect(capi,notificationCallback),null, SpaceIPoint.POST_ROLLBACK_TRANSACTION);
+
+            //add listeners
             NotificationManager notificationManager = new NotificationManager(core);
             RobotNotificationListener rbn = new RobotNotificationListener(this);
             notificationManager.createNotification(assembledNotifications, rbn, Operation.WRITE);
             notificationManager.createNotification(calibratedNotifications, rbn, Operation.WRITE);
             notificationManager.createNotification(testedNotifications, rbn, Operation.WRITE);
             notificationManager.createNotification(partsContainer, new PartsListener(this, notificationCallback)
-            ,Operation.WRITE);
+            ,Operation.WRITE, Operation.TAKE);
             notificationManager.createNotification(modulesContainer, new ModulesListener(this, notificationCallback)
-                    ,Operation.WRITE);
+                    ,Operation.WRITE, Operation.TAKE);
             notificationManager.createNotification(dronesContainer, new DronesListener(this, notificationCallback)
                     ,Operation.WRITE);
             notificationManager.createNotification(testedDronesContainer,
@@ -92,7 +85,7 @@ public class XVSMServer implements IServer {
 
     @Override
     public void stop(){
-
+        //TODO!
     }
 
     public synchronized boolean checkForWorkWithPartsForAssemblyRobot(){
@@ -125,8 +118,8 @@ public class XVSMServer implements IServer {
             capi.commitTransaction(notificationTx);
             Part casePart = entries.get(0);
             Part controlUnitPart = entries.get(1);
-            notificationCallback.onPartRemoved(casePart);
-            notificationCallback.onPartRemoved(controlUnitPart);
+            //notificationCallback.onPartRemoved(casePart);
+            //notificationCallback.onPartRemoved(controlUnitPart);
             notification.assembleCaseControlUnitPair(casePart, controlUnitPart, new Job(1));
             return true;
 
@@ -158,8 +151,8 @@ public class XVSMServer implements IServer {
                 Part rotor = entries.get(1);
                 motors.add(motor);
                 rotors.add(rotor);
-                notificationCallback.onPartRemoved(motor);
-                notificationCallback.onPartRemoved(rotor);
+                //notificationCallback.onPartRemoved(motor);
+                //notificationCallback.onPartRemoved(rotor);
             }
         } catch (CountNotMetException e){
             logger.error(e.getMessage());
@@ -200,21 +193,23 @@ public class XVSMServer implements IServer {
 
         // step C: check for 3x motor/rotor pairs and 1x case/control unit pair
         TransactionReference tx = null;
+        ArrayList<Module> caseControlUnitPairs = new ArrayList<>();
+        ArrayList<Module> motorRotorPairs = new ArrayList<>();
         try {
             Property moduleTypeProp = Property.forName("*", "moduleType");
             Query query1 = new Query().filter(moduleTypeProp.equalTo(ModuleType.CASE_CONTROL_UNIT_PAIR));
             Query query2 = new Query().filter(moduleTypeProp.equalTo(ModuleType.MOTOR_ROTOR_PAIR));
             tx =  capi.createTransaction(Constants.TRANSACTION_TIME_TO_LIVE, null);
-            List<Module> caseControlUnitPairs = capi.take(modulesContainer, QueryCoordinator.newSelector(query1, 1),
+            caseControlUnitPairs = capi.take(modulesContainer, QueryCoordinator.newSelector(query1, 1),
                     MzsConstants.RequestTimeout.DEFAULT, tx);
-            ArrayList<Module> motorRotorPairs =  capi.take(modulesContainer, QueryCoordinator.newSelector(query2, 3),
+            motorRotorPairs =  capi.take(modulesContainer, QueryCoordinator.newSelector(query2, 3),
                     MzsConstants.RequestTimeout.DEFAULT, tx);
             capi.commitTransaction(tx);
             capi.commitTransaction(notificationTx);
-            notificationCallback.onModuleRemoved(caseControlUnitPairs.get(0));
-            notificationCallback.onModuleRemoved(motorRotorPairs.get(0));
-            notificationCallback.onModuleRemoved(motorRotorPairs.get(1));
-            notificationCallback.onModuleRemoved(motorRotorPairs.get(2));
+            //notificationCallback.onModuleRemoved(caseControlUnitPairs.get(0));
+            //notificationCallback.onModuleRemoved(motorRotorPairs.get(0));
+            //notificationCallback.onModuleRemoved(motorRotorPairs.get(1));
+            //notificationCallback.onModuleRemoved(motorRotorPairs.get(2));
             notification.assembleDrone(caseControlUnitPairs.get(0), motorRotorPairs, new Job(1));
             return true;
 
@@ -223,7 +218,7 @@ public class XVSMServer implements IServer {
             try {
                 capi.rollbackTransaction(tx);
             } catch (MzsCoreException e1) {
-                logger.info(e.getMessage());
+                e1.printStackTrace();
             }
         }
 
@@ -263,7 +258,7 @@ public class XVSMServer implements IServer {
             List<Module> entries = capi.take(modulesContainer, QueryCoordinator.newSelector(query,1),
                     MzsConstants.RequestTimeout.DEFAULT, null);
             capi.commitTransaction(notificationTx);
-            notificationCallback.onModuleRemoved(entries.get(0));
+            //notificationCallback.onModuleRemoved(entries.get(0));
             notification.calibrateMotorRotorPair(entries.get(0), new Job(1));
             return true;
         } catch (MzsCoreException e) {
