@@ -61,7 +61,7 @@ public class XVSMConnection implements IConnection {
     @Override
     public void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException {
         try {
-            establish();
+            //establish();
             capi.write(assembledNotifications, new Entry((Serializable) assemblyRobotNotification));
         } catch (MzsCoreException e) {
             throw new ConnectionException(e.getMessage());
@@ -71,7 +71,9 @@ public class XVSMConnection implements IConnection {
     @Override
     public void moduleAssembled(Module module, Job job) throws ConnectionException {
         try{
-            establish();
+            if(capi == null || partsContainer == null){
+                establish();
+            }
             capi.write(modulesContainer, new Entry(module));
         }
         catch (MzsCoreException e) {
@@ -82,6 +84,9 @@ public class XVSMConnection implements IConnection {
     @Override
     public void droneAssembled(Drone drone, Job job) throws ConnectionException {
         try{
+            if(capi == null || dronesContainer == null){
+                establish();
+            }
             establish();
             capi.write(dronesContainer, new Entry(drone));
         }
