@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GUI{
@@ -106,6 +107,11 @@ public class GUI{
                     }
 
                     @Override
+                    public void setAllParts(ArrayList<Part> parts) {
+                        partsData.setAll(parts);
+                    }
+
+                    @Override
                     public synchronized void onModuleAdded(Module module) {
                         modulesData.add(module);
                     }
@@ -113,6 +119,11 @@ public class GUI{
                     @Override
                     public synchronized void onModuleRemoved(Module module) {
                         modulesData.remove(module);
+                    }
+
+                    @Override
+                    public void setAllModules(ArrayList<Module> modules) {
+                        modulesData.setAll(modules);
                     }
 
                     @Override
@@ -129,6 +140,11 @@ public class GUI{
                     @Override
                     public synchronized void onDroneRemoved(Drone drone) {
                         dronesData.remove(drone);
+                    }
+
+                    @Override
+                    public void setAllDrones(ArrayList<Drone> drones) {
+                        dronesData.setAll(drones);
                     }
 
                     @Override
