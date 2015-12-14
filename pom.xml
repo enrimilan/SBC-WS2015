@@ -88,7 +88,7 @@
             </build>
         </profile>
         <profile>
-            <id>drone-xvms</id>
+            <id>drone-xvsm</id>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
