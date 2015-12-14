@@ -1,5 +1,6 @@
 package at.ac.tuwien.utils;
 
+import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.rmi.RmiConnection;
 import at.ac.tuwien.common.entity.PartType;
@@ -45,9 +46,11 @@ public class Utils {
 
         if(type.equals("rmi") && connection == null){
             connection = new RmiConnection();
+            logger.debug("new rmi connection");
         }
         else if(type.equals("xvsm") && connection == null){
             connection = new XVSMConnection();
+            logger.debug("new xvsm connection");
         }
 
         return connection;

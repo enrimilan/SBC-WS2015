@@ -21,6 +21,10 @@ public class RmiConnection implements IConnection {
     private IRMIServer server;
     private Registry registry;
 
+    public RmiConnection(){
+
+    }
+
     @Override
     public void establish() throws ConnectionException {
         try {

@@ -137,6 +137,6 @@ public class XVSMConnection implements IConnection {
 
     @Override
     public void end() throws ConnectionException {
-        core.shutdown(true);
+        //core.shutdown(true);
     }
 }

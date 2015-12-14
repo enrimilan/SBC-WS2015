@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.UUID;
 
 public class AssemblyRobot extends AbstractRobot implements Runnable {
@@ -24,6 +25,8 @@ public class AssemblyRobot extends AbstractRobot implements Runnable {
             connection.registerAssemblyRobot(new AssembledNotification(UUID.randomUUID()));
             startRobot();
         } catch (ConnectionException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }

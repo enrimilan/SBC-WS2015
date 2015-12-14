@@ -12,9 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.UUID;
 
-public class TestedNotification implements ITestedNotification, Serializable {
+public class TestedNotification extends UnicastRemoteObject implements ITestedNotification, Serializable {
 
     private final static Logger logger = LoggerFactory.getLogger(TestedNotification.class);
     private final static int INTERVAL = 1000;
@@ -22,7 +23,8 @@ public class TestedNotification implements ITestedNotification, Serializable {
     private int minCalibrationValue;
     private int maxCalibrationValue;
 
-    public TestedNotification(UUID calibratorRobotId, int minCalibrationValue, int maxCalibrationValue) {
+    public TestedNotification(UUID calibratorRobotId, int minCalibrationValue, int maxCalibrationValue) throws RemoteException {
+        super();
         this.calibratorRobotId = calibratorRobotId;
         this.minCalibrationValue = minCalibrationValue;
         this.maxCalibrationValue = maxCalibrationValue;
