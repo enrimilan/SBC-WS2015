@@ -36,6 +36,7 @@ public class MainXVSM extends Application {
         primaryStage.show();
         primaryStage.setOnCloseRequest(we -> System.exit(0));
         GUI gui = new GUI(primaryStage, server);
+        gui.setType("xvsm");
         OverviewController controller = loader.getController();
         controller.setGui(gui);
     }

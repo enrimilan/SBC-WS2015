@@ -14,9 +14,6 @@ import at.ac.tuwien.common.robot.LogisticRobot;
 import at.ac.tuwien.common.robot.SupplierRobot;
 import at.ac.tuwien.utils.Utils;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -26,6 +23,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 
 public class OverviewController {
@@ -56,9 +57,15 @@ public class OverviewController {
     @FXML
     private Button supplyButton;
     @FXML
+    private Button consoleSupplyButton;
+    @FXML
     private Button startAssemblerButton;
     @FXML
+    private Button consoleAssemblerButton;
+    @FXML
     private Button startCalibratorButton;
+    @FXML
+    private Button consoleCalibratorButton;
     @FXML
     private TextField calibrationValueMIN_textfield;
     @FXML
@@ -66,6 +73,8 @@ public class OverviewController {
 
     @FXML
     private Button startTesterButton;
+    @FXML
+    private Button consoleTesterButton;
 
     @FXML
     private TextField supplyTxtField;
@@ -98,6 +107,101 @@ public class OverviewController {
         } catch (ConnectionException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleConsoleSupplyButtonAction(){
+            if(!supplyTxtField.getCharacters().toString().isEmpty()){
+                int amount = Integer.parseInt(supplyTxtField.getCharacters().toString());
+                PartType  partType = supplyComboBox.getValue();
+                supplyTxtField.clear();
+                if (amount > 0) {
+                    if ( partType != null) {
+                        Path currentRelativePath = null;
+                        try {
+                            if(this.gui.getType().equals("rmi")){
+                                currentRelativePath = Paths.get(getClass().getClassLoader().getResource("supplier-rmi.bat").toURI());
+                            } else {
+                                currentRelativePath = Paths.get(getClass().getClassLoader().getResource("supplier-xvms.bat").toURI());
+                            }
+                            String partIdentifier = "";
+                            if(partType == PartType.CASE){
+                                partIdentifier = " A ";
+                            } else if( partType == PartType.CONTROL_UNIT){
+                                partIdentifier = " B ";
+                            } else if(partType == PartType.MOTOR){
+                                partIdentifier = " C ";
+                            } else if (partType == PartType.ROTOR){
+                                partIdentifier = " D ";
+                            }
+
+                            String command = "cmd.exe /c start " + currentRelativePath.toString() + partIdentifier + amount ;
+                            Runtime.getRuntime().exec(command);
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+    }
+
+    @FXML
+    private void handleConsoleAssemblerButtonAction(){
+                    try {
+                        Path currentRelativePath = null;
+                        if(this.gui.getType().equals("rmi")){
+                            currentRelativePath = Paths.get(getClass().getClassLoader().getResource("assembler-rmi.bat").toURI());
+                        } else {
+                            currentRelativePath = Paths.get(getClass().getClassLoader().getResource("assembler-xvsm.bat").toURI());
+                        }
+                        String command = "cmd.exe /c start " + currentRelativePath.toString() ;
+                        Runtime.getRuntime().exec(command);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+    }
+
+    @FXML
+    private void handleConsoleCalibratorButtonAction(){
+        try {
+            Path currentRelativePath = null;
+            if(this.gui.getType().equals("rmi")){
+                currentRelativePath = Paths.get(getClass().getClassLoader().getResource("calibrator-rmi.bat").toURI());
+            } else {
+                currentRelativePath = Paths.get(getClass().getClassLoader().getResource("calibrator-xvsm.bat").toURI());
+            }
+            String command = "cmd.exe /c start " + currentRelativePath.toString() ;
+            Runtime.getRuntime().exec(command);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleConsoleTesterButtonAction(){
+        int min = Integer.parseInt(calibrationValueMIN_textfield.getCharacters().toString());
+        int max = Integer.parseInt(calibrationValueMAX_textfield.getCharacters().toString());
+
+        Path currentRelativePath = null;
+                    try {
+                        if(this.gui.getType().equals("rmi")){
+                            currentRelativePath = Paths.get(getClass().getClassLoader().getResource("tester-rmi.bat").toURI());
+                        } else {
+                            currentRelativePath = Paths.get(getClass().getClassLoader().getResource("tester-xvsm.bat").toURI());
+                        }
+                        String command = "cmd.exe /c start " + currentRelativePath.toString() + " " + min + " " + max;
+                        Runtime.getRuntime().exec(command);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
     }
 
     @FXML

@@ -23,7 +23,15 @@
                <children>
                   <ComboBox fx:id="supplyComboBox" prefWidth="150.0" promptText="Select part type" />
                   <TextField fx:id="supplyTxtField" prefHeight="25.0" prefWidth="85.0" promptText="Give amount" />
-                  <Button fx:id="supplyButton" mnemonicParsing="false" onAction="#handleSupplyButtonAction" text="Supply" />
+                  <Button fx:id="supplyButton" mnemonicParsing="false" onAction="#handleSupplyButtonAction" text="Supply">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></Button>
+                  <Button fx:id="consoleSupplyButton" mnemonicParsing="false" onMouseClicked="#handleConsoleSupplyButtonAction" text="Console Supply" textFill="#3127ee">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Button>
                </children>
                <VBox.margin>
                   <Insets top="50.0" />
@@ -32,11 +40,13 @@
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Button fx:id="startCalibratorButton" mnemonicParsing="false" onMouseClicked="#handleCalibratorButtonAction" text="Start Calibrator" />
+                  <Button fx:id="consoleCalibratorButton" mnemonicParsing="false" onMouseClicked="#handleConsoleCalibratorButtonAction" text="Console Calibrator" textFill="#3127ee" textOverrun="WORD_ELLIPSIS" />
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Button fx:id="startAssemblerButton" mnemonicParsing="false" onMouseClicked="#handleAssemblerButtonAction" text="Start Assembler" />
+                  <Button fx:id="consoleAssemblerButton" mnemonicParsing="false" onMouseClicked="#handleConsoleAssemblerButtonAction" text="Console Assembler" textFill="#3127ee" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
@@ -44,6 +54,7 @@
                   <TextField fx:id="calibrationValueMIN_textfield" prefHeight="25.0" prefWidth="61.0" promptText="MIN" />
                   <TextField fx:id="calibrationValueMAX_textfield" prefHeight="25.0" prefWidth="57.0" promptText="MAX" />
                   <Button fx:id="startTesterButton" mnemonicParsing="false" onMouseClicked="#handleTesterButtonAction" text="Start Tester" />
+                  <Button fx:id="consoleTesterButton" mnemonicParsing="false" onMouseClicked="#handleConsoleTesterButtonAction" text="Console Tester" textFill="#3127ee" />
                </children>
             </HBox>
          </children>

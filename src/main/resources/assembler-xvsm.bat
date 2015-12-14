@@ -1,0 +1,1 @@
+call mvn -f  .\pom.xml exec:java -Passembler-Dexec.args="xvsm"

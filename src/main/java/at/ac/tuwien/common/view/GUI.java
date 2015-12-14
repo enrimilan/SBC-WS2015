@@ -25,6 +25,8 @@ public class GUI{
     private Stage primaryStage;
     private IServer server;
 
+    private String type ="";
+
     private ObservableList<Part> partsData = FXCollections.observableArrayList();
     private ObservableList<Drone> dronesData = FXCollections.observableArrayList();
     private ObservableList<Module> modulesData = FXCollections.observableArrayList();
@@ -56,6 +58,15 @@ public class GUI{
         Updater u = new Updater();
         u.start();
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 
     public Stage getPrimaryStage() {
         return primaryStage;
