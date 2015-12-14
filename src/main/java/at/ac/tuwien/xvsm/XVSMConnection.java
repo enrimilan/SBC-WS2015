@@ -87,7 +87,6 @@ public class XVSMConnection implements IConnection {
             if(capi == null || dronesContainer == null){
                 establish();
             }
-            establish();
             capi.write(dronesContainer, new Entry(drone));
         }
         catch (MzsCoreException e) {
