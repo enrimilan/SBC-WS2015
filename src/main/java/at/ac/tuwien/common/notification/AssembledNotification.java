@@ -8,16 +8,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class AssembledNotification implements IAssembledNotification, Serializable {
+public class AssembledNotification extends UnicastRemoteObject implements IAssembledNotification, Serializable {
 
     private final static Logger logger = LoggerFactory.getLogger(AssembledNotification.class);
     private final static int INTERVAL = 1000;
     private UUID assemblyRobotId;
 
-    public AssembledNotification(UUID assemblyRobotId) {
+    public AssembledNotification(UUID assemblyRobotId) throws RemoteException {
+        super();
         this.assemblyRobotId = assemblyRobotId;
     }
 

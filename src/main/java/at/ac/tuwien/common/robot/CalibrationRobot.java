@@ -27,6 +27,8 @@ public class CalibrationRobot extends AbstractRobot implements Runnable {
             startRobot();
         } catch (ConnectionException e) {
             e.printStackTrace();
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
     }
 
