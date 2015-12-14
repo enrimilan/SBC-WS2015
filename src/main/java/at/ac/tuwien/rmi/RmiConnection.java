@@ -116,12 +116,6 @@ public class RmiConnection implements IConnection {
 
     @Override
     public void end() throws ConnectionException {
-        try {
-            registry.unbind(Constants.SERVER_HOST);
-        } catch (RemoteException e) {
-            throw new ConnectionException(e.getMessage());
-        } catch (NotBoundException e) {
-            throw new ConnectionException(e.getMessage());
-        }
+
     }
 }
