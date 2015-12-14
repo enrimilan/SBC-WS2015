@@ -16,12 +16,13 @@ public abstract class AbstractRobot {
 
     public AbstractRobot(IConnection connection) throws ConnectionException {
         this.connection = connection;
+        this.in = new BufferedReader(new InputStreamReader(System.in));
         this.id = UUID.randomUUID();
         connection.establish();
     }
 
     public void startRobot(){
-        in = new BufferedReader(new InputStreamReader(System.in));
+
         String s;
         System.out.println("Type q + ENTER to stop the robot");
         try {
