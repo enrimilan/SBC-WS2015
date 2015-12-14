@@ -13,7 +13,12 @@ import at.ac.tuwien.common.robot.CalibrationRobot;
 import at.ac.tuwien.common.robot.LogisticRobot;
 import at.ac.tuwien.common.robot.SupplierRobot;
 import at.ac.tuwien.utils.Utils;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -225,11 +230,6 @@ public class OverviewController {
         moduleCalibrationValue_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("calibrationValue"));
         moduleAssemblerId_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("assemblerId"));
         moduleCalibratorrId_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("calibratorId"));
-
-
-        lbl_StockSize.setText(String.valueOf(supplyTable.getItems().size()));
-        lbl_GoodDrones.setText(String.valueOf(goodDronesTable.getItems().size()));
-        lbl_BadDrones.setText(String.valueOf(badDronesTable.getItems().size()));
     }
 
     public void setGui(GUI gui) {
@@ -240,6 +240,40 @@ public class OverviewController {
         moduleTableView.setItems(gui.getModulesData());
         goodDronesTable.setItems(gui.getGoodDronesData());
         badDronesTable.setItems(gui.getBadDronesData());
+
+        gui.getPartsData().addListener(new ListChangeListener<Part>() {
+            @Override
+            public void onChanged(Change<? extends Part> c) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        lbl_StockSize.setText(String.valueOf(supplyTable.getItems().size()));
+                    }
+                });
+            }
+        });
+        gui.getGoodDronesData().addListener(new ListChangeListener<Drone>() {
+            @Override
+            public void onChanged(Change<? extends Drone> c) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        lbl_GoodDrones.setText(String.valueOf(goodDronesTable.getItems().size()));
+                    }
+                });
+            }
+        });
+        gui.getBadDronesData().addListener(new ListChangeListener<Drone>() {
+            @Override
+            public void onChanged(Change<? extends Drone> c) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        lbl_BadDrones.setText(String.valueOf(badDronesTable.getItems().size()));
+                    }
+                });
+            }
+        });
 
         dronesTable.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
