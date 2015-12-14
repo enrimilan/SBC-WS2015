@@ -93,7 +93,7 @@ public class XVSMConnection implements IConnection {
     @Override
     public void registerCalibrationRobot(ICalibratedNotification calibrationRobotNotification) throws ConnectionException {
         try {
-            establish();
+            //establish();
             capi.write(calibratedNotifications, new Entry((Serializable) calibrationRobotNotification));
         } catch (MzsCoreException e) {
             throw new ConnectionException(e.getMessage());
@@ -103,7 +103,7 @@ public class XVSMConnection implements IConnection {
     @Override
     public void motorRotorPairCalibrated(Module module, Job job) throws ConnectionException {
         try{
-            establish();
+            //establish();
             capi.write(modulesContainer, new Entry(module));
         }
         catch (MzsCoreException e) {
@@ -114,7 +114,7 @@ public class XVSMConnection implements IConnection {
     @Override
     public void droneCalibrated(Drone drone, Job job) throws ConnectionException {
         try{
-            establish();
+            //establish();
             capi.write(dronesContainer, new Entry(drone));
         }
         catch (MzsCoreException e) {
@@ -125,7 +125,7 @@ public class XVSMConnection implements IConnection {
     @Override
     public void registerLogisticRobot(ITestedNotification logisticRobotNotification) throws ConnectionException {
         try {
-            establish();
+            //establish();
             capi.write(testedNotifications, new Entry((Serializable) logisticRobotNotification));
         } catch (MzsCoreException e) {
             throw new ConnectionException(e.getMessage());
@@ -135,7 +135,7 @@ public class XVSMConnection implements IConnection {
     @Override
     public void droneTested(Drone drone, Job job) throws ConnectionException {
         try{
-            establish();
+            //establish();
             capi.write(testedDronesContainer, new Entry(drone));
         }
         catch (MzsCoreException e) {
