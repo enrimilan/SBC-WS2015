@@ -30,13 +30,12 @@ public class SupplierRobot extends AbstractRobot implements Runnable {
         try {
             for(int i = 0; i<amount; i++){
                 Part part = new Part(id, partType);
-                String address = getFactoryAddressWithMinimalAmount(part);
-                String data[] = address.split(":");
-                connection.establish(data[0], Integer.valueOf(data[1]));
-
                 if(part.getPartType() == PartType.CASE){
                     part.setCaseType(Utils.generateRandomCaseType());
                 }
+                String address = getFactoryAddressWithMinimalAmount(part);
+                String data[] = address.split(":");
+                connection.establish(data[0], Integer.valueOf(data[1]));
                 logger.debug("Supplying part.");
                 connection.supply(part);
                 Thread.sleep(INTERVAL);
