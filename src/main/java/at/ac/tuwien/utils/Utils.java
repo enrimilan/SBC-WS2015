@@ -63,7 +63,8 @@ public class Utils {
 
     public static ContainerReference getOrCreateContainer(String containerName, Capi capi, List<Coordinator> obligatoryCoords) {
         ContainerReference cref = null;
-        URI spaceUri = getSpaceUri(Constants.SERVER_HOST, Constants.SERVER_PORT);
+        int port = capi.getCore().getConfig().getSpaceUri().getPort();
+        URI spaceUri = getSpaceUri(Constants.SERVER_HOST, port);
         try {
             cref = capi.lookupContainer(containerName, spaceUri, MzsConstants.RequestTimeout.DEFAULT, null);
             logger.debug("created container: "+ containerName);
