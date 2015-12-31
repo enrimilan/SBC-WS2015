@@ -38,6 +38,8 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     private AtomicReference<Integer> jobId;
     private ConcurrentHashMap<Job,Transaction> jobs;
     private INotificationCallback notificationCallback;
+    private String host;
+    private int port;
 
     public RMIServer() throws RemoteException {
         super();
@@ -66,7 +68,8 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     @Override
     public void start() {
         try {
-            int port = getRandomFreePort();
+            this.port = getRandomFreePort();
+            this.host = Constants.SERVER_HOST;
             registry = LocateRegistry.createRegistry(port);
             registry.bind(Constants.SERVER_NAME, this);
             notificationCallback.setTitle("Drone Factory - " + Constants.SERVER_NAME + "@" + port);
@@ -90,6 +93,16 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         } catch (NotBoundException e) {
             logger.error(e.getMessage());
         }
+    }
+
+    @Override
+    public String getHost() {
+        return host;
+    }
+
+    @Override
+    public int getPort() {
+        return port;
     }
 
     @Override

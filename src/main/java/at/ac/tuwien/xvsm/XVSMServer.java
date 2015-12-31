@@ -29,6 +29,8 @@ public class XVSMServer implements IServer {
     private ContainerReference partsContainer, modulesContainer, dronesContainer, testedDronesContainer;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
     private INotificationCallback notificationCallback;
+    private String host;
+    private int port;
 
     @Override
     public void registerGUINotificationCallback(INotificationCallback notificationCallback) {
@@ -41,8 +43,8 @@ public class XVSMServer implements IServer {
         //setup the space
         this.core = DefaultMzsCore.newInstance(Constants.RANDOM_FREE_PORT);
         this.capi = new Capi(core);
-        String host = Constants.SERVER_HOST;
-        int port = core.getConfig().getSpaceUri().getPort();
+        this.host = Constants.SERVER_HOST;
+        this.port = core.getConfig().getSpaceUri().getPort();
         notificationCallback.setTitle("Drone Factory - @" + port);
         logger.debug("XVSMServer started");
         logger.debug("Server listening using port {}", port);
@@ -90,6 +92,16 @@ public class XVSMServer implements IServer {
     @Override
     public void stop(){
         //TODO!
+    }
+
+    @Override
+    public String getHost() {
+        return host;
+    }
+
+    @Override
+    public int getPort() {
+        return port;
     }
 
     public synchronized boolean checkForWorkWithPartsForAssemblyRobot(){

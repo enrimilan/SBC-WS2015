@@ -99,8 +99,9 @@ public class OverviewController {
                 supplyTxtField.clear();
                 if (amount > 0) {
                     if ( partType != null) {
-                        ArrayList<String> bla = new ArrayList<>();
-                        SupplierRobot sR = new SupplierRobot(Utils.getConnectionInstance(), partType, amount, bla);
+                        ArrayList<String> addresses = new ArrayList<>();
+                        addresses.add(gui.getHost()+":"+gui.getPort());
+                        SupplierRobot sR = new SupplierRobot(Utils.getConnectionInstance(), partType, amount, addresses);
                         Thread threadSupply = new Thread(sR);
                         threadSupply.start();
                     }
@@ -209,7 +210,7 @@ public class OverviewController {
     @FXML
     private void handleAssemblerButtonAction(){
         try {
-            AssemblyRobot aR = new AssemblyRobot(Utils.getConnectionInstance(),"localhost",1337);
+            AssemblyRobot aR = new AssemblyRobot(Utils.getConnectionInstance(), gui.getHost(), gui.getPort());
             Thread threadAssemble = new Thread(aR);
             threadAssemble.start();
         } catch (ConnectionException e) {
@@ -220,7 +221,7 @@ public class OverviewController {
     @FXML
     private void handleCalibratorButtonAction(){
         try {
-            CalibrationRobot cR = new CalibrationRobot(Utils.getConnectionInstance(), "localhost", 1337);
+            CalibrationRobot cR = new CalibrationRobot(Utils.getConnectionInstance(), gui.getHost(), gui.getPort());
             Thread threadCalibrate = new Thread(cR);
             threadCalibrate.start();
         } catch (ConnectionException e) {
@@ -235,7 +236,7 @@ public class OverviewController {
         try {
             int min = Integer.parseInt(calibrationValueMIN_textfield.getCharacters().toString());
             int max = Integer.parseInt(calibrationValueMAX_textfield.getCharacters().toString());
-            LogisticRobot lR = new LogisticRobot(Utils.getConnectionInstance(), min, max, "localhost", 1337);
+            LogisticRobot lR = new LogisticRobot(Utils.getConnectionInstance(), min, max, gui.getHost(), gui.getPort());
             Thread threadTester = new Thread(lR);
             threadTester.start();
         } catch (ConnectionException e) {

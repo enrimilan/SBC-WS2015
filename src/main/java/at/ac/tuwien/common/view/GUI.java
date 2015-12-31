@@ -33,6 +33,8 @@ public class GUI{
     private ObservableList<Module> modulesData = FXCollections.observableArrayList();
     private ObservableList<Drone> goodDronesData = FXCollections.observableArrayList();
     private ObservableList<Drone> badDronesData = FXCollections.observableArrayList();
+    private String host;
+    private int port;
 
     public ObservableList<Part> getPartsData() {
         return partsData;
@@ -56,8 +58,83 @@ public class GUI{
     public GUI(Stage primaryStage, IServer server) throws IOException {
         this.primaryStage = primaryStage;
         this.server = server;
-        Updater u = new Updater();
-        u.start();
+        server.registerGUINotificationCallback(new INotificationCallback() {
+
+            @Override
+            public void setTitle(String title) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        primaryStage.setTitle(title);
+                    }
+                });
+            }
+
+            @Override
+            public synchronized void onPartAdded(Part part) {
+                partsData.add(part);
+            }
+
+            @Override
+            public synchronized void onPartRemoved(Part part) {
+                partsData.remove(part);
+            }
+
+            @Override
+            public void setAllParts(ArrayList<Part> parts) {
+                partsData.setAll(parts);
+            }
+
+            @Override
+            public synchronized void onModuleAdded(Module module) {
+                modulesData.add(module);
+            }
+
+            @Override
+            public synchronized void onModuleRemoved(Module module) {
+                modulesData.remove(module);
+            }
+
+            @Override
+            public void setAllModules(ArrayList<Module> modules) {
+                modulesData.setAll(modules);
+            }
+
+            @Override
+            public synchronized void onDroneAdded(Drone drone) {
+                dronesData.add(drone);
+            }
+
+            @Override
+            public synchronized void onDroneUpdated(Drone drone) {
+                int i = dronesData.indexOf(drone);
+                dronesData.set(i, drone);
+            }
+
+            @Override
+            public synchronized void onDroneRemoved(Drone drone) {
+                dronesData.remove(drone);
+            }
+
+            @Override
+            public void setAllDrones(ArrayList<Drone> drones) {
+                dronesData.setAll(drones);
+            }
+
+            @Override
+            public synchronized void onGoodDroneTested(Drone drone) {
+                goodDronesData.add(drone);
+            }
+
+            @Override
+            public synchronized void onBadDroneTested(Drone drone) {
+                badDronesData.add(drone);
+            }
+
+        });
+        server.start();
+        this.host = server.getHost();
+        this.port = server.getPort();
     }
 
     public String getType() {
@@ -102,86 +179,11 @@ public class GUI{
         }
     }
 
-    private class Updater extends Thread {
-        @Override
-        public void run() {
+    public int getPort() {
+        return port;
+    }
 
-                server.registerGUINotificationCallback(new INotificationCallback() {
-
-                    @Override
-                    public void setTitle(String title) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                primaryStage.setTitle(title);
-                            }
-                        });
-                    }
-
-                    @Override
-                    public synchronized void onPartAdded(Part part) {
-                        partsData.add(part);
-                    }
-
-                    @Override
-                    public synchronized void onPartRemoved(Part part) {
-                        partsData.remove(part);
-                    }
-
-                    @Override
-                    public void setAllParts(ArrayList<Part> parts) {
-                        partsData.setAll(parts);
-                    }
-
-                    @Override
-                    public synchronized void onModuleAdded(Module module) {
-                        modulesData.add(module);
-                    }
-
-                    @Override
-                    public synchronized void onModuleRemoved(Module module) {
-                        modulesData.remove(module);
-                    }
-
-                    @Override
-                    public void setAllModules(ArrayList<Module> modules) {
-                        modulesData.setAll(modules);
-                    }
-
-                    @Override
-                    public synchronized void onDroneAdded(Drone drone) {
-                        dronesData.add(drone);
-                    }
-
-                    @Override
-                    public synchronized void onDroneUpdated(Drone drone) {
-                        int i = dronesData.indexOf(drone);
-                        dronesData.set(i, drone);
-                    }
-
-                    @Override
-                    public synchronized void onDroneRemoved(Drone drone) {
-                        dronesData.remove(drone);
-                    }
-
-                    @Override
-                    public void setAllDrones(ArrayList<Drone> drones) {
-                        dronesData.setAll(drones);
-                    }
-
-                    @Override
-                    public synchronized void onGoodDroneTested(Drone drone) {
-                        goodDronesData.add(drone);
-                    }
-
-                    @Override
-                    public synchronized void onBadDroneTested(Drone drone) {
-                        badDronesData.add(drone);
-                    }
-
-                });
-            server.start();
-
-        }
+    public String getHost() {
+        return host;
     }
 }
