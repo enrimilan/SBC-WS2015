@@ -28,6 +28,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class OverviewController {
 
@@ -98,7 +99,8 @@ public class OverviewController {
                 supplyTxtField.clear();
                 if (amount > 0) {
                     if ( partType != null) {
-                        SupplierRobot sR = new SupplierRobot(Utils.getConnectionInstance(), partType, amount);
+                        ArrayList<String> bla = new ArrayList<>();
+                        SupplierRobot sR = new SupplierRobot(Utils.getConnectionInstance(), partType, amount, bla);
                         Thread threadSupply = new Thread(sR);
                         threadSupply.start();
                     }

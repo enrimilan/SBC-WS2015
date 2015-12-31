@@ -1,17 +1,17 @@
 package at.ac.tuwien.common.connection;
 
-import at.ac.tuwien.common.entity.Drone;
-import at.ac.tuwien.common.entity.Job;
-import at.ac.tuwien.common.entity.Module;
-import at.ac.tuwien.common.entity.Part;
+import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.common.notification.IAssembledNotification;
 import at.ac.tuwien.common.notification.ICalibratedNotification;
 import at.ac.tuwien.common.notification.ITestedNotification;
 
+import java.sql.Connection;
+
 public interface IConnection {
 
-    void establish() throws ConnectionException;
+    void establish(String host, int port) throws ConnectionException;
 
+    int getAmount(PartType partType) throws ConnectionException;
     void supply(Part part) throws ConnectionException;
 
     void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException;

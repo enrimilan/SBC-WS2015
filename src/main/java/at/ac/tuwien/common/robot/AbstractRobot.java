@@ -17,7 +17,6 @@ public abstract class AbstractRobot {
     public AbstractRobot(IConnection connection) throws ConnectionException {
         this.connection = connection;
         this.id = UUID.randomUUID();
-        connection.establish();
         this.in = new BufferedReader(new InputStreamReader(System.in));
     }
 

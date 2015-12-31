@@ -9,9 +9,7 @@ import at.ac.tuwien.common.notification.ICalibratedNotification;
 import at.ac.tuwien.common.notification.ITestedNotification;
 import at.ac.tuwien.utils.Constants;
 import at.ac.tuwien.utils.Utils;
-import org.mozartspaces.capi3.Coordinator;
-import org.mozartspaces.capi3.FifoCoordinator;
-import org.mozartspaces.capi3.QueryCoordinator;
+import org.mozartspaces.capi3.*;
 import org.mozartspaces.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,26 +24,53 @@ public class XVSMConnection implements IConnection {
     private final static Logger logger = LoggerFactory.getLogger(XVSMConnection.class);
     private MzsCore core;
     private Capi capi;
+    private String host;
+    private int port;
     private ContainerReference partsContainer, modulesContainer, dronesContainer, testedDronesContainer;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
 
     @Override
-    public void establish() throws ConnectionException {
+    public void establish(String host, int port) throws ConnectionException {
         this.core = DefaultMzsCore.newInstance(Constants.RANDOM_FREE_PORT);
         this.capi = new Capi(core);
-
+        this.host = host;
+        this.port = port;
         List<Coordinator> coordinators = new ArrayList<Coordinator>();
         coordinators.add(new QueryCoordinator());
         coordinators.add(new FifoCoordinator());
 
-        this.partsContainer = Utils.getOrCreateContainer(Constants.PARTS_CONTAINER, capi, coordinators);
-        this.modulesContainer = Utils.getOrCreateContainer(Constants.MODULES_CONTAINER, capi, coordinators);
-        this.dronesContainer = Utils.getOrCreateContainer(Constants.DRONES_CONTAINER, capi, coordinators);
-        this.testedDronesContainer = Utils.getOrCreateContainer(Constants.TESTED_DRONES_CONTAINER, capi, coordinators);
-        this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators);
-        this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators);
-        this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators);
+        this.partsContainer = Utils.getOrCreateContainer(Constants.PARTS_CONTAINER, capi, coordinators, host, port);
+        this.modulesContainer = Utils.getOrCreateContainer(Constants.MODULES_CONTAINER, capi, coordinators, host, port);
+        this.dronesContainer = Utils.getOrCreateContainer(Constants.DRONES_CONTAINER, capi, coordinators, host, port);
+        this.testedDronesContainer = Utils.getOrCreateContainer(Constants.TESTED_DRONES_CONTAINER, capi, coordinators, host, port);
+        this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators, host, port);
+        this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators, host, port);
+        this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators, host, port);
         logger.debug("Connection established.");
+    }
+
+    @Override
+    public int getAmount(PartType partType) throws ConnectionException {
+        Property partTypeProp = Property.forName("*", "partType");
+        Query query = null;
+        if(partType == PartType.CASE){
+            query = new Query().filter(Matchmakers.and(partTypeProp.equalTo(PartType.CASE)));
+        }
+        else if(partType == PartType.CONTROL_UNIT){
+            query = new Query().filter(Matchmakers.and(partTypeProp.equalTo(PartType.CONTROL_UNIT)));
+        }
+        else if(partType == PartType.MOTOR){
+            query = new Query().filter(Matchmakers.and(partTypeProp.equalTo(PartType.MOTOR)));
+        }
+        else if(partType == PartType.ROTOR){
+            query = new Query().filter(Matchmakers.and(partTypeProp.equalTo(PartType.ROTOR)));
+        }
+        try {
+            return capi.read(partsContainer, QueryCoordinator.newSelector(query, MzsConstants.Selecting.COUNT_ALL),
+                    MzsConstants.RequestTimeout.DEFAULT, null).size();
+        } catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
@@ -61,7 +86,6 @@ public class XVSMConnection implements IConnection {
     @Override
     public void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException {
         try {
-            //establish();
             capi.write(assembledNotifications, new Entry((Serializable) assemblyRobotNotification));
         } catch (MzsCoreException e) {
             throw new ConnectionException(e.getMessage());
@@ -72,7 +96,7 @@ public class XVSMConnection implements IConnection {
     public void moduleAssembled(Module module, Job job) throws ConnectionException {
         try{
             if(capi == null || partsContainer == null){
-                establish();
+                establish(host, port);
             }
             capi.write(modulesContainer, new Entry(module));
         }
@@ -85,7 +109,7 @@ public class XVSMConnection implements IConnection {
     public void droneAssembled(Drone drone, Job job) throws ConnectionException {
         try{
             if(capi == null || dronesContainer == null){
-                establish();
+                establish(host, port);
             }
             capi.write(dronesContainer, new Entry(drone));
         }
@@ -97,7 +121,6 @@ public class XVSMConnection implements IConnection {
     @Override
     public void registerCalibrationRobot(ICalibratedNotification calibrationRobotNotification) throws ConnectionException {
         try {
-            //establish();
             capi.write(calibratedNotifications, new Entry((Serializable) calibrationRobotNotification));
         } catch (MzsCoreException e) {
             throw new ConnectionException(e.getMessage());
@@ -107,7 +130,6 @@ public class XVSMConnection implements IConnection {
     @Override
     public void motorRotorPairCalibrated(Module module, Job job) throws ConnectionException {
         try{
-            //establish();
             capi.write(modulesContainer, new Entry(module));
         }
         catch (MzsCoreException e) {
@@ -118,7 +140,6 @@ public class XVSMConnection implements IConnection {
     @Override
     public void droneCalibrated(Drone drone, Job job) throws ConnectionException {
         try{
-            //establish();
             capi.write(dronesContainer, new Entry(drone));
         }
         catch (MzsCoreException e) {
@@ -129,7 +150,6 @@ public class XVSMConnection implements IConnection {
     @Override
     public void registerLogisticRobot(ITestedNotification logisticRobotNotification) throws ConnectionException {
         try {
-            //establish();
             capi.write(testedNotifications, new Entry((Serializable) logisticRobotNotification));
         } catch (MzsCoreException e) {
             throw new ConnectionException(e.getMessage());
@@ -139,7 +159,6 @@ public class XVSMConnection implements IConnection {
     @Override
     public void droneTested(Drone drone, Job job) throws ConnectionException {
         try{
-            //establish();
             capi.write(testedDronesContainer, new Entry(drone));
         }
         catch (MzsCoreException e) {

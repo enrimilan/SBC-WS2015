@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by Enri on 12/14/2015.
- */
 public class SpaceAspect extends AbstractSpaceAspect {
 
     private Capi capi;
@@ -31,12 +28,14 @@ public class SpaceAspect extends AbstractSpaceAspect {
     public SpaceAspect(Capi capi, INotificationCallback notificationCallback){
         this.capi = capi;
         this.notificationCallback = notificationCallback;
+        String host = capi.getCore().getConfig().getSpaceUri().getHost();
+        int port = capi.getCore().getConfig().getSpaceUri().getPort();
         List<Coordinator> coordinators = new ArrayList<>();
         coordinators.add(new QueryCoordinator());
         coordinators.add(new FifoCoordinator());
-        this.partsContainer = Utils.getOrCreateContainer(Constants.PARTS_CONTAINER, capi, coordinators);
-        this.modulesContainer = Utils.getOrCreateContainer(Constants.MODULES_CONTAINER, capi, coordinators);
-        this.dronesContainer = Utils.getOrCreateContainer(Constants.DRONES_CONTAINER, capi, coordinators);
+        this.partsContainer = Utils.getOrCreateContainer(Constants.PARTS_CONTAINER, capi, coordinators, host, port);
+        this.modulesContainer = Utils.getOrCreateContainer(Constants.MODULES_CONTAINER, capi, coordinators, host, port);
+        this.dronesContainer = Utils.getOrCreateContainer(Constants.DRONES_CONTAINER, capi, coordinators, host, port);
     }
 
     @Override

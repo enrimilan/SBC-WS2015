@@ -2,10 +2,7 @@ package at.ac.tuwien.rmi;
 
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
-import at.ac.tuwien.common.entity.Drone;
-import at.ac.tuwien.common.entity.Job;
-import at.ac.tuwien.common.entity.Module;
-import at.ac.tuwien.common.entity.Part;
+import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.common.notification.IAssembledNotification;
 import at.ac.tuwien.common.notification.ICalibratedNotification;
 import at.ac.tuwien.common.notification.ITestedNotification;
@@ -26,13 +23,22 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void establish() throws ConnectionException {
+    public void establish(String host, int port) throws ConnectionException {
         try {
-            registry = LocateRegistry.getRegistry(Constants.SERVER_HOST, Constants.SERVER_PORT);
+            registry = LocateRegistry.getRegistry(host, port);
             server = (IRMIServer) registry.lookup(Constants.SERVER_NAME);
         } catch (RemoteException e) {
            throw new ConnectionException(e.getMessage());
         } catch (NotBoundException e) {
+            throw new ConnectionException(e.getMessage());
+        }
+    }
+
+    @Override
+    public int getAmount(PartType partType) throws ConnectionException {
+        try {
+            return server.getAmount(partType);
+        } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
     }

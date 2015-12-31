@@ -93,6 +93,23 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     @Override
+    public int getAmount(PartType partType) throws RemoteException {
+        if(partType == PartType.CASE){
+            return cases.size();
+        }
+        else if(partType == PartType.CONTROL_UNIT){
+            return controlUnits.size();
+        }
+        else if(partType == PartType.MOTOR){
+            return motors.size();
+        }
+        else if(partType == PartType.ROTOR){
+            return rotors.size();
+        }
+        return 0;
+    }
+
+    @Override
     public synchronized void supply(Part part) throws RemoteException {
         if(part.getPartType() == PartType.CASE){
             cases.add(part);

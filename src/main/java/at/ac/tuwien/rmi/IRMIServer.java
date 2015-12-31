@@ -1,10 +1,7 @@
 package at.ac.tuwien.rmi;
 
-import at.ac.tuwien.common.entity.Job;
+import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.common.notification.IAssembledNotification;
-import at.ac.tuwien.common.entity.Drone;
-import at.ac.tuwien.common.entity.Module;
-import at.ac.tuwien.common.entity.Part;
 import at.ac.tuwien.common.notification.ICalibratedNotification;
 import at.ac.tuwien.common.notification.ITestedNotification;
 
@@ -13,6 +10,8 @@ import java.rmi.RemoteException;
 
 public interface IRMIServer extends Remote {
 
+
+    int getAmount(PartType partType) throws RemoteException;
     void supply(Part part) throws RemoteException;
 
     void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws RemoteException;

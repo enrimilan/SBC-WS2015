@@ -1,13 +1,10 @@
 package at.ac.tuwien.utils;
 
-import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.rmi.RmiConnection;
 import at.ac.tuwien.common.entity.PartType;
 import at.ac.tuwien.xvsm.XVSMConnection;
 import org.mozartspaces.capi3.Coordinator;
-import org.mozartspaces.capi3.FifoCoordinator;
-import org.mozartspaces.capi3.QueryCoordinator;
 import org.mozartspaces.core.Capi;
 import org.mozartspaces.core.ContainerReference;
 import org.mozartspaces.core.MzsConstants;
@@ -16,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Utils {
@@ -61,10 +57,10 @@ public class Utils {
     }
 
 
-    public static ContainerReference getOrCreateContainer(String containerName, Capi capi, List<Coordinator> obligatoryCoords) {
+    public static ContainerReference getOrCreateContainer(String containerName, Capi capi,
+                                                          List<Coordinator> obligatoryCoords, String host, int port) {
         ContainerReference cref = null;
-        int port = capi.getCore().getConfig().getSpaceUri().getPort();
-        URI spaceUri = getSpaceUri(Constants.SERVER_HOST, port);
+        URI spaceUri = getSpaceUri(host, port);
         try {
             cref = capi.lookupContainer(containerName, spaceUri, MzsConstants.RequestTimeout.DEFAULT, null);
             logger.debug("created container: "+ containerName);
