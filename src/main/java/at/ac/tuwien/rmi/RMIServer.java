@@ -69,6 +69,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             int port = getRandomFreePort();
             registry = LocateRegistry.createRegistry(port);
             registry.bind(Constants.SERVER_NAME, this);
+            notificationCallback.setTitle("Drone Factory - " + Constants.SERVER_NAME + "@" + port);
             logger.debug("Server listening using port {} and name {}", port, Constants.SERVER_NAME);
         } catch (RemoteException e) {
             logger.error(e.getMessage());
