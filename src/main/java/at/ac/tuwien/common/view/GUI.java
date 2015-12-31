@@ -4,6 +4,7 @@ import at.ac.tuwien.common.server.IServer;
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.Module;
 import at.ac.tuwien.common.entity.Part;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -106,6 +107,16 @@ public class GUI{
         public void run() {
 
                 server.registerGUINotificationCallback(new INotificationCallback() {
+
+                    @Override
+                    public void setTitle(String title) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                primaryStage.setTitle(title);
+                            }
+                        });
+                    }
 
                     @Override
                     public synchronized void onPartAdded(Part part) {

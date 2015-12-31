@@ -9,6 +9,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface INotificationCallback {
 
+    void setTitle(String title);
+
     void onPartAdded(Part part);
     void onPartRemoved(Part part);
     void setAllParts(ArrayList<Part> parts);
@@ -24,7 +26,4 @@ public interface INotificationCallback {
 
     void onGoodDroneTested(Drone drone);
     void onBadDroneTested(Drone drone);
-
-
-
 }
