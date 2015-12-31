@@ -220,7 +220,7 @@ public class OverviewController {
     @FXML
     private void handleCalibratorButtonAction(){
         try {
-            CalibrationRobot cR = new CalibrationRobot(Utils.getConnectionInstance());
+            CalibrationRobot cR = new CalibrationRobot(Utils.getConnectionInstance(), "localhost", 1337);
             Thread threadCalibrate = new Thread(cR);
             threadCalibrate.start();
         } catch (ConnectionException e) {
@@ -235,7 +235,7 @@ public class OverviewController {
         try {
             int min = Integer.parseInt(calibrationValueMIN_textfield.getCharacters().toString());
             int max = Integer.parseInt(calibrationValueMAX_textfield.getCharacters().toString());
-            LogisticRobot lR = new LogisticRobot(Utils.getConnectionInstance(), min, max);
+            LogisticRobot lR = new LogisticRobot(Utils.getConnectionInstance(), min, max, "localhost", 1337);
             Thread threadTester = new Thread(lR);
             threadTester.start();
         } catch (ConnectionException e) {

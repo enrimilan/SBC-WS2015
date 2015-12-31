@@ -15,36 +15,41 @@ import java.rmi.RemoteException;
 public class CalibrationRobot extends AbstractRobot implements Runnable {
 
     private final static Logger logger = LoggerFactory.getLogger(CalibrationRobot.class);
+    private String host;
+    private int port;
 
-    public CalibrationRobot(IConnection connection) throws RemoteException, ConnectionException {
+    public CalibrationRobot(IConnection connection, String host, int port) throws RemoteException, ConnectionException {
         super(connection);
+        this.host = host;
+        this.port = port;
     }
 
     @Override
     public void run() {
         try {
+            connection.establish(host, port);
             connection.registerCalibrationRobot(new CalibratedNotification(id));
             startRobot();
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         } catch (RemoteException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
     }
 
     public static void main(String[] args){
-        if(args.length != 1){
-            throw new IllegalArgumentException("Usage: CalibrationRobot rmi|xvsm");
+        if(args.length != 3){
+            throw new IllegalArgumentException("Usage: CalibrationRobot rmi|xvsm SERVER_HOST SERVER_PORT");
         }
 
         IConnection connection = Utils.getConnectionInstance(args[0]);
         try {
-            CalibrationRobot calibrationRobot = new CalibrationRobot(connection);
+            CalibrationRobot calibrationRobot = new CalibrationRobot(connection, args[1], Integer.valueOf(args[2]));
             calibrationRobot.run();
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         } catch (RemoteException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
     }
 }
