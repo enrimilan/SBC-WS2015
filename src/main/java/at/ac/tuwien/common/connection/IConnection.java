@@ -11,7 +11,7 @@ public interface IConnection {
 
     void establish(String host, int port) throws ConnectionException;
 
-    int getAmount(PartType partType) throws ConnectionException;
+    int getAmount(Part part) throws ConnectionException;
     void supply(Part part) throws ConnectionException;
 
     void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException;

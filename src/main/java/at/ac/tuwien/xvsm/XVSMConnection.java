@@ -50,21 +50,14 @@ public class XVSMConnection implements IConnection {
     }
 
     @Override
-    public int getAmount(PartType partType) throws ConnectionException {
+    public int getAmount(Part part) throws ConnectionException {
         Property partTypeProp = Property.forName("*", "partType");
-        Query query = null;
-        if(partType == PartType.CASE){
-            query = new Query().filter(Matchmakers.and(partTypeProp.equalTo(PartType.CASE)));
-        }
-        else if(partType == PartType.CONTROL_UNIT){
-            query = new Query().filter(Matchmakers.and(partTypeProp.equalTo(PartType.CONTROL_UNIT)));
-        }
-        else if(partType == PartType.MOTOR){
-            query = new Query().filter(Matchmakers.and(partTypeProp.equalTo(PartType.MOTOR)));
-        }
-        else if(partType == PartType.ROTOR){
-            query = new Query().filter(Matchmakers.and(partTypeProp.equalTo(PartType.ROTOR)));
-        }
+        Property caseTypeProp = Property.forName("*", "caseType");
+        Property colorProp = Property.forName("*", "color");
+        Query query = new Query().filter(Matchmakers.and(
+                    partTypeProp.equalTo(part.getPartType()),
+                    caseTypeProp.equalTo(part.getCaseType()),
+                    colorProp.equalTo(Color.GRAY)));
         try {
             return capi.read(partsContainer, QueryCoordinator.newSelector(query, MzsConstants.Selecting.COUNT_ALL),
                     MzsConstants.RequestTimeout.DEFAULT, null).size();

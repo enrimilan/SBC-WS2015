@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 public interface IRMIServer extends Remote {
 
 
-    int getAmount(PartType partType) throws RemoteException;
+    int getAmount(Part part) throws RemoteException;
     void supply(Part part) throws RemoteException;
 
     void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws RemoteException;

@@ -29,14 +29,15 @@ public class SupplierRobot extends AbstractRobot implements Runnable {
     public void run() {
         try {
             for(int i = 0; i<amount; i++){
-                String address = getFactoryAddressWithMinimalAmount();
+                Part part = new Part(id, partType);
+                String address = getFactoryAddressWithMinimalAmount(part);
                 String data[] = address.split(":");
                 connection.establish(data[0], Integer.valueOf(data[1]));
-                logger.debug("Supplying part.");
-                Part part = new Part(id, partType);
+
                 if(part.getPartType() == PartType.CASE){
                     part.setCaseType(Utils.generateRandomCaseType());
                 }
+                logger.debug("Supplying part.");
                 connection.supply(part);
                 Thread.sleep(INTERVAL);
             }
@@ -48,7 +49,7 @@ public class SupplierRobot extends AbstractRobot implements Runnable {
         }
     }
 
-    private String getFactoryAddressWithMinimalAmount(){
+    private String getFactoryAddressWithMinimalAmount(Part part){
         String address = "";
         int minAmount = Integer.MAX_VALUE;
 
@@ -56,7 +57,7 @@ public class SupplierRobot extends AbstractRobot implements Runnable {
             String data[] = s.split(":");
             try {
                 connection.establish(data[0], Integer.valueOf(data[1]));
-                int amount = connection.getAmount(partType);
+                int amount = connection.getAmount(part);
                 if(amount<minAmount){
                     minAmount = amount;
                     address = s;

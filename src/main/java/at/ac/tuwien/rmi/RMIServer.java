@@ -24,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 
 public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServer {
 
@@ -106,17 +107,25 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     @Override
-    public int getAmount(PartType partType) throws RemoteException {
-        if(partType == PartType.CASE){
-            return cases.size();
+    public int getAmount(Part part) throws RemoteException {
+        if(part.getPartType() == PartType.CASE){
+            return (int)cases.stream().filter(new Predicate<Part>() {
+                @Override
+                public boolean test(Part partToBeCompared) {
+                    if(partToBeCompared.getCaseType() == part.getCaseType() && partToBeCompared.getColor() == Color.GRAY){
+                        return true;
+                    }
+                    return false;
+                }
+            }).count();
         }
-        else if(partType == PartType.CONTROL_UNIT){
+        else if(part.getPartType() == PartType.CONTROL_UNIT){
             return controlUnits.size();
         }
-        else if(partType == PartType.MOTOR){
+        else if(part.getPartType() == PartType.MOTOR){
             return motors.size();
         }
-        else if(partType == PartType.ROTOR){
+        else if(part.getPartType() == PartType.ROTOR){
             return rotors.size();
         }
         return 0;

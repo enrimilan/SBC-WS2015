@@ -35,9 +35,9 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public int getAmount(PartType partType) throws ConnectionException {
+    public int getAmount(Part part) throws ConnectionException {
         try {
-            return server.getAmount(partType);
+            return server.getAmount(part);
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
