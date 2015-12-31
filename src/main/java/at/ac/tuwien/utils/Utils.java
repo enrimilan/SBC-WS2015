@@ -1,6 +1,7 @@
 package at.ac.tuwien.utils;
 
 import at.ac.tuwien.common.connection.IConnection;
+import at.ac.tuwien.common.entity.CaseType;
 import at.ac.tuwien.rmi.RmiConnection;
 import at.ac.tuwien.common.entity.PartType;
 import at.ac.tuwien.xvsm.XVSMConnection;
@@ -13,12 +14,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Utils {
 
     private static Logger logger = LoggerFactory.getLogger(Utils.class);
     private static IConnection connection = null;
+    private static final List<CaseType> VALUES = Collections.unmodifiableList(Arrays.asList(CaseType.NORMAL,
+            CaseType.PACKAGE_HOLDER, CaseType.CAMERA_HOLDER));
+    private static final Random RANDOM = new Random();
 
     public static PartType getPartType(String id){
         if(id.equals("A")){
@@ -36,6 +43,10 @@ public class Utils {
         else{
             return null;
         }
+    }
+
+    public static CaseType generateRandomCaseType(){
+        return VALUES.get(RANDOM.nextInt(3));
     }
 
     public static IConnection getConnectionInstance(String type){
