@@ -209,7 +209,7 @@ public class OverviewController {
     @FXML
     private void handleAssemblerButtonAction(){
         try {
-            AssemblyRobot aR = new AssemblyRobot(Utils.getConnectionInstance());
+            AssemblyRobot aR = new AssemblyRobot(Utils.getConnectionInstance(),"localhost",1337);
             Thread threadAssemble = new Thread(aR);
             threadAssemble.start();
         } catch (ConnectionException e) {
