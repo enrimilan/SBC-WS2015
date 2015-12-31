@@ -10,6 +10,8 @@ import at.ac.tuwien.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -64,11 +66,15 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     @Override
     public void start() {
         try {
-            registry = LocateRegistry.createRegistry(Constants.SERVER_PORT);
+            int port = getRandomFreePort();
+            registry = LocateRegistry.createRegistry(port);
             registry.bind(Constants.SERVER_NAME, this);
+            logger.debug("Server listening using port {} and name {}", port, Constants.SERVER_NAME);
         } catch (RemoteException e) {
             logger.error(e.getMessage());
         } catch (AlreadyBoundException e) {
+            logger.error(e.getMessage());
+        } catch (IOException e) {
             logger.error(e.getMessage());
         }
     }
@@ -442,4 +448,11 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         }
         return false;
     }
+
+    private int getRandomFreePort() throws IOException {
+        ServerSocket s = new ServerSocket(0);
+        s.close();
+        return s.getLocalPort();
+    }
+
 }
