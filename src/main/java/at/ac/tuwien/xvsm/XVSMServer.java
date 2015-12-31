@@ -42,7 +42,7 @@ public class XVSMServer implements IServer {
         this.core = DefaultMzsCore.newInstance(Constants.RANDOM_FREE_PORT);
         this.capi = new Capi(core);
         int port = core.getConfig().getSpaceUri().getPort();
-        notificationCallback.setTitle("Drone Factory - " + port);
+        notificationCallback.setTitle("Drone Factory - @" + port);
         logger.debug("XVSMServer started");
         logger.debug("Server listening using port {}", port);
 
