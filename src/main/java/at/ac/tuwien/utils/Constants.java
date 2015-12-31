@@ -4,7 +4,6 @@ public class Constants {
 
     public final static String SERVER_HOST = "localhost";
     public final static String SERVER_NAME = "server";
-    public final static int SERVER_PORT = 1337;
     public final static int RANDOM_FREE_PORT = 0;
     public final static String PARTS_CONTAINER = "parts_container";
     public final static String MODULES_CONTAINER = "modules_container";
