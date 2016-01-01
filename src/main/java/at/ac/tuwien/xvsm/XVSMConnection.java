@@ -3,10 +3,7 @@ package at.ac.tuwien.xvsm;
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.common.entity.*;
-import at.ac.tuwien.common.notification.AssembledNotification;
-import at.ac.tuwien.common.notification.IAssembledNotification;
-import at.ac.tuwien.common.notification.ICalibratedNotification;
-import at.ac.tuwien.common.notification.ITestedNotification;
+import at.ac.tuwien.common.notification.*;
 import at.ac.tuwien.utils.Constants;
 import at.ac.tuwien.utils.Utils;
 import org.mozartspaces.capi3.*;
@@ -74,6 +71,16 @@ public class XVSMConnection implements IConnection {
         catch (MzsCoreException e) {
             throw new ConnectionException(e.getMessage());
         }
+    }
+
+    @Override
+    public void registerPaintingRobot(PaintedNotification paintedNotification) throws ConnectionException {
+        //TODO
+    }
+
+    @Override
+    public void partPainted(Part part) throws ConnectionException {
+        //TODO
     }
 
     @Override

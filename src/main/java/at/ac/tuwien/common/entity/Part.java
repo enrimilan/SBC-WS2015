@@ -7,6 +7,7 @@ public class Part implements Serializable {
 
     private UUID partId;
     private UUID supplierId;
+    private UUID painterId;
     private PartType partType;
     private CaseType caseType;
     private Color color;
@@ -46,11 +47,16 @@ public class Part implements Serializable {
         this.color = color;
     }
 
+    public void setPainterId(UUID painterId) {
+        this.painterId = painterId;
+    }
+
     @Override
     public String toString() {
         return "Part{" +
                 "partId=" + partId +
                 ", supplierId=" + supplierId +
+                ", painterId=" + painterId +
                 ", partType=" + partType +
                 ", caseType=" + caseType +
                 ", color=" + color +
