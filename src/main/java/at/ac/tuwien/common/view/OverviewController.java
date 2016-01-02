@@ -4,10 +4,7 @@ package at.ac.tuwien.common.view;
  * Created by Arber on 07.12.2015.
  */
 import at.ac.tuwien.common.connection.ConnectionException;
-import at.ac.tuwien.common.entity.Drone;
-import at.ac.tuwien.common.entity.Module;
-import at.ac.tuwien.common.entity.Part;
-import at.ac.tuwien.common.entity.PartType;
+import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.common.robot.AssemblyRobot;
 import at.ac.tuwien.common.robot.CalibrationRobot;
 import at.ac.tuwien.common.robot.LogisticRobot;
@@ -90,6 +87,31 @@ public class OverviewController {
 
     @FXML
     private ComboBox<PartType> supplyComboBox;
+
+
+    ObservableList<CaseType> caseTypeOptions =
+            FXCollections.observableArrayList(
+                    CaseType.NORMAL,
+                    CaseType.PACKAGE_HOLDER,
+                    CaseType.CAMERA_HOLDER
+            );
+
+
+    @FXML
+    private ComboBox<CaseType> caseTypeComboBox;
+
+    ObservableList<Color> droneColorsOptions =
+            FXCollections.observableArrayList(
+                    Color.BLUE,
+                    Color.GRAY,
+                    Color.GREEN,
+                    Color.RED
+            );
+
+
+    @FXML
+    private ComboBox<Color> dronoColorComboBox;
+
     @FXML
     private void handleSupplyButtonAction(){
         try {
@@ -317,6 +339,8 @@ public class OverviewController {
     private void initialize() {
         badDronesTable.setVisible(false);
         supplyComboBox.setItems(supplyOptions);
+        caseTypeComboBox.setItems(caseTypeOptions);
+        dronoColorComboBox.setItems(droneColorsOptions);
 
         partId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partId"));
         partType_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partType"));

@@ -232,7 +232,7 @@
                                     <Insets top="3.0" />
                                  </padding>
                               </Label>
-                              <ComboBox prefWidth="150.0" promptText="Select case type" />
+                              <ComboBox fx:id="caseTypeComboBox" prefWidth="150.0" promptText="Select case type" />
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
@@ -242,7 +242,7 @@
                                     <Insets top="3.0" />
                                  </padding>
                               </Label>
-                              <ComboBox prefWidth="150.0" promptText="Select case color" />
+                              <ComboBox fx:id="dronoColorComboBox" prefWidth="150.0" promptText="Select case color" />
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="3">
