@@ -3,9 +3,6 @@ package at.ac.tuwien.common.entity;
 import java.io.Serializable;
 import java.util.UUID;
 
-/**
- * Created by Arber on 02.01.2016.
- */
 public class Order implements Serializable {
 
     private UUID orderId;
