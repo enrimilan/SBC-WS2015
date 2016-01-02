@@ -7,7 +7,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <TabPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.common.view.OverviewController">
    <tabs>
       <Tab text="Overview">
@@ -284,6 +283,7 @@
                       <TableColumn prefWidth="144.0" text="Drones" />
                         <TableColumn prefWidth="141.0" text="Case type" />
                         <TableColumn minWidth="9.0" prefWidth="232.0" text="Case color" />
+                        <TableColumn prefWidth="75.0" text="Status" />
                     </columns>
                      <VBox.margin>
                         <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
