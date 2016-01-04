@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <TabPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.common.view.OverviewController">
    <tabs>
@@ -33,7 +36,12 @@
                                     <Insets />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="consoleSupplyButton" mnemonicParsing="false" onMouseClicked="#handleConsoleSupplyButtonAction" text="Console Supply" textFill="#3127ee">
+                              <Button fx:id="consoleSupplyButton" mnemonicParsing="false" onMouseClicked="#handleConsoleSupplyButtonAction" text="Supply" textFill="#3127ee">
+                                 <graphic>
+                                    <ImageView fitHeight="15.0" fitWidth="15.0">
+                                       <Image url="@console_img.gif" />
+                                    </ImageView>
+                                 </graphic>
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
@@ -46,13 +54,27 @@
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
                               <Button fx:id="startCalibratorButton" mnemonicParsing="false" onMouseClicked="#handleCalibratorButtonAction" text="Start Calibrator" />
-                              <Button fx:id="consoleCalibratorButton" mnemonicParsing="false" onMouseClicked="#handleConsoleCalibratorButtonAction" text="Console Calibrator" textFill="#3127ee" textOverrun="WORD_ELLIPSIS" />
+                              <Button fx:id="consoleCalibratorButton" mnemonicParsing="false" onMouseClicked="#handleConsoleCalibratorButtonAction" text="Calibrator" textFill="#3127ee" textOverrun="WORD_ELLIPSIS">
+                                 <graphic>
+                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@console_img.gif" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
                               <Button fx:id="startAssemblerButton" mnemonicParsing="false" onMouseClicked="#handleAssemblerButtonAction" text="Start Assembler" />
-                              <Button fx:id="consoleAssemblerButton" mnemonicParsing="false" onMouseClicked="#handleConsoleAssemblerButtonAction" text="Console Assembler" textFill="#3127ee" />
+                              <Button fx:id="consoleAssemblerButton" mnemonicParsing="false" onMouseClicked="#handleConsoleAssemblerButtonAction" text="Assembler" textFill="#3127ee">
+                                 <graphic>
+                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@console_img.gif" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
@@ -60,7 +82,14 @@
                               <TextField fx:id="calibrationValueMIN_textfield" prefHeight="25.0" prefWidth="61.0" promptText="MIN" />
                               <TextField fx:id="calibrationValueMAX_textfield" prefHeight="25.0" prefWidth="57.0" promptText="MAX" />
                               <Button fx:id="startTesterButton" mnemonicParsing="false" onMouseClicked="#handleTesterButtonAction" text="Start Tester" />
-                              <Button fx:id="consoleTesterButton" mnemonicParsing="false" onMouseClicked="#handleConsoleTesterButtonAction" text="Console Tester" textFill="#3127ee" />
+                              <Button fx:id="consoleTesterButton" mnemonicParsing="false" onMouseClicked="#handleConsoleTesterButtonAction" text="Tester" textFill="#3127ee">
+                                 <graphic>
+                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@console_img.gif" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
                            </children>
                         </HBox>
                      </children>
