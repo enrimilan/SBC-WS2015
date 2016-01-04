@@ -2,6 +2,7 @@ package at.ac.tuwien.utils;
 
 import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.common.entity.CaseType;
+import at.ac.tuwien.common.entity.Color;
 import at.ac.tuwien.rmi.RmiConnection;
 import at.ac.tuwien.common.entity.PartType;
 import at.ac.tuwien.xvsm.XVSMConnection;
@@ -18,13 +19,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Utils {
 
     private static Logger logger = LoggerFactory.getLogger(Utils.class);
     private static IConnection connection = null;
-    private static final List<CaseType> VALUES = Collections.unmodifiableList(Arrays.asList(CaseType.NORMAL,
+    private static final List<CaseType> CASE_TYPES = Collections.unmodifiableList(Arrays.asList(CaseType.NORMAL,
             CaseType.PACKAGE_HOLDER, CaseType.CAMERA_HOLDER));
+    private static final List<Color> COLORS = Collections.unmodifiableList(Arrays.asList(Color.RED, Color.GREEN, Color.BLUE));
     private static final Random RANDOM = new Random();
 
     public static PartType getPartType(String id){
@@ -46,7 +49,11 @@ public class Utils {
     }
 
     public static CaseType generateRandomCaseType(){
-        return VALUES.get(RANDOM.nextInt(3));
+        return CASE_TYPES.get(ThreadLocalRandom.current().nextInt(3));
+    }
+
+    public static Color generateRandomColor(){
+        return COLORS.get(ThreadLocalRandom.current().nextInt(3));
     }
 
     public static IConnection getConnectionInstance(String type){

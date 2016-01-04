@@ -6,6 +6,7 @@ import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.common.notification.IAssembledNotification;
 import at.ac.tuwien.common.notification.ICalibratedNotification;
 import at.ac.tuwien.common.notification.ITestedNotification;
+import at.ac.tuwien.common.notification.PaintedNotification;
 import at.ac.tuwien.utils.Constants;
 
 import java.rmi.NotBoundException;
@@ -50,6 +51,16 @@ public class RmiConnection implements IConnection {
         } catch (RemoteException e) {
             throw new ConnectionException(e.getMessage());
         }
+    }
+
+    @Override
+    public void registerPaintingRobot(PaintedNotification paintedNotification) throws ConnectionException {
+        //TODO
+    }
+
+    @Override
+    public void partPainted(Part part) throws ConnectionException {
+        //TODO
     }
 
     @Override
