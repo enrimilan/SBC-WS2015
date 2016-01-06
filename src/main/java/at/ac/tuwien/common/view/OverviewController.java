@@ -312,6 +312,8 @@ public class OverviewController {
     private TableColumn<Drone, String> droneId;
     @FXML
     private TableColumn<Drone, String> droneStatus;
+    @FXML
+    private TableColumn<Drone, Color> droneColor;
 
     private void showDroneDetails(Drone selectedDrone) {
 
@@ -359,7 +361,8 @@ public class OverviewController {
     private TableColumn<Drone, String> droneId_goodDronesTable;
     @FXML
     private TableColumn<Drone, String> assemblerId_goodDronesTable;
-
+    @FXML
+    private TableColumn<Drone, Color> droneColor_goodDronesTable;
 
     ////  Bad Drones ///
     @FXML
@@ -368,7 +371,8 @@ public class OverviewController {
     private TableColumn<Drone, String> droneId_badDronesTable;
     @FXML
     private TableColumn<Drone, String> assemblerId_badDronesTable;
-
+    @FXML
+    private TableColumn<Drone, Color> droneColor_badDronesTable;
 
 
     @FXML
@@ -419,13 +423,93 @@ public class OverviewController {
 
         droneId.setCellValueFactory(new PropertyValueFactory<>("droneId"));
         droneStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
-
+        droneColor.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
+        droneColor.setCellFactory(new Callback<TableColumn<Drone, Color>, TableCell<Drone, Color>>() {
+            @Override
+            public TableCell<Drone, Color> call(TableColumn<Drone, Color> param) {
+                return new TableCell<Drone, Color>(){
+                    @Override
+                    public void updateItem(Color item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            if(!empty){
+                                setStyle("-fx-background-color: none");
+                            }
+                        }else {
+                            if(item == Color.BLUE){
+                                setStyle("-fx-background-color: blue");
+                            }else if(item == Color.RED){
+                                setStyle("-fx-background-color: red");
+                            }else if(item == Color.GREEN){
+                                setStyle("-fx-background-color: green");
+                            }else if(item == Color.GRAY){
+                                setStyle("-fx-background-color: gray");
+                            }
+                        }
+                    }
+                };
+            }
+        });
 
         droneId_goodDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneId"));
         assemblerId_goodDronesTable.setCellValueFactory(new PropertyValueFactory<>("assemblerId"));
+        droneColor_goodDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
+        droneColor_goodDronesTable.setCellFactory(new Callback<TableColumn<Drone, Color>, TableCell<Drone, Color>>() {
+            @Override
+            public TableCell<Drone, Color> call(TableColumn<Drone, Color> param) {
+                return new TableCell<Drone, Color>(){
+                    @Override
+                    public void updateItem(Color item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            if(!empty){
+                                setStyle("-fx-background-color: none");
+                            }
+                        }else {
+                            if(item == Color.BLUE){
+                                setStyle("-fx-background-color: blue");
+                            }else if(item == Color.RED){
+                                setStyle("-fx-background-color: red");
+                            }else if(item == Color.GREEN){
+                                setStyle("-fx-background-color: green");
+                            }else if(item == Color.GRAY){
+                                setStyle("-fx-background-color: gray");
+                            }
+                        }
+                    }
+                };
+            }
+        });
 
         droneId_badDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneId"));
         assemblerId_badDronesTable.setCellValueFactory(new PropertyValueFactory<>("assemblerId"));
+        droneColor_badDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
+        droneColor_badDronesTable.setCellFactory(new Callback<TableColumn<Drone, Color>, TableCell<Drone, Color>>() {
+            @Override
+            public TableCell<Drone, Color> call(TableColumn<Drone, Color> param) {
+                return new TableCell<Drone, Color>(){
+                    @Override
+                    public void updateItem(Color item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            if(!empty){
+                                setStyle("-fx-background-color: none");
+                            }
+                        }else {
+                            if(item == Color.BLUE){
+                                setStyle("-fx-background-color: blue");
+                            }else if(item == Color.RED){
+                                setStyle("-fx-background-color: red");
+                            }else if(item == Color.GREEN){
+                                setStyle("-fx-background-color: green");
+                            }else if(item == Color.GRAY){
+                                setStyle("-fx-background-color: gray");
+                            }
+                        }
+                    }
+                };
+            }
+        });
 
         moduleType_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("moduleType"));
         moduleStatus_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("status"));
