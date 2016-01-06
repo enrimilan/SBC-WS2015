@@ -1,3 +1,6 @@
-set arg1=%1
-set arg2=%2
-call mvn -f  .\pom.xml exec:java -Psupplier -Dexec.args="rmi %arg1% %arg2%"
+@ECHO OFF
+set partType=%1
+set amount=%2
+set serverHost=%3
+call mvn -f  .\pom.xml exec:java -Psupplier -Dexec.args="%partType% %amount% rmi %serverHost%"
+EXIT

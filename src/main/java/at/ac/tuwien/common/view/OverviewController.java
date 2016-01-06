@@ -169,16 +169,16 @@ public class OverviewController {
                             }
                             String partIdentifier = "";
                             if(partType == PartType.CASE){
-                                partIdentifier = " A ";
+                                partIdentifier = "A";
                             } else if( partType == PartType.CONTROL_UNIT){
-                                partIdentifier = " B ";
+                                partIdentifier = "B";
                             } else if(partType == PartType.MOTOR){
-                                partIdentifier = " C ";
+                                partIdentifier = "C";
                             } else if (partType == PartType.ROTOR){
-                                partIdentifier = " D ";
+                                partIdentifier = "D";
                             }
 
-                            String command = "cmd.exe /c start " + currentRelativePath.toString() + partIdentifier + amount ;
+                            String command = "cmd.exe /C start " + currentRelativePath.toString() + " " + partIdentifier + " " + amount + " " + gui.getHost()+":"+gui.getPort();
                             Runtime.getRuntime().exec(command);
                         } catch (URISyntaxException e) {
                             e.printStackTrace();
