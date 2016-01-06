@@ -50,8 +50,6 @@ public class OverviewController {
     private TableColumn<Part, String> partType_supplyTable;
     @FXML
     private TableColumn<Part, String> supplierId_supplyTable;
-    @FXML
-    private TableColumn<Part, Color> caseColor_supplyTable;
 
 
     @FXML
@@ -383,43 +381,41 @@ public class OverviewController {
         dronoColorComboBox.setItems(droneColorsOptions);
 
         partId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partId"));
-        partType_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partType"));
-        supplierId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("supplierId"));
-        caseColor_supplyTable.setCellValueFactory(new PropertyValueFactory<>("caseColor"));
-        caseColor_supplyTable.setCellFactory(new Callback<TableColumn<Part, Color>, TableCell<Part, Color>>() {
+        partType_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partWithType"));
+        partType_supplyTable.setCellFactory(new Callback<TableColumn<Part, String>, TableCell<Part, String>>() {
             @Override
-            public TableCell<Part, Color> call(TableColumn<Part, Color> param) {
-                return new TableCell<Part, Color>(){
+            public TableCell<Part, String> call(TableColumn<Part, String> param) {
+                return new TableCell<Part, String>(){
                     @Override
-                    public void updateItem(Color item, boolean empty) {
+                    public void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
                         setAlignment(Pos.CENTER);
                         if (item == null || empty) {
                             if(!empty){
-                                setText("N/A");
-                                setStyle("-fx-background-color: none");
+                                setText(null);
                             }
                         }else {
-                            setText(item.name());
-
-                            if(item == Color.BLUE){
+                            if(item.endsWith("BLUE")){
                                 setTextFill(javafx.scene.paint.Color.WHITE);
                                 setStyle("-fx-background-color: blue");
-                            }else if(item == Color.RED){
+                            }else if(item.endsWith("RED")){
                                 setTextFill(javafx.scene.paint.Color.WHITE);
                                 setStyle("-fx-background-color: red");
-                            }else if(item == Color.GREEN){
+                            }else if(item.endsWith("GREEN")){
                                 setTextFill(javafx.scene.paint.Color.WHITE);
                                 setStyle("-fx-background-color: green");
-                            }else if(item == Color.GRAY){
+                            }else if(item.endsWith("GRAY")){
                                 setTextFill(javafx.scene.paint.Color.WHITE);
                                 setStyle("-fx-background-color: gray");
                             }
+                            setText(item.split(":")[0]);
                         }
                     }
                 };
             }
         });
+
+        supplierId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("supplierId"));
 
         droneId.setCellValueFactory(new PropertyValueFactory<>("droneId"));
         droneStatus.setCellValueFactory(new PropertyValueFactory<>("status"));

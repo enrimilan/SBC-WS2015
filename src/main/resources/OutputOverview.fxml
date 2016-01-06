@@ -172,7 +172,6 @@
                               <TableColumn fx:id="partId_supplyTable" prefWidth="75.0" text="PartI D" />
                               <TableColumn fx:id="partType_supplyTable" prefWidth="75.0" text="Part Type" />
                               <TableColumn fx:id="supplierId_supplyTable" prefWidth="75.0" text="Supplyer ID" />
-                              <TableColumn fx:id="caseColor_supplyTable" prefWidth="75.0" text="Color" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
