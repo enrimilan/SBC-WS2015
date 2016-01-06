@@ -1,5 +1,6 @@
 package at.ac.tuwien.common.server;
 
+import at.ac.tuwien.common.entity.Order;
 import at.ac.tuwien.common.view.INotificationCallback;
 
 public interface IServer {
@@ -9,5 +10,6 @@ public interface IServer {
     void stop();
     String getHost();
     int getPort();
+    void addOrder(Order order);
 
 }

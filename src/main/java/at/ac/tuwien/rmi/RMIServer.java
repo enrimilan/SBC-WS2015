@@ -107,6 +107,11 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     @Override
+    public void addOrder(Order order) {
+        //TODO
+    }
+
+    @Override
     public int getAmount(Part part) throws RemoteException {
         if(part.getPartType() == PartType.CASE){
             return (int)cases.stream().filter(new Predicate<Part>() {

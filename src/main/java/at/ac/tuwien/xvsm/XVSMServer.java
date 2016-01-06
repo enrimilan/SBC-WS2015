@@ -104,6 +104,11 @@ public class XVSMServer implements IServer {
         return port;
     }
 
+    @Override
+    public void addOrder(Order order) {
+        //TODO
+    }
+
     public synchronized boolean checkForWorkWithPartsForAssemblyRobot(){
 
         // take the assembly robot notification (if available)
