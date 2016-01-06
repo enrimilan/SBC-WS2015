@@ -199,7 +199,7 @@ public class OverviewController {
                         } else {
                             currentRelativePath = Paths.get(getClass().getClassLoader().getResource("assembler-xvsm.bat").toURI());
                         }
-                        String command = "cmd.exe /c start " + currentRelativePath.toString() ;
+                        String command = "cmd.exe /c start " + currentRelativePath.toString() + " " + gui.getHost() + " " + gui.getPort() ;
                         Runtime.getRuntime().exec(command);
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
@@ -217,7 +217,7 @@ public class OverviewController {
             } else {
                 currentRelativePath = Paths.get(getClass().getClassLoader().getResource("calibrator-xvsm.bat").toURI());
             }
-            String command = "cmd.exe /c start " + currentRelativePath.toString() ;
+            String command = "cmd.exe /c start \"\" " + currentRelativePath.toString() + " " + gui.getHost() + " " + gui.getPort();
             Runtime.getRuntime().exec(command);
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -238,7 +238,7 @@ public class OverviewController {
                         } else {
                             currentRelativePath = Paths.get(getClass().getClassLoader().getResource("tester-xvsm.bat").toURI());
                         }
-                        String command = "cmd.exe /c start " + currentRelativePath.toString() + " " + min + " " + max;
+                        String command = "cmd.exe /c start \"\" " + currentRelativePath.toString() + " " + min + " " + max + " " + gui.getHost() + " " + gui.getPort();
                         Runtime.getRuntime().exec(command);
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
