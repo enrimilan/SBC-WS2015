@@ -110,6 +110,20 @@
             </build>
         </profile>
         <profile>
+            <id>painter</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <configuration>
+                            <mainClass>at.ac.tuwien.common.robot.PaintingRobot</mainClass>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>assembler</id>
             <build>
                 <plugins>
