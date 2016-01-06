@@ -6,10 +6,7 @@ package at.ac.tuwien.common.view;
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.entity.*;
 import at.ac.tuwien.common.entity.Color;
-import at.ac.tuwien.common.robot.AssemblyRobot;
-import at.ac.tuwien.common.robot.CalibrationRobot;
-import at.ac.tuwien.common.robot.LogisticRobot;
-import at.ac.tuwien.common.robot.SupplierRobot;
+import at.ac.tuwien.common.robot.*;
 import at.ac.tuwien.utils.Utils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -73,11 +70,14 @@ public class OverviewController {
     private TextField calibrationValueMIN_textfield;
     @FXML
     private TextField calibrationValueMAX_textfield;
-
     @FXML
     private Button startTesterButton;
     @FXML
     private Button consoleTesterButton;
+    @FXML
+    private Button startPainterButton;
+    @FXML
+    private Button consolePainterButton;
 
     @FXML
     private TextField supplyTxtField;
@@ -134,6 +134,19 @@ public class OverviewController {
                     }
                 }
             }
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handlePainterButtonAction(){
+        try {
+            PaintingRobot pR = new PaintingRobot(Utils.getConnectionInstance(), gui.getHost(), gui.getPort());
+            Thread threadSupply = new Thread(pR);
+            threadSupply.start();
+        } catch (RemoteException e) {
+            e.printStackTrace();
         } catch (ConnectionException e) {
             e.printStackTrace();
         }

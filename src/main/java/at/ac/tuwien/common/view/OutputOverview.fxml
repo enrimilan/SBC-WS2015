@@ -92,6 +92,20 @@
                                  </graphic></Button>
                            </children>
                         </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <Button fx:id="startPainterButton" mnemonicParsing="false" onMouseClicked="#handlePainterButtonAction" text="Start Painter" />
+                              <Button fx:id="consolePainterButton" mnemonicParsing="false" text="Painter">
+                                 <graphic>
+                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@console_img.gif" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
