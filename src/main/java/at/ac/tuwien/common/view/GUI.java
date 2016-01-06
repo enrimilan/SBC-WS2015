@@ -1,5 +1,6 @@
 package at.ac.tuwien.common.view;
 
+import at.ac.tuwien.common.entity.Order;
 import at.ac.tuwien.common.server.IServer;
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.Module;
@@ -23,6 +24,9 @@ public class GUI{
 
     private static Logger logger = LoggerFactory.getLogger(GUI.class);
 
+    private String host;
+    private int port;
+
     private Stage primaryStage;
     private IServer server;
 
@@ -33,8 +37,8 @@ public class GUI{
     private ObservableList<Module> modulesData = FXCollections.observableArrayList();
     private ObservableList<Drone> goodDronesData = FXCollections.observableArrayList();
     private ObservableList<Drone> badDronesData = FXCollections.observableArrayList();
-    private String host;
-    private int port;
+    private ObservableList<Order> ordersData = FXCollections.observableArrayList();
+
 
     public ObservableList<Part> getPartsData() {
         return partsData;
@@ -42,17 +46,17 @@ public class GUI{
     public ObservableList<Drone> getDronesData() {
         return dronesData;
     }
-
     public ObservableList<Module> getModulesData() {
         return modulesData;
     }
-
     public ObservableList<Drone> getGoodDronesData() {
         return goodDronesData;
     }
-
     public ObservableList<Drone> getBadDronesData() {
         return badDronesData;
+    }
+    public ObservableList<Order> getOrdersData() {
+        return ordersData;
     }
 
     public GUI(Stage primaryStage, IServer server) throws IOException {

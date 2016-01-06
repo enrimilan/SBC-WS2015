@@ -41,7 +41,7 @@ public class OverviewController {
     @FXML
     private Label lbl_BadDrones;
 
-
+    /// Supply Table ///
     @FXML
     private TableView<Part> supplyTable;
     @FXML
@@ -302,6 +302,16 @@ public class OverviewController {
         }
     }
 
+    @FXML
+    private void handleCreateOrderButtonAction(){
+       // TODO
+        ObservableList<Order> testOrder =
+                FXCollections.observableArrayList(
+                       new Order(5, CaseType.CAMERA_HOLDER, Color.BLUE)
+                );
+        ordersTable.setItems(testOrder);
+    }
+
     /////////Drones Table //////////
 
     @FXML
@@ -378,6 +388,20 @@ public class OverviewController {
     @FXML
     private TableColumn<Drone, Color> droneColor_badDronesTable;
 
+
+    ////  Orders ///
+    @FXML
+    private TableView<Order> ordersTable;
+    @FXML
+    private TableColumn<Order, String> orderId_ordersTable;
+    @FXML
+    private TableColumn<Order, String> dronesNumber_ordersTable;
+    @FXML
+    private TableColumn<Order, String> caseType_ordersTable;
+    @FXML
+    private TableColumn<Order, String> caseColor_ordersTable;
+    @FXML
+    private TableColumn<Order, String> status_ordersTable;
 
     @FXML
     private void initialize() {
@@ -523,6 +547,11 @@ public class OverviewController {
         moduleCalibrationValue_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("calibrationValue"));
         moduleAssemblerId_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("assemblerId"));
         moduleCalibratorrId_moduleTableView.setCellValueFactory(new PropertyValueFactory<>("calibratorId"));
+
+        orderId_ordersTable.setCellValueFactory(new PropertyValueFactory<>("orderId"));
+        dronesNumber_ordersTable.setCellValueFactory(new PropertyValueFactory<>("orderSize"));
+        caseType_ordersTable.setCellValueFactory(new PropertyValueFactory<>("caseType"));
+        caseColor_ordersTable.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
     }
 
     public void setGui(GUI gui) {
@@ -533,6 +562,7 @@ public class OverviewController {
         moduleTableView.setItems(gui.getModulesData());
         goodDronesTable.setItems(gui.getGoodDronesData());
         badDronesTable.setItems(gui.getBadDronesData());
+        ordersTable.setItems(gui.getOrdersData());
 
         gui.getPartsData().addListener(new ListChangeListener<Part>() {
             @Override

@@ -326,13 +326,13 @@
                         <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </Separator>
-                  <TableView prefHeight="657.0" prefWidth="999.0">
+                  <TableView fx:id="ordersTable" prefHeight="657.0" prefWidth="999.0">
                     <columns>
-                      <TableColumn prefWidth="152.0" text="Order ID" />
-                      <TableColumn prefWidth="144.0" text="Drones" />
-                        <TableColumn prefWidth="141.0" text="Case type" />
-                        <TableColumn minWidth="9.0" prefWidth="232.0" text="Case color" />
-                        <TableColumn prefWidth="75.0" text="Status" />
+                      <TableColumn fx:id="orderId_ordersTable" prefWidth="152.0" text="Order ID" />
+                      <TableColumn fx:id="dronesNumber_ordersTable" prefWidth="144.0" text="Drones" />
+                        <TableColumn fx:id="caseType_ordersTable" prefWidth="141.0" text="Case type" />
+                        <TableColumn fx:id="caseColor_ordersTable" minWidth="9.0" prefWidth="232.0" text="Case color" />
+                        <TableColumn fx:id="status_ordersTable" prefWidth="75.0" text="Status" />
                     </columns>
                      <VBox.margin>
                         <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />

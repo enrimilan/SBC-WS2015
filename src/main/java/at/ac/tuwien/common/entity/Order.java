@@ -10,7 +10,7 @@ public class Order implements Serializable {
     private CaseType caseType;
     private Color droneColor;
 
-    private Order(Integer orderSize, CaseType caseType, Color droneColor){
+    public Order(Integer orderSize, CaseType caseType, Color droneColor){
         this.orderId = UUID.randomUUID();
         this.orderSize = orderSize;
         this.caseType = caseType;
