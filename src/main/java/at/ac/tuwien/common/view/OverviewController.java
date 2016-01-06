@@ -178,7 +178,7 @@ public class OverviewController {
                                 partIdentifier = "D";
                             }
 
-                            String command = "cmd.exe /C start " + currentRelativePath.toString() + " " + partIdentifier + " " + amount + " " + gui.getHost()+":"+gui.getPort();
+                            String command = "cmd.exe /C start \"\" " + currentRelativePath.toString() + " " + partIdentifier + " " + amount + " " + gui.getHost()+":"+gui.getPort();
                             Runtime.getRuntime().exec(command);
                         } catch (URISyntaxException e) {
                             e.printStackTrace();
