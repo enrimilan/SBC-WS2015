@@ -95,7 +95,7 @@
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
                               <Button fx:id="startPainterButton" mnemonicParsing="false" onMouseClicked="#handlePainterButtonAction" text="Start Painter" />
-                              <Button fx:id="consolePainterButton" mnemonicParsing="false" text="Painter">
+                              <Button fx:id="consolePainterButton" mnemonicParsing="false" onMouseClicked="#handleConsolePainterButtonAction" text="Painter">
                                  <graphic>
                                     <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                        <image>

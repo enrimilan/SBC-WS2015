@@ -153,6 +153,24 @@ public class OverviewController {
     }
 
     @FXML
+    private void handleConsolePainterButtonAction(){
+        try {
+            Path currentRelativePath = null;
+            if(this.gui.getType().equals("rmi")){
+                currentRelativePath = Paths.get(getClass().getClassLoader().getResource("painter-rmi.bat").toURI());
+            } else {
+                currentRelativePath = Paths.get(getClass().getClassLoader().getResource("painter-xvsm.bat").toURI());
+            }
+            String command = "cmd.exe /c start \"\" " + currentRelativePath.toString() + " " + gui.getHost() + " " + gui.getPort();
+            Runtime.getRuntime().exec(command);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void handleConsoleSupplyButtonAction(){
             if(!supplyTxtField.getCharacters().toString().isEmpty()){
                 int amount = Integer.parseInt(supplyTxtField.getCharacters().toString());
