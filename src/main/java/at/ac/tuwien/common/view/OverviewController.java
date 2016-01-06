@@ -5,6 +5,7 @@ package at.ac.tuwien.common.view;
  */
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.entity.*;
+import at.ac.tuwien.common.entity.Color;
 import at.ac.tuwien.common.robot.AssemblyRobot;
 import at.ac.tuwien.common.robot.CalibrationRobot;
 import at.ac.tuwien.common.robot.LogisticRobot;
@@ -19,6 +20,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.*;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -49,7 +52,8 @@ public class OverviewController {
     private TableColumn<Part, String> partType_supplyTable;
     @FXML
     private TableColumn<Part, String> supplierId_supplyTable;
-
+    @FXML
+    private TableColumn<Part, Color> caseColor_supplyTable;
 
 
     @FXML
@@ -345,6 +349,38 @@ public class OverviewController {
         partId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partId"));
         partType_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partType"));
         supplierId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("supplierId"));
+        caseColor_supplyTable.setCellValueFactory(new PropertyValueFactory<>("caseColor"));
+        caseColor_supplyTable.setCellFactory(new Callback<TableColumn<Part, Color>, TableCell<Part, Color>>() {
+            @Override
+            public TableCell<Part, Color> call(TableColumn<Part, Color> param) {
+                return new TableCell<Part, Color>(){
+                    @Override
+                    public void updateItem(Color item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setText(null);
+                            setStyle("");
+                        }else {
+                            setText(item.name());
+
+                            if(item == Color.BLUE){
+                                setTextFill(javafx.scene.paint.Color.WHITE);
+                                setStyle("-fx-background-color: blue");
+                            }else if(item == Color.RED){
+                                setTextFill(javafx.scene.paint.Color.WHITE);
+                                setStyle("-fx-background-color: red");
+                            }else if(item == Color.GREEN){
+                                setTextFill(javafx.scene.paint.Color.WHITE);
+                                setStyle("-fx-background-color: green");
+                            }else if(item == Color.GRAY){
+                                setTextFill(javafx.scene.paint.Color.WHITE);
+                                setStyle("-fx-background-color: gray");
+                            }
+                        }
+                    }
+                };
+            }
+        });
 
         droneId.setCellValueFactory(new PropertyValueFactory<>("droneId"));
         droneStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
