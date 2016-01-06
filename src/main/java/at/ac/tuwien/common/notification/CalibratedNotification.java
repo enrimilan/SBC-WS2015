@@ -21,10 +21,14 @@ public class CalibratedNotification extends UnicastRemoteObject implements ICali
     private final static int MIN_CALIBRATION_VALUE = -10;
     private final static int MAX_CALIBRATION_VALUE = 10;
     private UUID calibratorRobotId;
+    private String host;
+    private int port;
 
-    public CalibratedNotification(UUID calibratorRobotId) throws RemoteException {
+    public CalibratedNotification(UUID calibratorRobotId, String host, int port) throws RemoteException {
         super();
         this.calibratorRobotId = calibratorRobotId;
+        this.host = host;
+        this.port = port;
     }
 
     @Override
@@ -40,6 +44,8 @@ public class CalibratedNotification extends UnicastRemoteObject implements ICali
                     module.setStatus(Status.CALIBRATED);
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
+                    connection.setHost(host);
+                    connection.setPort(port);
                     job.setStatus(JobStatus.DONE);
                     connection.motorRotorPairCalibrated(module, job);
                     connection.registerCalibrationRobot(CalibratedNotification.this);
@@ -60,6 +66,8 @@ public class CalibratedNotification extends UnicastRemoteObject implements ICali
             public void run() {
                 try {
                     IConnection connection = Utils.getConnectionInstance();
+                    connection.setHost(host);
+                    connection.setPort(port);
                     ArrayList<Module> motorRotorPairs = drone.getMotorRotorPairs();
                     int value = 0;
                     for(Module motorRotorPair: motorRotorPairs){

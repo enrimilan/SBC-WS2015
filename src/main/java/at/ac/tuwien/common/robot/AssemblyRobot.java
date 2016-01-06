@@ -26,7 +26,7 @@ public class AssemblyRobot extends AbstractRobot implements Runnable {
     public void run() {
         try {
             connection.establish(host, port);
-            connection.registerAssemblyRobot(new AssembledNotification(UUID.randomUUID()));
+            connection.registerAssemblyRobot(new AssembledNotification(UUID.randomUUID(), host, port));
             startRobot();
         } catch (ConnectionException e) {
             e.printStackTrace();
@@ -41,6 +41,8 @@ public class AssemblyRobot extends AbstractRobot implements Runnable {
         }
         try {
             IConnection connection = Utils.getConnectionInstance(args[0]);
+            connection.setHost(args[1]);
+            connection.setPort(Integer.valueOf(args[2]));
             AssemblyRobot assemblyRobot = new AssemblyRobot(connection, args[1], Integer.valueOf(args[2]));
             assemblyRobot.run();
         } catch (ConnectionException e) {

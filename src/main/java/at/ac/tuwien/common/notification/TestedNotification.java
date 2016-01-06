@@ -22,12 +22,17 @@ public class TestedNotification extends UnicastRemoteObject implements ITestedNo
     private UUID calibratorRobotId;
     private int minCalibrationValue;
     private int maxCalibrationValue;
+    private String host;
+    private int port;
 
-    public TestedNotification(UUID calibratorRobotId, int minCalibrationValue, int maxCalibrationValue) throws RemoteException {
+    public TestedNotification(UUID calibratorRobotId, int minCalibrationValue, int maxCalibrationValue,
+                              String host, int port) throws RemoteException {
         super();
         this.calibratorRobotId = calibratorRobotId;
         this.minCalibrationValue = minCalibrationValue;
         this.maxCalibrationValue = maxCalibrationValue;
+        this.host = host;
+        this.port = port;
     }
 
     @Override
@@ -46,6 +51,8 @@ public class TestedNotification extends UnicastRemoteObject implements ITestedNo
                     }
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
+                    connection.setHost(host);
+                    connection.setPort(port);
                     job.setStatus(JobStatus.DONE);
                     connection.droneTested(drone, job);
                     connection.registerLogisticRobot(TestedNotification.this);

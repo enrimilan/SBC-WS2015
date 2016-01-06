@@ -26,12 +26,24 @@ public class XVSMConnection implements IConnection {
     private ContainerReference partsContainer, modulesContainer, dronesContainer, testedDronesContainer;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
 
+    public XVSMConnection(){
+        this.core = DefaultMzsCore.newInstance(Constants.RANDOM_FREE_PORT);
+    }
+
+    @Override
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    @Override
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     @Override
     public void establish(String host, int port) throws ConnectionException {
-        this.core = DefaultMzsCore.newInstance(Constants.RANDOM_FREE_PORT);
+        logger.debug("Establishing connection with host {} and port {}", host, port);
         this.capi = new Capi(core);
-        this.host = host;
-        this.port = port;
         List<Coordinator> coordinators = new ArrayList<Coordinator>();
         coordinators.add(new QueryCoordinator());
         coordinators.add(new FifoCoordinator());
@@ -95,7 +107,7 @@ public class XVSMConnection implements IConnection {
     @Override
     public void moduleAssembled(Module module, Job job) throws ConnectionException {
         try{
-            if(capi == null || partsContainer == null){
+            if(capi == null || modulesContainer == null){
                 establish(host, port);
             }
             capi.write(modulesContainer, new Entry(module));

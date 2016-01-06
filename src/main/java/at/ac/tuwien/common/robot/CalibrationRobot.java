@@ -28,7 +28,7 @@ public class CalibrationRobot extends AbstractRobot implements Runnable {
     public void run() {
         try {
             connection.establish(host, port);
-            connection.registerCalibrationRobot(new CalibratedNotification(id));
+            connection.registerCalibrationRobot(new CalibratedNotification(id, host, port));
             startRobot();
         } catch (ConnectionException e) {
             logger.debug(e.getMessage());

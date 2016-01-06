@@ -18,10 +18,14 @@ public class AssembledNotification extends UnicastRemoteObject implements IAssem
     private final static Logger logger = LoggerFactory.getLogger(AssembledNotification.class);
     private final static int INTERVAL = 1000;
     private UUID assemblyRobotId;
+    private String host;
+    private int port;
 
-    public AssembledNotification(UUID assemblyRobotId) throws RemoteException {
+    public AssembledNotification(UUID assemblyRobotId, String host, int port) throws RemoteException {
         super();
         this.assemblyRobotId = assemblyRobotId;
+        this.host = host;
+        this.port = port;
     }
 
     @Override
@@ -31,6 +35,8 @@ public class AssembledNotification extends UnicastRemoteObject implements IAssem
             @Override
             public void run() {
                 IConnection connection = Utils.getConnectionInstance();
+                connection.setHost(host);
+                connection.setPort(port);
                 for(int i = 0; i<motors.size(); i++){
                     Module module = new Module(ModuleType.MOTOR_ROTOR_PAIR, assemblyRobotId);
                     module.addPart(motors.get(i));
@@ -70,6 +76,8 @@ public class AssembledNotification extends UnicastRemoteObject implements IAssem
                 try {
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
+                    connection.setHost(host);
+                    connection.setPort(port);
                     job.setStatus(JobStatus.DONE);
                     connection.moduleAssembled(module, job);
                     connection.registerAssemblyRobot(AssembledNotification.this);
@@ -94,6 +102,8 @@ public class AssembledNotification extends UnicastRemoteObject implements IAssem
                 try {
                     Thread.sleep(3*INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
+                    connection.setHost(host);
+                    connection.setPort(port);
                     job.setStatus(JobStatus.DONE);
                     connection.droneAssembled(drone, job);
                     connection.registerAssemblyRobot(AssembledNotification.this);

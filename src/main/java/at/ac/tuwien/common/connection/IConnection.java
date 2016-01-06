@@ -10,6 +10,9 @@ import java.sql.Connection;
 
 public interface IConnection {
 
+    void setHost(String host);
+    void setPort(int port);
+
     void establish(String host, int port) throws ConnectionException;
 
     int getAmount(Part part) throws ConnectionException;

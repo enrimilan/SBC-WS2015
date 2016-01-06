@@ -24,6 +24,16 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
+    public void setHost(String host) {
+
+    }
+
+    @Override
+    public void setPort(int port) {
+
+    }
+
+    @Override
     public void establish(String host, int port) throws ConnectionException {
         try {
             registry = LocateRegistry.getRegistry(host, port);
