@@ -43,6 +43,12 @@ public class Part implements Serializable {
         return color;
     }
 
+    public Color getCaseColor() {
+        if (partType == PartType.CASE){
+            return color;
+        } else return null;
+    }
+
     public void setColor(Color color) {
         this.color = color;
     }
