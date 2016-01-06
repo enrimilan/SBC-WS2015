@@ -59,6 +59,10 @@ public class Drone implements Serializable {
         return caseControlUnitPair.getParts().get(0).getColor();
     }
 
+    public CaseType getDroneType(){
+        return caseControlUnitPair.getParts().get(0).getCaseType();
+    }
+
     @Override
     public String toString() {
         return "Drone{" +

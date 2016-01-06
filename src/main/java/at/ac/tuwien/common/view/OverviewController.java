@@ -309,6 +309,8 @@ public class OverviewController {
     @FXML
     private TableColumn<Drone, String> droneId;
     @FXML
+    private TableColumn<Drone, CaseType> droneType;
+    @FXML
     private TableColumn<Drone, String> droneStatus;
     @FXML
     private TableColumn<Drone, Color> droneColor;
@@ -358,6 +360,8 @@ public class OverviewController {
     @FXML
     private TableColumn<Drone, String> droneId_goodDronesTable;
     @FXML
+    private TableColumn<Drone, CaseType> droneType_goodDronesTable;
+    @FXML
     private TableColumn<Drone, String> assemblerId_goodDronesTable;
     @FXML
     private TableColumn<Drone, Color> droneColor_goodDronesTable;
@@ -367,6 +371,8 @@ public class OverviewController {
     private TableView<Drone> badDronesTable;
     @FXML
     private TableColumn<Drone, String> droneId_badDronesTable;
+    @FXML
+    private TableColumn<Drone, CaseType> droneType_badDronesTable;
     @FXML
     private TableColumn<Drone, String> assemblerId_badDronesTable;
     @FXML
@@ -392,7 +398,7 @@ public class OverviewController {
                         setAlignment(Pos.CENTER);
                         if (item == null || empty) {
                             if(!empty){
-                                setText(null);
+                                this.setText(null);
                             }
                         }else {
                             if(item.endsWith("BLUE")){
@@ -408,7 +414,7 @@ public class OverviewController {
                                 setTextFill(javafx.scene.paint.Color.WHITE);
                                 setStyle("-fx-background-color: gray");
                             }
-                            setText(item.split(":")[0]);
+                            this.setText(item.split(":")[0]);
                         }
                     }
                 };
@@ -419,6 +425,7 @@ public class OverviewController {
 
         droneId.setCellValueFactory(new PropertyValueFactory<>("droneId"));
         droneStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        droneType.setCellValueFactory(new PropertyValueFactory<>("droneType"));
         droneColor.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
         droneColor.setCellFactory(new Callback<TableColumn<Drone, Color>, TableCell<Drone, Color>>() {
             @Override
@@ -448,6 +455,7 @@ public class OverviewController {
         });
 
         droneId_goodDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneId"));
+        droneType_goodDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneType"));
         assemblerId_goodDronesTable.setCellValueFactory(new PropertyValueFactory<>("assemblerId"));
         droneColor_goodDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
         droneColor_goodDronesTable.setCellFactory(new Callback<TableColumn<Drone, Color>, TableCell<Drone, Color>>() {
@@ -478,6 +486,7 @@ public class OverviewController {
         });
 
         droneId_badDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneId"));
+        droneType_badDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneType"));
         assemblerId_badDronesTable.setCellValueFactory(new PropertyValueFactory<>("assemblerId"));
         droneColor_badDronesTable.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
         droneColor_badDronesTable.setCellFactory(new Callback<TableColumn<Drone, Color>, TableCell<Drone, Color>>() {

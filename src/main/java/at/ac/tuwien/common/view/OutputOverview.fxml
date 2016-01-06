@@ -128,6 +128,7 @@
                               <TableView fx:id="goodDronesTable">
                                 <columns>
                                     <TableColumn fx:id="droneId_goodDronesTable" prefWidth="75.0" text="Drone ID" />
+                                    <TableColumn fx:id="droneType_goodDronesTable" prefWidth="75.0" text="Drone Type" />
                                     <TableColumn fx:id="assemblerId_goodDronesTable" prefWidth="75.0" text="Assembler ID" />
                                     <TableColumn fx:id="droneColor_goodDronesTable" maxWidth="300.0" prefWidth="75.0" text="C" />
                                 </columns>
@@ -138,6 +139,7 @@
                               <TableView fx:id="badDronesTable">
                                  <columns>
                                     <TableColumn fx:id="droneId_badDronesTable" prefWidth="75.0" text="Drone ID" />
+                                    <TableColumn fx:id="droneType_badDronesTable" prefWidth="75.0" text="Drone Type" />
                                     <TableColumn fx:id="assemblerId_badDronesTable" prefWidth="75.0" text="Assembler ID" />
                                     <TableColumn fx:id="droneColor_badDronesTable" maxWidth="300.0" prefWidth="75.0" text="C" />
                                  </columns>
@@ -189,6 +191,7 @@
                         <TableView fx:id="dronesTable">
                            <columns>
                               <TableColumn fx:id="droneId" prefWidth="75.0" text="Drone ID" />
+                              <TableColumn fx:id="droneType" prefWidth="75.0" text="Drone Type" />
                               <TableColumn fx:id="droneStatus" prefWidth="292.0" text="Drone Status" />
                               <TableColumn fx:id="droneColor" maxWidth="300.0" prefWidth="38.0" text="C" />
                            </columns>
