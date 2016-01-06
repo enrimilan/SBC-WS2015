@@ -17,6 +17,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -357,9 +358,12 @@ public class OverviewController {
                     @Override
                     public void updateItem(Color item, boolean empty) {
                         super.updateItem(item, empty);
+                        setAlignment(Pos.CENTER);
                         if (item == null || empty) {
-                            setText(null);
-                            setStyle("");
+                            if(!empty){
+                                setText("N/A");
+                                setStyle("-fx-background-color: none");
+                            }
                         }else {
                             setText(item.name());
 
