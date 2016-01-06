@@ -400,20 +400,19 @@ public class OverviewController {
                             if(!empty){
                                 this.setText(null);
                             }
+                            setStyle("-fx-background-color: none");
+                            this.setText(null);
                         }else {
+                            setTextFill(javafx.scene.paint.Color.WHITE);
                             if(item.endsWith("BLUE")){
-                                setTextFill(javafx.scene.paint.Color.WHITE);
                                 setStyle("-fx-background-color: blue");
                             }else if(item.endsWith("RED")){
-                                setTextFill(javafx.scene.paint.Color.WHITE);
                                 setStyle("-fx-background-color: red");
                             }else if(item.endsWith("GREEN")){
-                                setTextFill(javafx.scene.paint.Color.WHITE);
                                 setStyle("-fx-background-color: green");
                             }else if(item.endsWith("GRAY")){
-                                setTextFill(javafx.scene.paint.Color.WHITE);
                                 setStyle("-fx-background-color: gray");
-                            }
+                            } else setTextFill(javafx.scene.paint.Color.BLACK);
                             this.setText(item.split(":")[0]);
                         }
                     }
@@ -436,8 +435,9 @@ public class OverviewController {
                         super.updateItem(item, empty);
                         if (item == null || empty) {
                             if(!empty){
-                                setStyle("-fx-background-color: none");
+                                this.setText(null);
                             }
+                            setStyle("-fx-background-color: none");
                         }else {
                             if(item == Color.BLUE){
                                 setStyle("-fx-background-color: blue");
@@ -467,8 +467,9 @@ public class OverviewController {
                         super.updateItem(item, empty);
                         if (item == null || empty) {
                             if(!empty){
-                                setStyle("-fx-background-color: none");
+                                this.setText(null);
                             }
+                            setStyle("-fx-background-color: none");
                         }else {
                             if(item == Color.BLUE){
                                 setStyle("-fx-background-color: blue");
@@ -498,8 +499,9 @@ public class OverviewController {
                         super.updateItem(item, empty);
                         if (item == null || empty) {
                             if(!empty){
-                                setStyle("-fx-background-color: none");
+                                this.setText(null);
                             }
+                            setStyle("-fx-background-color: none");
                         }else {
                             if(item == Color.BLUE){
                                 setStyle("-fx-background-color: blue");
