@@ -30,22 +30,26 @@
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
                               <ComboBox fx:id="supplyComboBox" prefWidth="150.0" promptText="Select part type" />
-                              <TextField fx:id="supplyTxtField" prefHeight="25.0" prefWidth="85.0" promptText="Give amount" />
-                              <Button fx:id="supplyButton" mnemonicParsing="false" onAction="#handleSupplyButtonAction" text="Supply">
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="consoleSupplyButton" mnemonicParsing="false" onMouseClicked="#handleConsoleSupplyButtonAction" text="Supply" textFill="#3127ee">
-                                 <graphic>
-                                    <ImageView fitHeight="15.0" fitWidth="15.0">
-                                       <Image url="@console_img.gif" />
-                                    </ImageView>
-                                 </graphic>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </Button>
+                              <TextField fx:id="supplyTxtField" prefHeight="25.0" prefWidth="55.0" promptText="amount" />
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="supplyButton" mnemonicParsing="false" onAction="#handleSupplyButtonAction" text="Supply">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="consoleSupplyButton" mnemonicParsing="false" onMouseClicked="#handleConsoleSupplyButtonAction" prefHeight="25.0" prefWidth="0.0" textFill="#3127ee">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="16.0">
+                                             <Image url="@console_img.gif" />
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                            <VBox.margin>
                               <Insets top="50.0" />
@@ -53,57 +57,76 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Button fx:id="startCalibratorButton" mnemonicParsing="false" onMouseClicked="#handleCalibratorButtonAction" text="Start Calibrator" />
-                              <Button fx:id="consoleCalibratorButton" mnemonicParsing="false" onMouseClicked="#handleConsoleCalibratorButtonAction" text="Calibrator" textFill="#3127ee" textOverrun="WORD_ELLIPSIS">
-                                 <graphic>
-                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@console_img.gif" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic></Button>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="startPainterButton" mnemonicParsing="false" onMouseClicked="#handlePainterButtonAction" text="Start Painter" />
+                                    <Button fx:id="consolePainterButton" graphicTextGap="0.0" mnemonicParsing="false" onMouseClicked="#handleConsolePainterButtonAction" prefHeight="25.0" prefWidth="15.0">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@console_img.gif" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
-                              <Button fx:id="startAssemblerButton" mnemonicParsing="false" onMouseClicked="#handleAssemblerButtonAction" text="Start Assembler" />
-                              <Button fx:id="consoleAssemblerButton" mnemonicParsing="false" onMouseClicked="#handleConsoleAssemblerButtonAction" text="Assembler" textFill="#3127ee">
-                                 <graphic>
-                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@console_img.gif" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic></Button>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="startAssemblerButton" mnemonicParsing="false" onMouseClicked="#handleAssemblerButtonAction" text="Start Assembler" />
+                                    <Button fx:id="consoleAssemblerButton" mnemonicParsing="false" onMouseClicked="#handleConsoleAssemblerButtonAction" prefHeight="25.0" prefWidth="32.0" textFill="#3127ee">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@console_img.gif" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                           <children>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="startCalibratorButton" mnemonicParsing="false" onMouseClicked="#handleCalibratorButtonAction" text="Start Calibrator" />
+                                    <Button fx:id="consoleCalibratorButton" mnemonicParsing="false" onMouseClicked="#handleConsoleCalibratorButtonAction" prefHeight="25.0" prefWidth="32.0" textFill="#3127ee" textOverrun="WORD_ELLIPSIS">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@console_img.gif" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                            <children>
                               <TextField fx:id="calibrationValueMIN_textfield" prefHeight="25.0" prefWidth="61.0" promptText="MIN" />
                               <TextField fx:id="calibrationValueMAX_textfield" prefHeight="25.0" prefWidth="57.0" promptText="MAX" />
-                              <Button fx:id="startTesterButton" mnemonicParsing="false" onMouseClicked="#handleTesterButtonAction" text="Start Tester" />
-                              <Button fx:id="consoleTesterButton" mnemonicParsing="false" onMouseClicked="#handleConsoleTesterButtonAction" text="Tester" textFill="#3127ee">
-                                 <graphic>
-                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@console_img.gif" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic></Button>
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                           <children>
-                              <Button fx:id="startPainterButton" mnemonicParsing="false" onMouseClicked="#handlePainterButtonAction" text="Start Painter" />
-                              <Button fx:id="consolePainterButton" mnemonicParsing="false" onMouseClicked="#handleConsolePainterButtonAction" text="Painter">
-                                 <graphic>
-                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@console_img.gif" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="startTesterButton" mnemonicParsing="false" onMouseClicked="#handleTesterButtonAction" text="Start Tester" />
+                                    <Button fx:id="consoleTesterButton" mnemonicParsing="false" onMouseClicked="#handleConsoleTesterButtonAction" prefHeight="25.0" prefWidth="32.0" textFill="#3127ee">
+                                       <graphic>
+                                          <ImageView fitHeight="17.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@console_img.gif" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                         </HBox>
                      </children>
