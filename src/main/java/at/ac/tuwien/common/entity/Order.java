@@ -13,13 +13,15 @@ public class Order implements Serializable {
     private int nrOfAssembleCaseControlUnitPairRequests;
     private int nrOfAssembleMotorRotorPairRequests;
     private int nrOfAssembleDronesRequests;
-    private int nrOfTestRequests;
+    private int nrOfProducedDrones;
+    private String status;
 
     public Order(Integer orderSize, CaseType caseType, Color droneColor){
         this.orderId = UUID.randomUUID();
         this.orderSize = orderSize;
         this.caseType = caseType;
         this.droneColor = droneColor;
+        this.status = nrOfProducedDrones +"/"+orderSize;
     }
 
     public UUID getOrderId() {
@@ -82,12 +84,13 @@ public class Order implements Serializable {
         this.nrOfAssembleDronesRequests = nrOfAssembleDronesRequests;
     }
 
-    public int getNrOfTestRequests() {
-        return nrOfTestRequests;
+    public int getNrOfProducedDrones() {
+        return nrOfProducedDrones;
     }
 
-    public void setNrOfTestRequests(int nrOfTestRequests) {
-        this.nrOfTestRequests = nrOfTestRequests;
+    public void setNrOfProducedDrones(int nrOfProducedDrones) {
+        this.nrOfProducedDrones = nrOfProducedDrones;
+        this.status = nrOfProducedDrones +"/"+orderSize;
     }
 
     @Override
@@ -100,7 +103,7 @@ public class Order implements Serializable {
                 ", nrOfPaintPartRequests=" + nrOfPaintPartRequests +
                 ", nrOfAssembleCaseControlUnitPairRequests=" + nrOfAssembleCaseControlUnitPairRequests +
                 ", nrOfAssembleDronesRequests=" + nrOfAssembleDronesRequests +
-                ", nrOfTestRequests=" + nrOfTestRequests +
+                ", nrOfProducedDrones=" + nrOfProducedDrones +
                 '}';
     }
 

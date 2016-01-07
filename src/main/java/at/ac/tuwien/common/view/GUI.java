@@ -142,7 +142,8 @@ public class GUI{
 
             @Override
             public void onOrderModified(Order order) {
-               //TODO
+                int i = ordersData.indexOf(order);
+                ordersData.set(i, order);
             }
 
         });

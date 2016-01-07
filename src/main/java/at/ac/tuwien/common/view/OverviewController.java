@@ -553,6 +553,7 @@ public class OverviewController {
         dronesNumber_ordersTable.setCellValueFactory(new PropertyValueFactory<>("orderSize"));
         caseType_ordersTable.setCellValueFactory(new PropertyValueFactory<>("caseType"));
         caseColor_ordersTable.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
+        status_ordersTable.setCellValueFactory(new PropertyValueFactory<>("status"));
     }
 
     public void setGui(GUI gui) {

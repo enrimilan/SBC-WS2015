@@ -329,7 +329,10 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         }
         else{
             if(o != null){
-                o.setNrOfTestRequests(o.getNrOfTestRequests()-1);
+                o.setNrOfProducedDrones(o.getNrOfProducedDrones()-1);
+                o.setNrOfAssembleCaseControlUnitPairRequests(o.getNrOfAssembleCaseControlUnitPairRequests()-1);
+                o.setNrOfAssembleMotorRotorPairRequests(o.getNrOfAssembleMotorRotorPairRequests()-3);
+                o.setNrOfPaintPartRequests(o.getNrOfPaintPartRequests()-1);
             }
             notificationCallback.onDroneRemoved(drone);
             badDrones.add(drone);
@@ -419,7 +422,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                     @Override
                     public boolean test(Part part) {
                         if(part.getCaseType() == o.getCaseType() && part.getColor() == o.getDroneColor()
-                                && (part.getOrderId().equals(o.getOrderId()) || part.getOrderId() == null)){
+                                && (part.getOrderId() == null || part.getOrderId().equals(o.getOrderId()))){
                             return true;
                         }
                         return false;
@@ -705,7 +708,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         UUID orderId = null;
         List<Drone> droneList = new ArrayList<>();
         for(Order o : orders){
-            if(o.getNrOfTestRequests()<o.getOrderSize()){
+            if(o.getNrOfProducedDrones()<o.getOrderSize()){
                 droneList = drones.stream().filter(new Predicate<Drone>() {
                     @Override
                     public boolean test(Drone drone) {
@@ -739,7 +742,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                 return false;
             }
             if(order != null){
-                order.setNrOfTestRequests(order.getNrOfTestRequests()+1);
+                order.setNrOfProducedDrones(order.getNrOfProducedDrones()+1);
             }
             jobId.set(jobId.get()+1);
             Job job = new Job(jobId.get());
