@@ -31,7 +31,7 @@ public class PaintedNotification extends UnicastRemoteObject implements IPainted
     }
 
     @Override
-    public void paintPart(Part part, Color color, Job job) throws RemoteException {
+    public void paintPart(Part part, Color color, Job job, UUID orderId) throws RemoteException {
         logger.debug("painting part");
         Thread thread = new Thread(){
             @Override
@@ -49,7 +49,7 @@ public class PaintedNotification extends UnicastRemoteObject implements IPainted
                     connection.setHost(host);
                     connection.setPort(port);
                     job.setStatus(JobStatus.DONE);
-                    connection.partPainted(part);
+                    connection.partPainted(part, job);
                     connection.registerPaintingRobot(PaintedNotification.this);
                 } catch (ConnectionException e) {
                     e.printStackTrace();
