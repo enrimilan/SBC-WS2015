@@ -8,6 +8,7 @@ public class Part implements Serializable {
     private UUID partId;
     private UUID supplierId;
     private UUID painterId;
+    private UUID orderId;
     private PartType partType;
     private CaseType caseType;
     private Color color;
@@ -33,6 +34,14 @@ public class Part implements Serializable {
 
     public CaseType getCaseType() {
         return caseType;
+    }
+
+    public UUID getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(UUID orderId) {
+        this.orderId = orderId;
     }
 
     public void setCaseType(CaseType caseType) {
@@ -69,6 +78,7 @@ public class Part implements Serializable {
                 "partId=" + partId +
                 ", supplierId=" + supplierId +
                 ", painterId=" + painterId +
+                ", orderId=" + orderId +
                 ", partType=" + partType +
                 ", caseType=" + caseType +
                 ", color=" + color +
