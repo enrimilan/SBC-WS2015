@@ -420,8 +420,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                 List<Part> caseParts = cases.stream().filter(new Predicate<Part>() {
                     @Override
                     public boolean test(Part part) {
-                        if(part.getCaseType() == o.getCaseType() && part.getColor() == o.getDroneColor()
-                                && (part.getOrderId() == null || part.getOrderId().equals(o.getOrderId()))){
+                        if(part.getCaseType() == o.getCaseType() && part.getColor() == o.getDroneColor()){
                             return true;
                         }
                         return false;
@@ -622,15 +621,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         }
 
         if(caseControlUnitModules.isEmpty()){
-            caseControlUnitModules = caseControlUnitPairs.stream().filter(new Predicate<Module>() {
-                @Override
-                public boolean test(Module module) {
-                    if(module.getOrderId() == null){
-                        return true;
-                    }
-                    return false;
-                }
-            }).collect(Collectors.toList());
+            caseControlUnitModules = caseControlUnitPairs;
         }
 
         //all necessary parts for a drone are available and were already assembled by the robots
