@@ -13,5 +13,4 @@ public interface IServer {
     String getHost();
     int getPort();
     void addOrder(Order order);
-    CopyOnWriteArrayList<Order> getOrders();
 }

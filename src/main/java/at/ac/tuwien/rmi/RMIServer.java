@@ -120,11 +120,6 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     @Override
-    public CopyOnWriteArrayList<Order> getOrders() {
-        return orders;
-    }
-
-    @Override
     public synchronized int getAmount(Part part) throws RemoteException {
         if(part.getPartType() == PartType.CASE){
             return (int)cases.stream().filter(new Predicate<Part>() {

@@ -61,7 +61,7 @@ public class GUI{
     }
     public void addOrder(Order order){
         server.addOrder(order);
-        ordersData.setAll(server.getOrders());
+        ordersData.add(order);
     }
 
     public GUI(Stage primaryStage, IServer server) throws IOException {

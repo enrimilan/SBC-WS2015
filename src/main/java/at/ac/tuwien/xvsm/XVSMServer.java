@@ -113,10 +113,6 @@ public class XVSMServer implements IServer {
        orders.add(order);
     }
 
-    @Override
-    public CopyOnWriteArrayList<Order> getOrders() {
-        return orders;
-    }
 
     public synchronized boolean checkForWorkWithPartsForAssemblyRobot(){
 
