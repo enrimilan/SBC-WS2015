@@ -14,6 +14,8 @@ public class Order implements Serializable {
     private int nrOfAssembleMotorRotorPairRequests;
     private int nrOfAssembleDronesRequests;
     private int nrOfProducedDrones;
+
+
     private String status;
 
     public Order(Integer orderSize, CaseType caseType, Color droneColor){
@@ -91,6 +93,10 @@ public class Order implements Serializable {
     public void setNrOfProducedDrones(int nrOfProducedDrones) {
         this.nrOfProducedDrones = nrOfProducedDrones;
         this.status = nrOfProducedDrones +"/"+orderSize;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     @Override
