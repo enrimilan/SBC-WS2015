@@ -12,6 +12,8 @@ public class Drone implements Serializable {
     private UUID assemblerId;
     private Status status;
     private UUID orderId;
+    private CaseType caseType;
+    private Color color;
 
     public Drone(Module caseControlUnitPair, UUID assemblerId) {
         this.droneId = UUID.randomUUID();
@@ -70,6 +72,22 @@ public class Drone implements Serializable {
 
     public void setOrderId(UUID orderId) {
         this.orderId = orderId;
+    }
+
+    public CaseType getCaseType() {
+        return caseType;
+    }
+
+    public void setCaseType(CaseType caseType) {
+        this.caseType = caseType;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     @Override
