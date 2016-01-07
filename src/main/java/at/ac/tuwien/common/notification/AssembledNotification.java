@@ -102,6 +102,8 @@ public class AssembledNotification extends UnicastRemoteObject implements IAssem
                 Drone drone = new Drone(caseControlUnitPair, assemblyRobotId);
                 drone.setMotorRotorPairs(motorRotorPairs);
                 drone.setOrderId(orderId);
+                drone.setCaseType(caseControlUnitPair.getParts().get(0).getCaseType());
+                drone.setColor(caseControlUnitPair.getParts().get(0).getColor());
                 try {
                     Thread.sleep(3*INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();

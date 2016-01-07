@@ -741,6 +741,23 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                     orderId = o.getOrderId();
                     break;
                 }
+                else{
+                    //try some drones matching our order
+                    droneList = drones.stream().filter(new Predicate<Drone>() {
+                        @Override
+                        public boolean test(Drone drone) {
+                            if(drone.getStatus() == Status.CALIBRATED && drone.getCaseType() == o.getCaseType() && drone.getColor() == o.getDroneColor()){
+                                return true;
+                            }
+                            return false;
+                        }
+                    }).collect(Collectors.toList());
+                    if(droneList.size()>0){
+                        order = o;
+                        orderId = o.getOrderId();
+                        break;
+                    }
+                }
             }
         }
         if(droneList.isEmpty()){
