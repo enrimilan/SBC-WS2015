@@ -91,7 +91,7 @@ public class XVSMConnection implements IConnection {
     }
 
     @Override
-    public void partPainted(Part part) throws ConnectionException {
+    public void partPainted(Part part, Job job) throws ConnectionException {
         //TODO
     }
 

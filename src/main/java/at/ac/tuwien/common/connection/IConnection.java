@@ -19,7 +19,7 @@ public interface IConnection {
     void supply(Part part) throws ConnectionException;
 
     void registerPaintingRobot(PaintedNotification paintedNotification) throws ConnectionException;
-    void partPainted(Part part) throws ConnectionException;
+    void partPainted(Part part, Job job) throws ConnectionException;
 
     void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException;
     void moduleAssembled(Module module, Job job) throws ConnectionException;
