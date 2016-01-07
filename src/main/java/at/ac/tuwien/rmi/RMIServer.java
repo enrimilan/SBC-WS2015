@@ -20,12 +20,14 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServer {
 
@@ -161,6 +163,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             rotors.add(part);
         }
         notificationCallback.onPartAdded(part);
+        checkForWorkWithPartForPaintingRobot();
         checkForWorkWithPartsForAssemblyRobot();
     }
 
@@ -168,12 +171,23 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     public void registerPaintingRobot(IPaintedNotification paintedNotification) throws RemoteException {
         paintingRobots.add(paintedNotification);
         logger.debug("painting robot is ready to do some work.");
-        //TODO
+        checkForWorkWithPartForPaintingRobot();
     }
 
     @Override
     public void partPainted(Part part, Job job) throws RemoteException {
-        //TODO
+        Transaction t = jobs.get(job);
+        if(job == null || job.getStatus() == JobStatus.WORKING){
+            //null or still not finished
+        }
+        else if(t!=null &&  t.getStatus() == TransactionStatus.RUNNING){
+            t.commit();
+        }
+        else{
+            //the robot was too slow and the changes were already aborted
+            return;
+        }
+        supply(part);
     }
 
     @Override
@@ -311,6 +325,42 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             badDrones.add(drone);
             notificationCallback.onBadDroneTested(drone);
         }
+    }
+
+    private synchronized boolean checkForWorkWithPartForPaintingRobot(){
+        List<Part> grayCases = cases.stream().filter(new Predicate<Part>() {
+            @Override
+            public boolean test(Part part) {
+                if(part.getPartType() == PartType.CASE && part.getColor() == Color.GRAY){
+                    return true;
+                }
+                return false;
+            }
+        }).collect(Collectors.toList());
+        if(grayCases.size()>0){
+            IPaintedNotification paintedNotification = paintingRobots.poll();
+            if(paintedNotification == null){
+                return false;
+            }
+            Part casePart = grayCases.get(0);
+            cases.remove(casePart);
+            Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
+            notificationCallback.onPartRemoved(casePart);
+            t.addPart(casePart);
+            jobId.set(jobId.get()+1);
+            Job job = new Job(jobId.get());
+            jobs.put(job, t);
+            (new Thread(t)).start();
+            try {
+                paintedNotification.paintPart(casePart, Color.GRAY, job, null);
+                return true;
+            } catch (RemoteException e) {
+                logger.error(e.getMessage());
+                t.rollback();
+            }
+        }
+
+        return false;
     }
 
     private synchronized boolean checkForWorkWithPartsForAssemblyRobot(){
