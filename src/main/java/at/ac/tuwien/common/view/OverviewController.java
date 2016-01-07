@@ -400,7 +400,6 @@ public class OverviewController {
     ObservableList<Color> droneColorsOptions =
             FXCollections.observableArrayList(
                     Color.BLUE,
-                    Color.GRAY,
                     Color.GREEN,
                     Color.RED
             );
