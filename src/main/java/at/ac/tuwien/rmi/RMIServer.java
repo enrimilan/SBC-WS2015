@@ -326,6 +326,9 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             if(o != null){
                 notificationCallback.onOrderModified(o);
             }
+            if(o.getOrderSize() == o.getNrOfProducedDrones()){
+                orders.remove(o);
+            }
         }
         else{
             if(o != null){
@@ -414,9 +417,9 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     private synchronized boolean checkForWorkWithPartsForAssemblyRobot(){
-        Order order = null;
-        UUID orderId;
+
         for(Order o : orders){
+            Order order = null;
             if(o.getNrOfAssembleCaseControlUnitPairRequests()<o.getOrderSize()){
                 List<Part> caseParts = cases.stream().filter(new Predicate<Part>() {
                     @Override
@@ -456,17 +459,42 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                     }
                 }
                 else if(o.getNrOfAssembleMotorRotorPairRequests()<o.getOrderSize()*3){
-                    order = o;
-                    orderId = o.getOrderId();
-                    //stop here, this order still requests some motors and rotors.
-                    break;
+                    if(motorRotorPairs.size()<3 && motors.size()>0 && rotors.size()>0){
+                        IAssembledNotification assemblyRobotNotification = assemblyRobots.poll();
+                        if(assemblyRobotNotification == null){
+                            return false;
+                        }
+                        ArrayList<Part> motorParts = new ArrayList<Part>();
+                        ArrayList<Part> rotorParts = new ArrayList<Part>();
+                        int i = 0;
+                        Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
+                        while(i<3 && motors.size()>0 && rotors.size()>0){
+                            if(order != null){
+                                order.setNrOfAssembleMotorRotorPairRequests(order.getNrOfAssembleMotorRotorPairRequests());
+                            }
+                            Part m = motors.remove(0);
+                            Part r = rotors.remove(0);
+                            notificationCallback.onPartRemoved(m);
+                            notificationCallback.onPartRemoved(r);
+                            t.addPart(m);
+                            t.addPart(r);
+                            motorParts.add(m);
+                            rotorParts.add(r);
+                            i++;
+                        }
+                        jobId.set(jobId.get()+1);
+                        Job job = new Job(jobId.get());
+                        jobs.put(job, t);
+                        (new Thread(t)).start();
+                        try {
+                            assemblyRobotNotification.assembleMotorRotorPairs(motorParts, rotorParts, job);
+                            return true;
+                        } catch (RemoteException e) {
+                            logger.error(e.getMessage());
+                            t.rollback();
+                        }
+                    }
                 }
-            }
-            else if(o.getNrOfAssembleMotorRotorPairRequests()<o.getOrderSize()*3){
-                order = o;
-                orderId = o.getOrderId();
-                //stop here, this order still requests some motors and rotors.
-                break;
             }
         }
 
@@ -482,9 +510,6 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             int i = 0;
             Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
             while(i<3-motorRotorPairsSize && motors.size()>0 && rotors.size()>0){
-                if(order != null){
-                    order.setNrOfAssembleMotorRotorPairRequests(order.getNrOfAssembleMotorRotorPairRequests());
-                }
                 Part m = motors.remove(0);
                 Part r = rotors.remove(0);
                 notificationCallback.onPartRemoved(m);
@@ -550,9 +575,6 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             IAssembledNotification assemblyRobotNotification = assemblyRobots.poll();
             if(assemblyRobotNotification == null){
                 return false;
-            }
-            if(order != null){
-                order.setNrOfAssembleMotorRotorPairRequests(order.getNrOfAssembleMotorRotorPairRequests());
             }
             ArrayList<Part> motorParts = new ArrayList<Part>();
             ArrayList<Part> rotorParts = new ArrayList<Part>();
