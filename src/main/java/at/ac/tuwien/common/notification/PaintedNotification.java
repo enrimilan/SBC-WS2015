@@ -44,6 +44,7 @@ public class PaintedNotification extends UnicastRemoteObject implements IPainted
                         part.setColor(color);
                     }
                     part.setPainterId(paintingRobotId);
+                    part.setOrderId(orderId);
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
                     connection.setHost(host);
