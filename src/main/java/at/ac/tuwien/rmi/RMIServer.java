@@ -35,6 +35,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     private CopyOnWriteArrayList<Module> caseControlUnitPairs, motorRotorPairs;
     private CopyOnWriteArrayList<Drone> drones, goodDrones, badDrones;
     private CopyOnWriteArrayList<Order> orders;
+    private Queue<IPaintedNotification> paintingRobots;
     private Queue<IAssembledNotification> assemblyRobots;
     private Queue<ICalibratedNotification> calibrationRobots;
     private Queue<ITestedNotification> logisticRobots;
@@ -56,6 +57,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         this.goodDrones = new CopyOnWriteArrayList<>();
         this.badDrones =  new CopyOnWriteArrayList<>();
         this.orders = new CopyOnWriteArrayList<>();
+        this.paintingRobots = new ConcurrentLinkedQueue<>();
         this.assemblyRobots = new ConcurrentLinkedQueue<>();
         this.calibrationRobots = new ConcurrentLinkedQueue<>();
         this.logisticRobots = new ConcurrentLinkedQueue<>();
@@ -164,6 +166,8 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
 
     @Override
     public void registerPaintingRobot(IPaintedNotification paintedNotification) throws RemoteException {
+        paintingRobots.add(paintedNotification);
+        logger.debug("painting robot is ready to do some work.");
         //TODO
     }
 

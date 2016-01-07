@@ -3,10 +3,7 @@ package at.ac.tuwien.rmi;
 import at.ac.tuwien.common.connection.ConnectionException;
 import at.ac.tuwien.common.connection.IConnection;
 import at.ac.tuwien.common.entity.*;
-import at.ac.tuwien.common.notification.IAssembledNotification;
-import at.ac.tuwien.common.notification.ICalibratedNotification;
-import at.ac.tuwien.common.notification.ITestedNotification;
-import at.ac.tuwien.common.notification.PaintedNotification;
+import at.ac.tuwien.common.notification.*;
 import at.ac.tuwien.utils.Constants;
 
 import java.rmi.NotBoundException;
@@ -62,7 +59,7 @@ public class RmiConnection implements IConnection {
     }
 
     @Override
-    public void registerPaintingRobot(PaintedNotification paintedNotification) throws ConnectionException {
+    public void registerPaintingRobot(IPaintedNotification paintedNotification) throws ConnectionException {
         try {
             server.registerPaintingRobot(paintedNotification);
         } catch (RemoteException e) {

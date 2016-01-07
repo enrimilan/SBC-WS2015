@@ -86,7 +86,7 @@ public class XVSMConnection implements IConnection {
     }
 
     @Override
-    public void registerPaintingRobot(PaintedNotification paintedNotification) throws ConnectionException {
+    public void registerPaintingRobot(IPaintedNotification paintedNotification) throws ConnectionException {
         //TODO
     }
 

@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 
 public class PaintingRobot extends AbstractRobot implements Runnable {
 
-    private final static Logger logger = LoggerFactory.getLogger(CalibrationRobot.class);
+    private final static Logger logger = LoggerFactory.getLogger(PaintingRobot.class);
     private String host;
     private int port;
 

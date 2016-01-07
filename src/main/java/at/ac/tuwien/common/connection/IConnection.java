@@ -1,12 +1,7 @@
 package at.ac.tuwien.common.connection;
 
 import at.ac.tuwien.common.entity.*;
-import at.ac.tuwien.common.notification.IAssembledNotification;
-import at.ac.tuwien.common.notification.ICalibratedNotification;
-import at.ac.tuwien.common.notification.ITestedNotification;
-import at.ac.tuwien.common.notification.PaintedNotification;
-
-import java.sql.Connection;
+import at.ac.tuwien.common.notification.*;
 
 public interface IConnection {
 
@@ -18,7 +13,7 @@ public interface IConnection {
     int getAmount(Part part) throws ConnectionException;
     void supply(Part part) throws ConnectionException;
 
-    void registerPaintingRobot(PaintedNotification paintedNotification) throws ConnectionException;
+    void registerPaintingRobot(IPaintedNotification paintedNotification) throws ConnectionException;
     void partPainted(Part part, Job job) throws ConnectionException;
 
     void registerAssemblyRobot(IAssembledNotification assemblyRobotNotification) throws ConnectionException;
