@@ -9,6 +9,7 @@ import at.ac.tuwien.common.entity.Color;
 import at.ac.tuwien.common.robot.*;
 import at.ac.tuwien.utils.Utils;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -18,6 +19,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -379,7 +382,7 @@ public class OverviewController {
     @FXML
     private TableColumn<Order, String> caseType_ordersTable;
     @FXML
-    private TableColumn<Order, String> caseColor_ordersTable;
+    private TableColumn<Order, Color> caseColor_ordersTable;
     @FXML
     private TableColumn<Order, String> status_ordersTable;
 
@@ -416,26 +419,26 @@ public class OverviewController {
         partType_supplyTable.setCellFactory(new Callback<TableColumn<Part, String>, TableCell<Part, String>>() {
             @Override
             public TableCell<Part, String> call(TableColumn<Part, String> param) {
-                return new TableCell<Part, String>(){
+                return new TableCell<Part, String>() {
                     @Override
                     public void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
                         setAlignment(Pos.CENTER);
                         if (item == null || empty) {
-                            if(!empty){
+                            if (!empty) {
                                 this.setText(null);
                             }
                             setStyle("-fx-background-color: none");
                             this.setText(null);
-                        }else {
+                        } else {
                             setTextFill(javafx.scene.paint.Color.WHITE);
-                            if(item.endsWith("BLUE")){
+                            if (item.endsWith("BLUE")) {
                                 setStyle("-fx-background-color: blue");
-                            }else if(item.endsWith("RED")){
+                            } else if (item.endsWith("RED")) {
                                 setStyle("-fx-background-color: red");
-                            }else if(item.endsWith("GREEN")){
+                            } else if (item.endsWith("GREEN")) {
                                 setStyle("-fx-background-color: green");
-                            }else if(item.endsWith("GRAY")){
+                            } else if (item.endsWith("GRAY")) {
                                 setStyle("-fx-background-color: gray");
                             } else setTextFill(javafx.scene.paint.Color.BLACK);
                             this.setText(item.split(":")[0]);
@@ -454,23 +457,23 @@ public class OverviewController {
         droneColor.setCellFactory(new Callback<TableColumn<Drone, Color>, TableCell<Drone, Color>>() {
             @Override
             public TableCell<Drone, Color> call(TableColumn<Drone, Color> param) {
-                return new TableCell<Drone, Color>(){
+                return new TableCell<Drone, Color>() {
                     @Override
                     public void updateItem(Color item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item == null || empty) {
-                            if(!empty){
+                            if (!empty) {
                                 this.setText(null);
                             }
                             setStyle("-fx-background-color: none");
-                        }else {
-                            if(item == Color.BLUE){
+                        } else {
+                            if (item == Color.BLUE) {
                                 setStyle("-fx-background-color: blue");
-                            }else if(item == Color.RED){
+                            } else if (item == Color.RED) {
                                 setStyle("-fx-background-color: red");
-                            }else if(item == Color.GREEN){
+                            } else if (item == Color.GREEN) {
                                 setStyle("-fx-background-color: green");
-                            }else if(item == Color.GRAY){
+                            } else if (item == Color.GRAY) {
                                 setStyle("-fx-background-color: gray");
                             }
                         }
@@ -486,23 +489,23 @@ public class OverviewController {
         droneColor_goodDronesTable.setCellFactory(new Callback<TableColumn<Drone, Color>, TableCell<Drone, Color>>() {
             @Override
             public TableCell<Drone, Color> call(TableColumn<Drone, Color> param) {
-                return new TableCell<Drone, Color>(){
+                return new TableCell<Drone, Color>() {
                     @Override
                     public void updateItem(Color item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item == null || empty) {
-                            if(!empty){
+                            if (!empty) {
                                 this.setText(null);
                             }
                             setStyle("-fx-background-color: none");
-                        }else {
-                            if(item == Color.BLUE){
+                        } else {
+                            if (item == Color.BLUE) {
                                 setStyle("-fx-background-color: blue");
-                            }else if(item == Color.RED){
+                            } else if (item == Color.RED) {
                                 setStyle("-fx-background-color: red");
-                            }else if(item == Color.GREEN){
+                            } else if (item == Color.GREEN) {
                                 setStyle("-fx-background-color: green");
-                            }else if(item == Color.GRAY){
+                            } else if (item == Color.GRAY) {
                                 setStyle("-fx-background-color: gray");
                             }
                         }
@@ -518,23 +521,23 @@ public class OverviewController {
         droneColor_badDronesTable.setCellFactory(new Callback<TableColumn<Drone, Color>, TableCell<Drone, Color>>() {
             @Override
             public TableCell<Drone, Color> call(TableColumn<Drone, Color> param) {
-                return new TableCell<Drone, Color>(){
+                return new TableCell<Drone, Color>() {
                     @Override
                     public void updateItem(Color item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item == null || empty) {
-                            if(!empty){
+                            if (!empty) {
                                 this.setText(null);
                             }
                             setStyle("-fx-background-color: none");
-                        }else {
-                            if(item == Color.BLUE){
+                        } else {
+                            if (item == Color.BLUE) {
                                 setStyle("-fx-background-color: blue");
-                            }else if(item == Color.RED){
+                            } else if (item == Color.RED) {
                                 setStyle("-fx-background-color: red");
-                            }else if(item == Color.GREEN){
+                            } else if (item == Color.GREEN) {
                                 setStyle("-fx-background-color: green");
-                            }else if(item == Color.GRAY){
+                            } else if (item == Color.GRAY) {
                                 setStyle("-fx-background-color: gray");
                             }
                         }
@@ -553,7 +556,52 @@ public class OverviewController {
         dronesNumber_ordersTable.setCellValueFactory(new PropertyValueFactory<>("orderSize"));
         caseType_ordersTable.setCellValueFactory(new PropertyValueFactory<>("caseType"));
         caseColor_ordersTable.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
+        caseColor_ordersTable.setCellFactory(new Callback<TableColumn<Order, Color>, TableCell<Order, Color>>() {
+            @Override
+            public TableCell<Order, Color> call(TableColumn<Order, Color> param) {
+                return new TableCell<Order, Color>() {
+                    @Override
+                    public void updateItem(Color item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if(item != null) {
+                            setText(item.name());
+                            if (item == Color.BLUE) {
+                                setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
+                            } else if (item == Color.RED) {
+                                setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                            } else if (item == Color.GREEN) {
+                                setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                            } else if (item == Color.GRAY) {
+                                setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
+                            }
+                        }
+                    }
+                };
+            }
+        });
+
+
+
         status_ordersTable.setCellValueFactory(new PropertyValueFactory<>("status"));
+        status_ordersTable.setCellFactory(new Callback<TableColumn<Order, String>, TableCell<Order, String>>() {
+            @Override
+            public TableCell<Order, String> call(TableColumn<Order, String> param) {
+                return new TableCell<Order, String>() {
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if(item != null){
+                            String created = item.split("/")[0];
+                            String total = item.split("/")[1];
+                            if(created.equals(total)){
+                                setText(item + " READY");
+                                setStyle("-fx-font-weight: bold");
+                            } else  setText(item);
+                        }
+                    }
+                };
+            }
+        });
     }
 
     public void setGui(GUI gui) {
