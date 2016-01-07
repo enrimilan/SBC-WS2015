@@ -11,6 +11,7 @@ public class Drone implements Serializable {
     private ArrayList<Module> motorRotorPairs;
     private UUID assemblerId;
     private Status status;
+    private UUID orderId;
 
     public Drone(Module caseControlUnitPair, UUID assemblerId) {
         this.droneId = UUID.randomUUID();
@@ -63,13 +64,23 @@ public class Drone implements Serializable {
         return caseControlUnitPair.getParts().get(0).getCaseType();
     }
 
+    public UUID getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(UUID orderId) {
+        this.orderId = orderId;
+    }
+
     @Override
     public String toString() {
         return "Drone{" +
-                "caseControlUnitPair=" + caseControlUnitPair +
+                "droneId=" + droneId +
+                ", caseControlUnitPair=" + caseControlUnitPair +
                 ", motorRotorPairs=" + motorRotorPairs +
                 ", assemblerId=" + assemblerId +
                 ", status=" + status +
+                ", orderId=" + orderId +
                 '}';
     }
 
