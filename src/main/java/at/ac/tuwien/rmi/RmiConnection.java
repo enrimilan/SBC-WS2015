@@ -18,19 +18,17 @@ public class RmiConnection implements IConnection {
 
     private IRMIServer server;
     private Registry registry;
-
-    public RmiConnection(){
-
-    }
+    private String host;
+    private int port;
 
     @Override
     public void setHost(String host) {
-
+        this.host = host;
     }
 
     @Override
     public void setPort(int port) {
-
+        this.port = port;
     }
 
     @Override
