@@ -20,10 +20,14 @@ public class PaintedNotification extends UnicastRemoteObject implements IPainted
     private final static Logger logger = LoggerFactory.getLogger(PaintedNotification.class);
     private final static int INTERVAL = 1000;
     private UUID paintingRobotId;
+    private String host;
+    private int port;
 
-    public PaintedNotification(UUID paintingRobotId) throws RemoteException {
+    public PaintedNotification(UUID paintingRobotId, String host, int port) throws RemoteException {
         super();
         this.paintingRobotId = paintingRobotId;
+        this.host = host;
+        this.port = port;
     }
 
     @Override
@@ -42,6 +46,8 @@ public class PaintedNotification extends UnicastRemoteObject implements IPainted
                     part.setPainterId(paintingRobotId);
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();
+                    connection.setHost(host);
+                    connection.setPort(port);
                     job.setStatus(JobStatus.DONE);
                     connection.partPainted(part);
                     connection.registerPaintingRobot(PaintedNotification.this);

@@ -25,7 +25,7 @@ public class PaintingRobot extends AbstractRobot implements Runnable {
     public void run() {
         try {
             connection.establish(host, port);
-            connection.registerPaintingRobot(new PaintedNotification(id));
+            connection.registerPaintingRobot(new PaintedNotification(id, host, port));
             startRobot();
         } catch (ConnectionException e) {
             logger.debug(e.getMessage());
