@@ -1,5 +1,6 @@
 package at.ac.tuwien.rmi;
 
+import at.ac.tuwien.common.notification.IPaintedNotification;
 import at.ac.tuwien.common.server.IServer;
 import at.ac.tuwien.common.notification.IAssembledNotification;
 import at.ac.tuwien.common.entity.*;
@@ -159,6 +160,16 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         }
         notificationCallback.onPartAdded(part);
         checkForWorkWithPartsForAssemblyRobot();
+    }
+
+    @Override
+    public void registerPaintingRobot(IPaintedNotification paintedNotification) throws RemoteException {
+        //TODO
+    }
+
+    @Override
+    public void partPainted(Part part, Job job) throws RemoteException {
+        //TODO
     }
 
     @Override
