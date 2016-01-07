@@ -65,12 +65,20 @@ public class RmiConnection implements IConnection {
 
     @Override
     public void registerPaintingRobot(PaintedNotification paintedNotification) throws ConnectionException {
-        //TODO
+        try {
+            server.registerPaintingRobot(paintedNotification);
+        } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
     public void partPainted(Part part, Job job) throws ConnectionException {
-        //TODO
+        try {
+            server.partPainted(part, job);
+        } catch (RemoteException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
