@@ -240,7 +240,7 @@ public class XVSMServer implements IServer {
             //notificationCallback.onModuleRemoved(motorRotorPairs.get(0));
             //notificationCallback.onModuleRemoved(motorRotorPairs.get(1));
             //notificationCallback.onModuleRemoved(motorRotorPairs.get(2));
-            notification.assembleDrone(caseControlUnitPairs.get(0), motorRotorPairs, new Job(1));
+            notification.assembleDrone(caseControlUnitPairs.get(0), motorRotorPairs, new Job(1), null);
             return true;
 
         } catch (MzsCoreException e) {
@@ -366,7 +366,7 @@ public class XVSMServer implements IServer {
             List<Drone> entries = capi.take(dronesContainer, QueryCoordinator.newSelector(query,1),
                     MzsConstants.RequestTimeout.DEFAULT, null);
             capi.commitTransaction(notificationTx);
-            notification.testDrone(entries.get(0), new Job(1));
+            notification.testDrone(entries.get(0), new Job(1), null);
             return true;
         } catch (MzsCoreException e) {
             logger.error(e.getMessage());

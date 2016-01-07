@@ -94,13 +94,14 @@ public class AssembledNotification extends UnicastRemoteObject implements IAssem
     }
 
     @Override
-    public void assembleDrone(Module caseControlUnitPair, ArrayList<Module> motorRotorPairs, Job job) {
+    public void assembleDrone(Module caseControlUnitPair, ArrayList<Module> motorRotorPairs, Job job, UUID orderId) {
         logger.debug("Assembling drone.");
         Thread thread = new Thread(){
             @Override
             public void run() {
                 Drone drone = new Drone(caseControlUnitPair, assemblyRobotId);
                 drone.setMotorRotorPairs(motorRotorPairs);
+                drone.setOrderId(orderId);
                 try {
                     Thread.sleep(3*INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();

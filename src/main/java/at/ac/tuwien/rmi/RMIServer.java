@@ -318,12 +318,19 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             return;
         }
 
+        Order o = findOrderById(drone.getOrderId());
         if(drone.getStatus() == Status.TESTED_GOOD){
             notificationCallback.onDroneRemoved(drone);
             goodDrones.add(drone);
             notificationCallback.onGoodDroneTested(drone);
+            if(o != null){
+                notificationCallback.onOrderModified(o);
+            }
         }
         else{
+            if(o != null){
+                o.setNrOfTestRequests(o.getNrOfTestRequests()-1);
+            }
             notificationCallback.onDroneRemoved(drone);
             badDrones.add(drone);
             notificationCallback.onBadDroneTested(drone);
@@ -571,13 +578,51 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     private synchronized boolean checkForWorkWithModulesForAssemblyRobot(){
+        Order order = null;
+        UUID orderId = null;
+        List<Module> caseControlUnitModules = new ArrayList<>();
+        for(Order o : orders){
+            if(o.getNrOfAssembleDronesRequests()<o.getOrderSize()){
+                caseControlUnitModules = caseControlUnitPairs.stream().filter(new Predicate<Module>() {
+                    @Override
+                    public boolean test(Module module) {
+                        if(module.getOrderId() !=null && module.getOrderId().equals(o.getOrderId())){
+                            return true;
+                        }
+                        return false;
+                    }
+                }).collect(Collectors.toList());
+                if(caseControlUnitModules.size()>0){
+                    order = o;
+                    orderId = o.getOrderId();
+                    break;
+                }
+            }
+        }
+
+        if(caseControlUnitModules.isEmpty()){
+            caseControlUnitModules = caseControlUnitPairs.stream().filter(new Predicate<Module>() {
+                @Override
+                public boolean test(Module module) {
+                    if(module.getOrderId() == null){
+                        return true;
+                    }
+                    return false;
+                }
+            }).collect(Collectors.toList());
+        }
+
         //all necessary parts for a drone are available and were already assembled by the robots
-        if(caseControlUnitPairs.size()>=1 && motorRotorPairs.size()>=3){
+        if(caseControlUnitModules.size()>=1 && motorRotorPairs.size()>=3){
             IAssembledNotification assemblyRobotNotification = assemblyRobots.poll();
             if(assemblyRobotNotification == null){
                 return false;
             }
-            Module caseControlUnitPair = caseControlUnitPairs.remove(0);
+            if(order != null){
+                order.setNrOfAssembleDronesRequests(order.getNrOfAssembleDronesRequests()+1);
+            }
+            Module caseControlUnitPair = caseControlUnitModules.remove(0);
+            caseControlUnitPairs.remove(caseControlUnitPair);
             notificationCallback.onModuleRemoved(caseControlUnitPair);
             ArrayList<Module> motorRotorPairModules = new ArrayList<Module>();
             Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
@@ -595,7 +640,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             jobs.put(job, t);
             (new Thread(t)).start();
             try {
-                assemblyRobotNotification.assembleDrone(caseControlUnitPair, motorRotorPairModules, job);
+                assemblyRobotNotification.assembleDrone(caseControlUnitPair, motorRotorPairModules, job, orderId);
                 return true;
             } catch (RemoteException e) {
                 logger.error(e.getMessage());
@@ -656,10 +701,45 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     private synchronized boolean checkForWorkWithDroneForLogisticRobot(){
-        if(drones.size()>0 && drones.get(0).getStatus() == Status.CALIBRATED){
+        Order order = null;
+        UUID orderId = null;
+        List<Drone> droneList = new ArrayList<>();
+        for(Order o : orders){
+            if(o.getNrOfTestRequests()<o.getOrderSize()){
+                droneList = drones.stream().filter(new Predicate<Drone>() {
+                    @Override
+                    public boolean test(Drone drone) {
+                        if(drone.getStatus() == Status.CALIBRATED && drone.getOrderId() != null && drone.getOrderId().equals(o.getOrderId())){
+                            return true;
+                        }
+                        return false;
+                    }
+                }).collect(Collectors.toList());
+                if(droneList.size()>0){
+                    order = o;
+                    orderId = o.getOrderId();
+                }
+            }
+        }
+        if(droneList.isEmpty()){
+            droneList = drones.stream().filter(new Predicate<Drone>() {
+                @Override
+                public boolean test(Drone drone) {
+                    if(drone.getStatus() == Status.CALIBRATED && drone.getOrderId() == null){
+                        return true;
+                    }
+                    return false;
+                }
+            }).collect(Collectors.toList());
+        }
+
+        if(droneList.size()>0){
             ITestedNotification logisticRobotNotification = logisticRobots.poll();
             if(logisticRobotNotification == null){
                 return false;
+            }
+            if(order != null){
+                order.setNrOfTestRequests(order.getNrOfTestRequests()+1);
             }
             jobId.set(jobId.get()+1);
             Job job = new Job(jobId.get());
@@ -669,7 +749,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             jobs.put(job, t);
             (new Thread(t)).start();
             try {
-                logisticRobotNotification.testDrone(drone, job);
+                logisticRobotNotification.testDrone(drone, job, orderId);
                 return true;
             } catch (RemoteException e) {
                 logger.debug(e.getMessage());
@@ -683,6 +763,18 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         ServerSocket s = new ServerSocket(0);
         s.close();
         return s.getLocalPort();
+    }
+
+    private Order findOrderById(UUID orderId){
+        if(orderId == null){
+            return null;
+        }
+        for(Order o : orders){
+            if(o.getOrderId().equals(orderId)){
+                return o;
+            }
+        }
+        return null;
     }
 
 }

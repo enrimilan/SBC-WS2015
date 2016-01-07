@@ -36,7 +36,7 @@ public class TestedNotification extends UnicastRemoteObject implements ITestedNo
     }
 
     @Override
-    public void testDrone(Drone drone, Job job) {
+    public void testDrone(Drone drone, Job job, UUID orderId) {
         logger.debug("testing drone.");
         Thread thread = new Thread(){
             @Override
@@ -48,6 +48,9 @@ public class TestedNotification extends UnicastRemoteObject implements ITestedNo
                     }
                     else{
                         drone.setStatus(Status.TESTED_BAD);
+                    }
+                    if(orderId != null){
+                        drone.setOrderId(orderId);
                     }
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();

@@ -13,5 +13,5 @@ public interface IAssembledNotification extends Remote {
 
     void assembleMotorRotorPairs(ArrayList<Part> motors, ArrayList<Part> rotors, Job job) throws RemoteException;
     void assembleCaseControlUnitPair(Part casePart, Part controlUnit, Job job, UUID orderId) throws RemoteException;
-    void assembleDrone(Module caseControlUnitPair, ArrayList<Module> motorRotorPairs, Job job) throws RemoteException;
+    void assembleDrone(Module caseControlUnitPair, ArrayList<Module> motorRotorPairs, Job job, UUID orderId) throws RemoteException;
 }
