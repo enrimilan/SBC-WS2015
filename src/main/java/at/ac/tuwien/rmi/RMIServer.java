@@ -22,6 +22,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -163,7 +164,9 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             rotors.add(part);
         }
         notificationCallback.onPartAdded(part);
-        checkForWorkWithPartForPaintingRobot();
+        if(part.getColor() == Color.GRAY){
+            checkForWorkWithPartForPaintingRobot();
+        }
         checkForWorkWithPartsForAssemblyRobot();
     }
 
@@ -328,21 +331,59 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     private synchronized boolean checkForWorkWithPartForPaintingRobot(){
-        List<Part> grayCases = cases.stream().filter(new Predicate<Part>() {
-            @Override
-            public boolean test(Part part) {
-                if(part.getPartType() == PartType.CASE && part.getColor() == Color.GRAY){
-                    return true;
+        UUID orderId = null;
+        Color color = Color.GRAY;
+        Part casePart;
+        Order order = null;
+        List<Part> casesNeeded = new ArrayList<>();
+        for(Order o : orders){
+            //look for cases that were not assigned to any order(gray) and have got the order's case type.
+            if(o.getNrOfPaintPartRequests()<o.getOrderSize()){
+                casesNeeded = cases.stream().filter(new Predicate<Part>() {
+                    @Override
+                    public boolean test(Part part) {
+                        if(part.getColor() == Color.GRAY && part.getCaseType() == o.getCaseType()){
+                            return true;
+                        }
+                        return false;
+                    }
+                }).collect(Collectors.toList());
+
+                //found cases for order.
+                if(casesNeeded.size()>0){
+                    logger.debug("found cases for order.");
+                    orderId = o.getOrderId();
+                    color = o.getDroneColor();
+                    casePart = casesNeeded.get(0);
+                    order = o;
+                    break;
                 }
-                return false;
             }
-        }).collect(Collectors.toList());
-        if(grayCases.size()>0){
+        }
+
+        //no cases were found. so paint some random case which was not already painted of course.
+        if(casesNeeded.isEmpty()){
+            logger.debug("no cases matching any order were found. continuing in random mode.");
+            casesNeeded = cases.stream().filter(new Predicate<Part>() {
+                @Override
+                public boolean test(Part part) {
+                    if(part.getPartType() == PartType.CASE && part.getColor() == Color.GRAY){
+                        return true;
+                    }
+                    return false;
+                }
+            }).collect(Collectors.toList());
+        }
+
+        if(casesNeeded.size()>0){
             IPaintedNotification paintedNotification = paintingRobots.poll();
             if(paintedNotification == null){
                 return false;
             }
-            Part casePart = grayCases.get(0);
+            if(order != null){
+                order.setNrOfPaintPartRequests(order.getNrOfPaintPartRequests()+1);
+            }
+            casePart = casesNeeded.get(0);
             cases.remove(casePart);
             Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
             notificationCallback.onPartRemoved(casePart);
@@ -352,14 +393,13 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             jobs.put(job, t);
             (new Thread(t)).start();
             try {
-                paintedNotification.paintPart(casePart, Color.GRAY, job, null);
+                paintedNotification.paintPart(casePart, color, job, orderId);
                 return true;
             } catch (RemoteException e) {
                 logger.error(e.getMessage());
                 t.rollback();
             }
         }
-
         return false;
     }
 

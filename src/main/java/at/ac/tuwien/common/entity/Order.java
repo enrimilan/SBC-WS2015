@@ -9,6 +9,10 @@ public class Order implements Serializable {
     private int orderSize;
     private CaseType caseType;
     private Color droneColor;
+    private int nrOfPaintPartRequests;
+    private int nrOfAssembleCaseControlUnitPairRequests;
+    private int nrOfAssembleDronesRequests;
+    private int nrOfTestRequests;
 
     public Order(Integer orderSize, CaseType caseType, Color droneColor){
         this.orderId = UUID.randomUUID();
@@ -45,10 +49,50 @@ public class Order implements Serializable {
         this.droneColor = droneColor;
     }
 
+    public int getNrOfPaintPartRequests() {
+        return nrOfPaintPartRequests;
+    }
+
+    public void setNrOfPaintPartRequests(int nrOfPaintPartRequests) {
+        this.nrOfPaintPartRequests = nrOfPaintPartRequests;
+    }
+
+    public int getNrOfAssembleCaseControlUnitPairRequests() {
+        return nrOfAssembleCaseControlUnitPairRequests;
+    }
+
+    public void setNrOfAssembleCaseControlUnitPairRequests(int nrOfAssembleCaseControlUnitPairRequests) {
+        this.nrOfAssembleCaseControlUnitPairRequests = nrOfAssembleCaseControlUnitPairRequests;
+    }
+
+    public int getNrOfAssembleDronesRequests() {
+        return nrOfAssembleDronesRequests;
+    }
+
+    public void setNrOfAssembleDronesRequests(int nrOfAssembleDronesRequests) {
+        this.nrOfAssembleDronesRequests = nrOfAssembleDronesRequests;
+    }
+
+    public int getNrOfTestRequests() {
+        return nrOfTestRequests;
+    }
+
+    public void setNrOfTestRequests(int nrOfTestRequests) {
+        this.nrOfTestRequests = nrOfTestRequests;
+    }
+
     @Override
     public String toString() {
-        return "Order [orderId=" + orderId.toString() + ", orderSize=" + orderSize
-                + ", caseType=" + caseType + ", droneColor=" + droneColor + "]";
+        return "Order{" +
+                "orderId=" + orderId +
+                ", orderSize=" + orderSize +
+                ", caseType=" + caseType +
+                ", droneColor=" + droneColor +
+                ", nrOfPaintPartRequests=" + nrOfPaintPartRequests +
+                ", nrOfAssembleCaseControlUnitPairRequests=" + nrOfAssembleCaseControlUnitPairRequests +
+                ", nrOfAssembleDronesRequests=" + nrOfAssembleDronesRequests +
+                ", nrOfTestRequests=" + nrOfTestRequests +
+                '}';
     }
 
 }
