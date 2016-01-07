@@ -65,7 +65,7 @@ public class AssembledNotification extends UnicastRemoteObject implements IAssem
     }
 
     @Override
-    public void assembleCaseControlUnitPair(Part casePart, Part controlUnit, Job job) {
+    public void assembleCaseControlUnitPair(Part casePart, Part controlUnit, Job job, UUID orderId) {
         logger.debug("Assembling case control unit pairs.");
         Thread thread = new Thread(){
             @Override
@@ -73,6 +73,8 @@ public class AssembledNotification extends UnicastRemoteObject implements IAssem
                 Module module = new Module(ModuleType.CASE_CONTROL_UNIT_PAIR, assemblyRobotId);
                 module.addPart(casePart);
                 module.addPart(controlUnit);
+                casePart.setOrderId(orderId);
+                module.setOrderId(orderId);
                 try {
                     Thread.sleep(INTERVAL);
                     IConnection connection = Utils.getConnectionInstance();

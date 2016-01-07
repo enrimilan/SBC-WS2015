@@ -125,7 +125,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     @Override
-    public int getAmount(Part part) throws RemoteException {
+    public synchronized int getAmount(Part part) throws RemoteException {
         if(part.getPartType() == PartType.CASE){
             return (int)cases.stream().filter(new Predicate<Part>() {
                 @Override
@@ -178,7 +178,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     @Override
-    public void partPainted(Part part, Job job) throws RemoteException {
+    public synchronized void partPainted(Part part, Job job) throws RemoteException {
         Transaction t = jobs.get(job);
         if(job == null || job.getStatus() == JobStatus.WORKING){
             //null or still not finished
@@ -404,6 +404,62 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     private synchronized boolean checkForWorkWithPartsForAssemblyRobot(){
+        Order order = null;
+        UUID orderId;
+        for(Order o : orders){
+            if(o.getNrOfAssembleCaseControlUnitPairRequests()<o.getOrderSize()){
+                List<Part> caseParts = cases.stream().filter(new Predicate<Part>() {
+                    @Override
+                    public boolean test(Part part) {
+                        if(part.getCaseType() == o.getCaseType() && part.getColor() == o.getDroneColor()
+                                && (part.getOrderId().equals(o.getOrderId()) || part.getOrderId() == null)){
+                            return true;
+                        }
+                        return false;
+                    }
+                }).collect(Collectors.toList());
+                if(caseParts.size()>0 && controlUnits.size()>0){
+                    IAssembledNotification assemblyRobotNotification = assemblyRobots.poll();
+                    if(assemblyRobotNotification == null){
+                        return false;
+                    }
+                    logger.debug("found case and control unit for order to assemble");
+                    o.setNrOfAssembleCaseControlUnitPairRequests(o.getNrOfAssembleCaseControlUnitPairRequests()+1);
+                    Part casePart = caseParts.remove(0);
+                    cases.remove(casePart);
+                    Part controlUnit = controlUnits.remove(0);
+                    notificationCallback.onPartRemoved(casePart);
+                    notificationCallback.onPartRemoved(controlUnit);
+                    jobId.set(jobId.get()+1);
+                    Job job = new Job(jobId.get());
+                    Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
+                    t.addPart(casePart);
+                    t.addPart(controlUnit);
+                    jobs.put(job, t);
+                    (new Thread(t)).start();
+                    try {
+                        assemblyRobotNotification.assembleCaseControlUnitPair(casePart, controlUnit, job, o.getOrderId());
+                        return true;
+                    } catch (RemoteException e) {
+                        logger.error(e.getMessage());
+                        t.rollback();
+                    }
+                }
+                else if(o.getNrOfAssembleMotorRotorPairRequests()<o.getOrderSize()*3){
+                    order = o;
+                    orderId = o.getOrderId();
+                    //stop here, this order still requests some motors and rotors.
+                    break;
+                }
+            }
+            else if(o.getNrOfAssembleMotorRotorPairRequests()<o.getOrderSize()*3){
+                order = o;
+                orderId = o.getOrderId();
+                //stop here, this order still requests some motors and rotors.
+                break;
+            }
+        }
+
         //we still need some motor-rotor modules
         int motorRotorPairsSize = motorRotorPairs.size();
         if(motorRotorPairsSize<3 && motors.size()>0 && rotors.size()>0){
@@ -416,6 +472,9 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             int i = 0;
             Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
             while(i<3-motorRotorPairsSize && motors.size()>0 && rotors.size()>0){
+                if(order != null){
+                    order.setNrOfAssembleMotorRotorPairRequests(order.getNrOfAssembleMotorRotorPairRequests());
+                }
                 Part m = motors.remove(0);
                 Part r = rotors.remove(0);
                 notificationCallback.onPartRemoved(m);
@@ -440,12 +499,23 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         }
 
         //assemble a case-control unit module
-        if(cases.size()>0 && controlUnits.size()>0){
+        //assure we get only parts not related to any order.
+        List<Part> caseParts = cases.stream().filter(new Predicate<Part>() {
+            @Override
+            public boolean test(Part part) {
+                if(part.getOrderId()==null){
+                    return true;
+                }
+                return false;
+            }
+        }).collect(Collectors.toList());
+        if(caseParts.size()>0 && controlUnits.size()>0){
             IAssembledNotification assemblyRobotNotification = assemblyRobots.poll();
             if(assemblyRobotNotification == null){
                 return false;
             }
-            Part casePart = cases.remove(0);
+            Part casePart = caseParts.get(0);
+            cases.remove(casePart);
             Part controlUnit = controlUnits.remove(0);
             notificationCallback.onPartRemoved(casePart);
             notificationCallback.onPartRemoved(controlUnit);
@@ -457,7 +527,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             jobs.put(job, t);
             (new Thread(t)).start();
             try {
-                assemblyRobotNotification.assembleCaseControlUnitPair(casePart, controlUnit, job);
+                assemblyRobotNotification.assembleCaseControlUnitPair(casePart, controlUnit, job, null);
                 return true;
             } catch (RemoteException e) {
                 logger.error(e.getMessage());
@@ -470,6 +540,9 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             IAssembledNotification assemblyRobotNotification = assemblyRobots.poll();
             if(assemblyRobotNotification == null){
                 return false;
+            }
+            if(order != null){
+                order.setNrOfAssembleMotorRotorPairRequests(order.getNrOfAssembleMotorRotorPairRequests());
             }
             ArrayList<Part> motorParts = new ArrayList<Part>();
             ArrayList<Part> rotorParts = new ArrayList<Part>();

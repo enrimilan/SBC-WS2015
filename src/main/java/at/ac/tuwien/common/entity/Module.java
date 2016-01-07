@@ -13,6 +13,7 @@ public class Module implements Serializable {
     private Status status;
     private int calibrationValue;
     private UUID id;
+    private UUID orderId;
 
     public Module(ModuleType moduleType, UUID assemblerId) {
         this.id = UUID.randomUUID();
@@ -66,6 +67,14 @@ public class Module implements Serializable {
         return id;
     }
 
+    public void setOrderId(UUID orderId) {
+        this.orderId = orderId;
+    }
+
+    public UUID getOrderId() {
+        return orderId;
+    }
+
     @Override
     public String toString() {
         return "Module{" +
@@ -75,6 +84,8 @@ public class Module implements Serializable {
                 ", parts=" + parts +
                 ", status=" + status +
                 ", calibrationValue=" + calibrationValue +
+                ", id=" + id +
+                ", orderId=" + orderId +
                 '}';
     }
 
@@ -93,4 +104,5 @@ public class Module implements Serializable {
     public int hashCode() {
         return id.hashCode();
     }
+
 }

@@ -17,11 +17,10 @@ public abstract class AbstractRobot {
     public AbstractRobot(IConnection connection) throws ConnectionException {
         this.connection = connection;
         this.id = UUID.randomUUID();
-        this.in = new BufferedReader(new InputStreamReader(System.in));
     }
 
     public void startRobot(){
-
+        this.in = new BufferedReader(new InputStreamReader(System.in));
         String s;
         System.out.println("Type q + ENTER to stop the robot");
         try {
@@ -39,7 +38,8 @@ public abstract class AbstractRobot {
     public void stopRobot(){
         try {
             connection.end();
-            in.close();
+            if(in!=null)
+                in.close();
         } catch (ConnectionException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -150,7 +150,7 @@ public class XVSMServer implements IServer {
             Part controlUnitPart = entries.get(1);
             //notificationCallback.onPartRemoved(casePart);
             //notificationCallback.onPartRemoved(controlUnitPart);
-            notification.assembleCaseControlUnitPair(casePart, controlUnitPart, new Job(1));
+            notification.assembleCaseControlUnitPair(casePart, controlUnitPart, new Job(1), null);
             return true;
 
         } catch (MzsCoreException e) {

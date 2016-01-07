@@ -11,6 +11,7 @@ public class Order implements Serializable {
     private Color droneColor;
     private int nrOfPaintPartRequests;
     private int nrOfAssembleCaseControlUnitPairRequests;
+    private int nrOfAssembleMotorRotorPairRequests;
     private int nrOfAssembleDronesRequests;
     private int nrOfTestRequests;
 
@@ -63,6 +64,14 @@ public class Order implements Serializable {
 
     public void setNrOfAssembleCaseControlUnitPairRequests(int nrOfAssembleCaseControlUnitPairRequests) {
         this.nrOfAssembleCaseControlUnitPairRequests = nrOfAssembleCaseControlUnitPairRequests;
+    }
+
+    public int getNrOfAssembleMotorRotorPairRequests() {
+        return nrOfAssembleMotorRotorPairRequests;
+    }
+
+    public void setNrOfAssembleMotorRotorPairRequests(int nrOfAssembleMotorRotorPairRequests) {
+        this.nrOfAssembleMotorRotorPairRequests = nrOfAssembleMotorRotorPairRequests;
     }
 
     public int getNrOfAssembleDronesRequests() {
