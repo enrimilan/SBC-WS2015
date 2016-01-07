@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class XVSMServer implements IServer {
 
@@ -27,6 +28,7 @@ public class XVSMServer implements IServer {
     private MzsCore core;
     private Capi capi;
     private ContainerReference partsContainer, modulesContainer, dronesContainer, testedDronesContainer;
+    private CopyOnWriteArrayList<Order> orders;
     private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
     private INotificationCallback notificationCallback;
     private String host;
@@ -52,6 +54,8 @@ public class XVSMServer implements IServer {
         List<Coordinator> coordinators = new ArrayList<Coordinator>();
         coordinators.add(new QueryCoordinator());
         coordinators.add(new FifoCoordinator());
+
+        this.orders = new CopyOnWriteArrayList<>();
 
         //create the containers
         this.partsContainer = Utils.getOrCreateContainer(Constants.PARTS_CONTAINER, capi, coordinators, host, port);
@@ -106,7 +110,12 @@ public class XVSMServer implements IServer {
 
     @Override
     public void addOrder(Order order) {
-        //TODO
+       orders.add(order);
+    }
+
+    @Override
+    public CopyOnWriteArrayList<Order> getOrders() {
+        return orders;
     }
 
     public synchronized boolean checkForWorkWithPartsForAssemblyRobot(){

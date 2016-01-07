@@ -2,6 +2,7 @@ package at.ac.tuwien.common.view;
 
 import at.ac.tuwien.common.entity.Drone;
 import at.ac.tuwien.common.entity.Module;
+import at.ac.tuwien.common.entity.Order;
 import at.ac.tuwien.common.entity.Part;
 
 import java.util.ArrayList;
@@ -26,4 +27,6 @@ public interface INotificationCallback {
 
     void onGoodDroneTested(Drone drone);
     void onBadDroneTested(Drone drone);
+
+    void onOrderModified(Order order);
 }

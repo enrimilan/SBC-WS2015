@@ -33,6 +33,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     private CopyOnWriteArrayList<Part> cases, controlUnits, motors, rotors;
     private CopyOnWriteArrayList<Module> caseControlUnitPairs, motorRotorPairs;
     private CopyOnWriteArrayList<Drone> drones, goodDrones, badDrones;
+    private CopyOnWriteArrayList<Order> orders;
     private Queue<IAssembledNotification> assemblyRobots;
     private Queue<ICalibratedNotification> calibrationRobots;
     private Queue<ITestedNotification> logisticRobots;
@@ -53,6 +54,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         this.drones = new CopyOnWriteArrayList<>();
         this.goodDrones = new CopyOnWriteArrayList<>();
         this.badDrones =  new CopyOnWriteArrayList<>();
+        this.orders = new CopyOnWriteArrayList<>();
         this.assemblyRobots = new ConcurrentLinkedQueue<>();
         this.calibrationRobots = new ConcurrentLinkedQueue<>();
         this.logisticRobots = new ConcurrentLinkedQueue<>();
@@ -108,7 +110,12 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
 
     @Override
     public void addOrder(Order order) {
-        //TODO
+        orders.add(order);
+    }
+
+    @Override
+    public CopyOnWriteArrayList<Order> getOrders() {
+        return orders;
     }
 
     @Override

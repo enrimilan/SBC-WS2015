@@ -18,7 +18,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.*;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -87,33 +86,8 @@ public class OverviewController {
                     PartType.ROTOR
             );
 
-
     @FXML
     private ComboBox<PartType> supplyComboBox;
-
-
-    ObservableList<CaseType> caseTypeOptions =
-            FXCollections.observableArrayList(
-                    CaseType.NORMAL,
-                    CaseType.PACKAGE_HOLDER,
-                    CaseType.CAMERA_HOLDER
-            );
-
-
-    @FXML
-    private ComboBox<CaseType> caseTypeComboBox;
-
-    ObservableList<Color> droneColorsOptions =
-            FXCollections.observableArrayList(
-                    Color.BLUE,
-                    Color.GRAY,
-                    Color.GREEN,
-                    Color.RED
-            );
-
-
-    @FXML
-    private ComboBox<Color> dronoColorComboBox;
 
     @FXML
     private void handleSupplyButtonAction(){
@@ -304,12 +278,18 @@ public class OverviewController {
 
     @FXML
     private void handleCreateOrderButtonAction(){
-       // TODO
-        ObservableList<Order> testOrder =
-                FXCollections.observableArrayList(
-                       new Order(5, CaseType.CAMERA_HOLDER, Color.BLUE)
-                );
-        ordersTable.setItems(testOrder);
+
+        if(!dronesNumber_textfield.getCharacters().toString().isEmpty()) {
+            int orderSize = Integer.parseInt(dronesNumber_textfield.getCharacters().toString());
+            CaseType caseType = caseTypeComboBox.getValue();
+            Color droneColor = droneColorComboBox.getValue();
+            dronesNumber_textfield.clear();
+
+            Order order = new Order(orderSize, caseType, droneColor);
+            gui.addOrder(order);
+
+            // TODO
+        }
     }
 
     /////////Drones Table //////////
@@ -404,11 +384,33 @@ public class OverviewController {
     private TableColumn<Order, String> status_ordersTable;
 
     @FXML
+    private TextField dronesNumber_textfield;
+
+    @FXML
+    private ComboBox<CaseType> caseTypeComboBox;
+    ObservableList<CaseType> caseTypeOptions =
+            FXCollections.observableArrayList(
+                    CaseType.NORMAL,
+                    CaseType.PACKAGE_HOLDER,
+                    CaseType.CAMERA_HOLDER
+            );
+
+    @FXML
+    private ComboBox<Color> droneColorComboBox;
+    ObservableList<Color> droneColorsOptions =
+            FXCollections.observableArrayList(
+                    Color.BLUE,
+                    Color.GRAY,
+                    Color.GREEN,
+                    Color.RED
+            );
+
+    @FXML
     private void initialize() {
         badDronesTable.setVisible(false);
         supplyComboBox.setItems(supplyOptions);
         caseTypeComboBox.setItems(caseTypeOptions);
-        dronoColorComboBox.setItems(droneColorsOptions);
+        droneColorComboBox.setItems(droneColorsOptions);
 
         partId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partId"));
         partType_supplyTable.setCellValueFactory(new PropertyValueFactory<>("partWithType"));

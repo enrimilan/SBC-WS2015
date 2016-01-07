@@ -3,6 +3,8 @@ package at.ac.tuwien.common.server;
 import at.ac.tuwien.common.entity.Order;
 import at.ac.tuwien.common.view.INotificationCallback;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public interface IServer {
 
     void registerGUINotificationCallback(INotificationCallback notificationCallback);
@@ -11,5 +13,5 @@ public interface IServer {
     String getHost();
     int getPort();
     void addOrder(Order order);
-
+    CopyOnWriteArrayList<Order> getOrders();
 }

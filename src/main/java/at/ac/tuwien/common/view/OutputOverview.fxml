@@ -268,7 +268,7 @@
                                     <Insets top="3.0" />
                                  </padding>
                               </Label>
-                              <TextField prefHeight="25.0" prefWidth="65.0" promptText="0" />
+                              <TextField fx:id="dronesNumber_textfield" prefHeight="25.0" prefWidth="65.0" promptText="0" />
                            </children>
                            <GridPane.margin>
                               <Insets />
@@ -291,12 +291,12 @@
                                     <Insets top="3.0" />
                                  </padding>
                               </Label>
-                              <ComboBox fx:id="dronoColorComboBox" prefWidth="150.0" promptText="Select case color" />
+                              <ComboBox fx:id="droneColorComboBox" prefWidth="150.0" promptText="Select case color" />
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="3">
                            <children>
-                              <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Create order">
+                              <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#handleCreateOrderButtonAction" text="Create order">
                                  <HBox.margin>
                                     <Insets left="50.0" />
                                  </HBox.margin>

@@ -28,6 +28,7 @@ public class GUI{
     private int port;
 
     private Stage primaryStage;
+
     private IServer server;
 
     private String type ="";
@@ -57,6 +58,10 @@ public class GUI{
     }
     public ObservableList<Order> getOrdersData() {
         return ordersData;
+    }
+    public void addOrder(Order order){
+        server.addOrder(order);
+        ordersData.setAll(server.getOrders());
     }
 
     public GUI(Stage primaryStage, IServer server) throws IOException {
@@ -133,6 +138,11 @@ public class GUI{
             @Override
             public synchronized void onBadDroneTested(Drone drone) {
                 badDronesData.add(drone);
+            }
+
+            @Override
+            public void onOrderModified(Order order) {
+               //TODO
             }
 
         });

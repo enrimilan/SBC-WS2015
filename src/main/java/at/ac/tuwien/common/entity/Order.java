@@ -17,6 +17,10 @@ public class Order implements Serializable {
         this.droneColor = droneColor;
     }
 
+    public UUID getOrderId() {
+        return orderId;
+    }
+
     public int getOrderSize() {
         return orderSize;
     }
