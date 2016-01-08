@@ -8,9 +8,10 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="949.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.ac.tuwien.common.view.DroneDetailsDialogController">
    <children>
+      <TextField disable="true" layoutX="196.0" layoutY="170.0" prefHeight="3.0" prefWidth="59.0" />
       <Label layoutX="25.0" layoutY="16.0" text="Drone UUID :" />
-      <Label layoutX="567.0" layoutY="15.0" text="Drone Status:" />
-      <Label fx:id="label_droneStatus" layoutX="567.0" layoutY="32.0" text="N/A">
+      <Label layoutX="386.0" layoutY="15.0" text="Drone Status:" />
+      <Label fx:id="label_droneStatus" layoutX="386.0" layoutY="32.0" text="N/A">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
@@ -21,34 +22,34 @@
          </font>
       </Label>
       <Separator layoutX="27.0" layoutY="52.0" prefHeight="3.0" prefWidth="899.0" />
-      <Label layoutX="444.0" layoutY="73.0" text="PARTS">
+      <Label layoutX="444.0" layoutY="56.0" text="PARTS">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Label>
-      <Label layoutX="27.0" layoutY="94.0" text="Module {Case - ControlUnit}">
+      <Label layoutX="27.0" layoutY="78.0" text="Module {Case - ControlUnit}">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="131.0" layoutY="126.0" text="Case UUID:" />
-      <Label fx:id="label_droneCaseId" layoutX="131.0" layoutY="143.0" text="N/A">
+      <Label layoutX="131.0" layoutY="109.0" text="Case UUID:" />
+      <Label fx:id="label_droneCaseId" layoutX="131.0" layoutY="126.0" text="N/A">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="131.0" layoutY="207.0" text="ControlUnit UUID:" />
-      <Label fx:id="label_droneCUId" layoutX="131.0" layoutY="224.0" text="N/A">
+      <Label layoutX="131.0" layoutY="210.0" text="ControlUnit UUID:" />
+      <Label fx:id="label_droneCUId" layoutX="131.0" layoutY="227.0" text="N/A">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="149.0" layoutY="162.0" text="Supplied by robot with UUID:">
+      <Label layoutX="149.0" layoutY="141.0" text="Supplied by robot with UUID:">
          <font>
             <Font name="System Italic" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="label_droneCaseSupplierId" layoutX="149.0" layoutY="180.0" text="N/A">
+      <Label fx:id="label_droneCaseSupplierId" layoutX="149.0" layoutY="159.0" text="N/A">
          <font>
             <Font name="System Italic" size="12.0" />
          </font>
@@ -63,21 +64,21 @@
             <Font name="System Italic" size="12.0" />
          </font>
       </Label>
-      <Separator layoutX="464.0" layoutY="138.0" orientation="VERTICAL" prefHeight="102.0" prefWidth="5.0" />
-      <Label layoutX="552.0" layoutY="125.0" text="Module assembled by robot with UUID:" />
-      <Label fx:id="label_droneModuleCCUassemblerId" layoutX="552.0" layoutY="141.0" text="N/A">
+      <Separator layoutX="464.0" layoutY="112.0" orientation="VERTICAL" prefHeight="128.0" prefWidth="7.0" />
+      <Label layoutX="552.0" layoutY="115.0" text="Module assembled by robot with UUID:" />
+      <Label fx:id="label_droneModuleCCUassemblerId" layoutX="552.0" layoutY="131.0" text="N/A">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="552.0" layoutY="171.0" text="Module calibrated by robot with UUID:" />
-      <Label fx:id="label_droneModuleCCUcalibratorId" layoutX="552.0" layoutY="188.0" text="N/A">
+      <Label layoutX="552.0" layoutY="161.0" text="Module calibrated by robot with UUID:" />
+      <Label fx:id="label_droneModuleCCUcalibratorId" layoutX="552.0" layoutY="178.0" text="N/A">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </Label>
-      <Label layoutX="552.0" layoutY="216.0" text="Module calibration value:" />
-      <Label fx:id="label_droneModuleCCUcalibrationValue" layoutX="552.0" layoutY="233.0" text="N/A">
+      <Label layoutX="552.0" layoutY="206.0" text="Module calibration value:" />
+      <Label fx:id="label_droneModuleCCUcalibrationValue" layoutX="552.0" layoutY="223.0" text="N/A">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
@@ -248,5 +249,26 @@
       <Label layoutX="330.0" layoutY="403.0" text="Rotor UUID:" />
       <Label layoutX="630.0" layoutY="403.0" text="Rotor UUID:" />
       <Separator layoutX="25.0" layoutY="287.0" prefHeight="3.0" prefWidth="899.0" />
+      <Label layoutX="691.0" layoutY="15.0" text="ORDER ID:" />
+      <Label fx:id="label_orderID" layoutX="691.0" layoutY="32.0" text="N/A">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="148.0" layoutY="174.0" text="Painted                      by robot with UUID:">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="label_droneCasePainterId" layoutX="148.0" layoutY="192.0" text="N/A">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="label_caseColor" layoutX="208.0" layoutY="174.0" text="Label">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

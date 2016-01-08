@@ -19,10 +19,19 @@ public class DroneDetailsDialogController {
     private Label label_droneStatus;
 
     @FXML
+    private Label label_orderID;
+
+    @FXML
     private Label label_droneCaseId;
 
     @FXML
     private Label label_droneCaseSupplierId;
+
+    @FXML
+    private Label label_droneCasePainterId;
+
+    @FXML
+    private Label label_caseColor;
 
     @FXML
     private Label label_droneCUId;
@@ -115,9 +124,22 @@ public class DroneDetailsDialogController {
         label_droneId.setText(drone.getDroneId().toString());
         label_droneStatus.setText(drone.getStatus().name());
 
+        if(drone.getOrderId() != null){
+            label_orderID.setText(drone.getOrderId().toString());
+        } else {
+            label_orderID.setText("N/A");
+        }
+
        if(drone.getCaseControlUnitPair().getParts().get(0).getPartType() == PartType.CASE){
            label_droneCaseId.setText(drone.getCaseControlUnitPair().getParts().get(0).getPartId().toString());
            label_droneCaseSupplierId.setText(drone.getCaseControlUnitPair().getParts().get(0).getSupplierId().toString());
+
+           if(drone.getCaseControlUnitPair().getParts().get(0).getPainterId() != null){
+               label_droneCasePainterId.setText(drone.getCaseControlUnitPair().getParts().get(0).getPainterId().toString());
+           } else {
+               label_droneCasePainterId.setText("N/A");
+           }
+           label_caseColor.setText(drone.getCaseControlUnitPair().getParts().get(0).getColor().name());
            label_droneCUId.setText(drone.getCaseControlUnitPair().getParts().get(1).getPartId().toString());
            label_droneCUSupplierId.setText(drone.getCaseControlUnitPair().getParts().get(1).getSupplierId().toString());
        } else {
@@ -134,7 +156,6 @@ public class DroneDetailsDialogController {
             label_droneModuleCCUcalibrationValue.setText("N/A");
 
 
-            //TODO: Assumed 0 is Motor, 1 is Rotor
             /*** CP1 ***/
 
             lbl_CP1_MotorId.setText(drone.getMotorRotorPairs().get(0).getParts().get(0).getPartId().toString());
@@ -179,7 +200,6 @@ public class DroneDetailsDialogController {
             label_droneModuleCCUcalibrationValue.setText(String.valueOf(drone.getCaseControlUnitPair().getCalibrationValue()));
 
 
-            //TODO: Assumed 0 is Motor, 1 is Rotor
             /*** CP1 ***/
 
             lbl_CP1_MotorId.setText(drone.getMotorRotorPairs().get(0).getParts().get(0).getPartId().toString());
