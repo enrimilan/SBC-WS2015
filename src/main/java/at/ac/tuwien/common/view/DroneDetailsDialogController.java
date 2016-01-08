@@ -5,6 +5,7 @@ import at.ac.tuwien.common.entity.PartType;
 import at.ac.tuwien.common.entity.Status;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -139,7 +140,15 @@ public class DroneDetailsDialogController {
            } else {
                label_droneCasePainterId.setText("N/A");
            }
-           label_caseColor.setText(drone.getCaseControlUnitPair().getParts().get(0).getColor().name());
+           String color = drone.getCaseControlUnitPair().getParts().get(0).getColor().name();
+           if (color.equals("BLUE")){
+               label_caseColor.setTextFill(Color.BLUE);
+           } else if (color.equals("RED")){
+               label_caseColor.setTextFill(Color.RED);
+           } else if (color.equals("GREEN")){
+               label_caseColor.setTextFill(Color.GREEN);
+           } else color = "N/A";
+           label_caseColor.setText(color);
            label_droneCUId.setText(drone.getCaseControlUnitPair().getParts().get(1).getPartId().toString());
            label_droneCUSupplierId.setText(drone.getCaseControlUnitPair().getParts().get(1).getSupplierId().toString());
        } else {
