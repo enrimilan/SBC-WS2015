@@ -663,12 +663,22 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
     }
 
     private synchronized boolean checkForWorkWithDroneForCalibrationRobot(){
-        if(drones.size()>0 && drones.get(drones.size()-1).getStatus() != Status.CALIBRATED ){
+        List<Drone> dronesToCalibrate = drones.stream().filter(new Predicate<Drone>() {
+            @Override
+            public boolean test(Drone drone) {
+                if(drone.getStatus() != Status.CALIBRATED){
+                    return true;
+                }
+                return false;
+            }
+        }).collect(Collectors.toList());
+        if(!dronesToCalibrate.isEmpty()){
             ICalibratedNotification calibrationRobotNotification = calibrationRobots.poll();
             if (calibrationRobotNotification == null) {
                 return false;
             }
-            Drone drone = drones.remove(drones.size()-1);
+            Drone drone = dronesToCalibrate.remove(0);
+            drones.remove(drone);
             jobId.set(jobId.get()+1);
             Job job = new Job(jobId.get());
             Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
