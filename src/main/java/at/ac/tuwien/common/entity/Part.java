@@ -11,6 +11,8 @@ public class Part implements Serializable {
     private UUID orderId;
     private PartType partType;
     private CaseType caseType;
+
+
     private Color color;
 
     public Part(UUID supplierId, PartType partType) {
@@ -70,6 +72,10 @@ public class Part implements Serializable {
 
     public void setPainterId(UUID painterId) {
         this.painterId = painterId;
+    }
+
+    public UUID getPainterId() {
+        return painterId;
     }
 
     @Override

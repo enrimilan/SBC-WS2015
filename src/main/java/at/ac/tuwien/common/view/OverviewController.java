@@ -52,6 +52,8 @@ public class OverviewController {
     private TableColumn<Part, String> partType_supplyTable;
     @FXML
     private TableColumn<Part, String> supplierId_supplyTable;
+    @FXML
+    private TableColumn<Part, String> painterId_supplyTable;
 
 
     @FXML
@@ -302,6 +304,8 @@ public class OverviewController {
     @FXML
     private TableColumn<Drone, String> droneId;
     @FXML
+    private TableColumn<Drone, String> orderId;
+    @FXML
     private TableColumn<Drone, CaseType> droneType;
     @FXML
     private TableColumn<Drone, String> droneStatus;
@@ -431,15 +435,14 @@ public class OverviewController {
                             setStyle("-fx-background-color: none");
                             this.setText(null);
                         } else {
-                            setTextFill(javafx.scene.paint.Color.WHITE);
                             if (item.endsWith("BLUE")) {
-                                setStyle("-fx-background-color: blue");
+                                setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
                             } else if (item.endsWith("RED")) {
-                                setStyle("-fx-background-color: red");
+                                setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
                             } else if (item.endsWith("GREEN")) {
-                                setStyle("-fx-background-color: green");
+                                setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
                             } else if (item.endsWith("GRAY")) {
-                                setStyle("-fx-background-color: gray");
+                                setStyle("-fx-text-fill: gray; -fx-font-weight: bold;");
                             } else setTextFill(javafx.scene.paint.Color.BLACK);
                             this.setText(item.split(":")[0]);
                         }
@@ -449,8 +452,10 @@ public class OverviewController {
         });
 
         supplierId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("supplierId"));
+        painterId_supplyTable.setCellValueFactory(new PropertyValueFactory<>("painterId"));
 
         droneId.setCellValueFactory(new PropertyValueFactory<>("droneId"));
+        orderId.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         droneStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         droneType.setCellValueFactory(new PropertyValueFactory<>("droneType"));
         droneColor.setCellValueFactory(new PropertyValueFactory<>("droneColor"));
