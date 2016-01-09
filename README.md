@@ -1,5 +1,5 @@
-### This project has been developed as a solution of the assignments during the course
-**"Distributed Programming with Space Based Computing Middleware"**. ###
+This project has been developed as a solution of the assignments during the course
+**"Distributed Programming with Space Based Computing Middleware"**
 
 
 
