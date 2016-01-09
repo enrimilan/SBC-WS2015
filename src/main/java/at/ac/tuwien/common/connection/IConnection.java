@@ -40,7 +40,7 @@ public interface IConnection {
     /**
      * Will be used by {@link at.ac.tuwien.common.robot.SupplierRobot} to supply parts
      * @param part to be supplied
-     * @throws ConnectionException iif there are issues with the connection
+     * @throws ConnectionException if there are issues with the connection
      */
     void supply(Part part) throws ConnectionException;
 
