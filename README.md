@@ -19,8 +19,8 @@ To start the GUI and server (inc. building of the project):
 *     XVSM: /xvsm/gui.bat
 
 Start [function]-robots (where [function] = {supplier|assembler|calibrator|tester|painter}:
-    RMI: /rmi/[function].bat (follow instruction in console)
-    XVSM: /xvsm/[function].bat (follow instruction in console)
+*     RMI: /rmi/[function].bat (follow instruction in console)
+*     XVSM: /xvsm/[function].bat (follow instruction in console)
 
 
 The robots can also be started from the GUI. To take use of that, the project name should not contain any white-spaces in it.
