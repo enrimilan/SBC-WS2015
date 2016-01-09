@@ -6,8 +6,8 @@
 
 
 The solution comprises of two parts:
-    *** 1. RMI as Non-Spaced-Technology
-*     2. MozartSpaces 2.3 as Space-Based-Technology**
+* RMI as Non-Spaced-Technology
+* MozartSpaces 2.3 as Space-Based-Technology
 
 Maven was used as a build tool, hence to build and run the project installation of Maven and a Java version of 1.8 is required on your computer.
 To compile, package and install all the artifacts used in this project, the command "mvn install" must be invoked in the root directory (e.g. where pom.xml file is)
