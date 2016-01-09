@@ -30,8 +30,8 @@ public interface IConnection {
     void establish(String host, int port) throws ConnectionException;
 
     /**
-     * Gives the sum of all stored parts which have same features as the part given in the parameter
-     * @param part type to be looked up
+     * Gives the sum of all stored parts which have same features as the <code>part</code> given in the parameter
+     * @param part the part, features of which will be looked up
      * @return number of parts stored as int
      * @throws ConnectionException if there are issues with the connection
      */
@@ -84,7 +84,7 @@ public interface IConnection {
      * Checks if  the given <code>drone</code> is fully assembled and proceeds with calibration, otherwise it will proceed with assembling.
      * Calls {@link at.ac.tuwien.common.view.INotificationCallback#onDroneAdded(Drone)} to notify GUI about the changes
      * @param drone to be checked if uts fully assembled
-     * @param job
+     * @param job  from which the {@link  at.ac.tuwien.rmi.Transaction} will be notified  about the status of the work and proceed respectively
      * @throws ConnectionException
      */
     void droneAssembled(Drone drone, Job job) throws ConnectionException;
@@ -118,7 +118,6 @@ public interface IConnection {
      * Adds (i.e. registers) a new {@link at.ac.tuwien.common.robot.CalibrationRobot} and immediately checks if there is work that
      * can be done by the robot (i.e. already fully calibrated drones waiting to be tested)
      * @param logisticRobotNotification callback notification for {@link at.ac.tuwien.common.robot.LogisticRobot}
-     * @param logisticRobotNotification
      * @throws ConnectionException if there are issues with the connection
      */
     void registerLogisticRobot(ITestedNotification logisticRobotNotification) throws ConnectionException;
