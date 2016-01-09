@@ -1,5 +1,5 @@
-This project has been developed as a solution of the assignments during the course
-**"Distributed Programming with Space Based Computing Middleware"**.
+# This project has been developed as a solution of the assignments during the course
+**"Distributed Programming with Space Based Computing Middleware"**. #
 
 @Authors: **Enri Miho** & **Arber Kryeziu**
 
@@ -14,11 +14,15 @@ To compile, package and install all the artifacts used in this project, the comm
 Otherwise, to start the application (which also includes compiling the whole project), there are scripts available in "bin" directory.
 For both parts of the solution, the scripts are placed in sub-directories rmi and xvms , respectively.
 
+
+
 To start the GUI and server (inc. building of the project):
+
 *     RMI: /rmi/gui.bat
 *     XVSM: /xvsm/gui.bat
 
 Start [function]-robots (where [function] = {supplier|assembler|calibrator|tester|painter}:
+
 *     RMI: /rmi/[function].bat (follow instruction in console)
 *     XVSM: /xvsm/[function].bat (follow instruction in console)
 
