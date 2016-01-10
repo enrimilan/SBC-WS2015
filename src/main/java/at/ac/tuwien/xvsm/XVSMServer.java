@@ -95,7 +95,8 @@ public class XVSMServer implements IServer {
 
     @Override
     public void stop(){
-        //TODO!
+        if(core!=null)
+            core.shutdown(true);
     }
 
     @Override
