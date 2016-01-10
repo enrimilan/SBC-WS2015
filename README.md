@@ -15,11 +15,19 @@ The solution comprises of two parts:
 * **RMI as Non-Spaced-Technology**
 * **MozartSpaces 2.3 as Space-Based-Technology**
 
-Maven was used as a build tool, hence to build and run the project installation of **Maven** and a **Java** version of 1.8 is required on your computer.
-To compile, package and install all the artifacts used in this project, the command "mvn install" must be invoked in the root directory (e.g. where **pom.xml** file is)
+Maven was used as a build tool, hence to build and run the project, installation of **Maven** and a **Java 1.8** is required on your computer.
+
+To compile, package and install all the artifacts used in this project, the command 
+```
+#!java
+
+mvn install
+```
+ must be invoked in the root directory (e.g. where **pom.xml** file is)
 
 
 Otherwise, to start the application (which also includes compiling the whole project), there are scripts available in "bin" directory.
+
 For both parts of the solution, the scripts are placed in sub-directories rmi and xvms , respectively.
 
 
@@ -39,4 +47,5 @@ Start [function]-robots (where [function] = {supplier|assembler|calibrator|teste
 
 
 
-The robots can also be started from the GUI. To take use of that, the project name should not contain any white-spaces in it.
+
+NOTE: The robots can also be started from the GUI. To take use of that, the project name should not contain any white-spaces in it.
