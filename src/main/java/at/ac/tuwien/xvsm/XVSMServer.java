@@ -1,16 +1,16 @@
 package at.ac.tuwien.xvsm;
 
 import at.ac.tuwien.common.entity.*;
-import at.ac.tuwien.common.notification.AssembledNotification;
-import at.ac.tuwien.common.notification.CalibratedNotification;
-import at.ac.tuwien.common.notification.TestedNotification;
+import at.ac.tuwien.common.notification.*;
 import at.ac.tuwien.common.server.IServer;
 import at.ac.tuwien.common.view.INotificationCallback;
+import at.ac.tuwien.rmi.*;
 import at.ac.tuwien.utils.Constants;
 import at.ac.tuwien.utils.Utils;
 import at.ac.tuwien.xvsm.aspect.SpaceAspect;
 import at.ac.tuwien.xvsm.listener.*;
 import org.mozartspaces.capi3.*;
+import org.mozartspaces.capi3.Transaction;
 import org.mozartspaces.core.*;
 import org.mozartspaces.core.aspects.SpaceIPoint;
 import org.mozartspaces.notifications.NotificationManager;
@@ -18,9 +18,13 @@ import org.mozartspaces.notifications.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class XVSMServer implements IServer {
 
@@ -73,6 +77,7 @@ public class XVSMServer implements IServer {
             //add listeners
             NotificationManager notificationManager = new NotificationManager(core);
             RobotNotificationListener rbn = new RobotNotificationListener(this);
+            notificationManager.createNotification(paintedNotifications, rbn, Operation.WRITE);
             notificationManager.createNotification(assembledNotifications, rbn, Operation.WRITE);
             notificationManager.createNotification(calibratedNotifications, rbn, Operation.WRITE);
             notificationManager.createNotification(testedNotifications, rbn, Operation.WRITE);
@@ -115,6 +120,80 @@ public class XVSMServer implements IServer {
        orders.add(order);
     }
 
+    public synchronized boolean checkForWorkWithPartForPaintingRobot(){
+        // take the painting robot notification (if available)
+        PaintedNotification notification;
+        TransactionReference notificationTx;
+        try {
+            notificationTx = capi.createTransaction(MzsConstants.RequestTimeout.INFINITE, null);
+            ArrayList<PaintedNotification> notifications = capi.take(paintedNotifications, FifoCoordinator.newSelector(1),
+                    MzsConstants.RequestTimeout.DEFAULT, notificationTx);
+            notification = notifications.get(0);
+        } catch (MzsCoreException e) {
+            //no robot available, so we finish immediately.
+            logger.info(e.getMessage());
+            return false;
+        }
+
+        for(Order o : orders){
+            //look for cases that were not assigned to any order(gray) and have got the order's case type.
+            if(o.getNrOfPaintPartRequests()<o.getOrderSize()) {
+                Property partTypeProp = Property.forName("*", "partType");
+                Property caseTypeProp = Property.forName("*", "caseType");
+                Property colorProp = Property.forName("*", "color");
+                Query query = new Query().filter(
+                        Matchmakers.and(
+                                partTypeProp.equalTo(PartType.CASE),
+                                caseTypeProp.equalTo(o.getCaseType()),
+                                colorProp.equalTo(Color.GRAY)
+                        )
+                ).cnt(1);
+                try {
+                    List<Part> entries = capi.take(partsContainer, QueryCoordinator.newSelector(query, 1),
+                            MzsConstants.RequestTimeout.DEFAULT, null);
+                    capi.commitTransaction(notificationTx);
+                    Part casePart = entries.get(0);
+                    o.setNrOfPaintPartRequests(o.getNrOfPaintPartRequests()+1);
+                    notification.paintPart(casePart, o.getDroneColor(), new Job(1), o.getOrderId());
+                    return true;
+                } catch (MzsCoreException e) {
+                    logger.debug(e.getMessage());
+                } catch (RemoteException e) {
+                    logger.debug(e.getMessage());
+                }
+            }
+        }
+
+        //no cases were found. so paint some random case which was not already painted of course.
+        Property partTypeProp = Property.forName("*", "partType");
+        Property colorProp = Property.forName("*", "color");
+        Query query = new Query().filter(
+                Matchmakers.and(
+                        partTypeProp.equalTo(PartType.CASE),
+                        colorProp.equalTo(Color.GRAY)
+                )
+        ).cnt(1);
+        try {
+            List<Part> entries = capi.take(partsContainer, QueryCoordinator.newSelector(query, 1),
+                    MzsConstants.RequestTimeout.DEFAULT, null);
+            capi.commitTransaction(notificationTx);
+            Part casePart = entries.get(0);
+            notification.paintPart(casePart, Color.GRAY, new Job(1), null);
+            return true;
+        } catch (MzsCoreException e) {
+            logger.debug(e.getMessage());
+        } catch (RemoteException e) {
+            logger.debug(e.getMessage());
+        }
+
+        //if we reached here, no work was found, so give the notification back.
+        try {
+            capi.rollbackTransaction(notificationTx);
+        } catch (MzsCoreException e) {
+            logger.debug(e.getMessage());
+        }
+        return false;
+    }
 
     public synchronized boolean checkForWorkWithPartsForAssemblyRobot(){
 

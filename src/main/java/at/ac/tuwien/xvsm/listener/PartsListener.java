@@ -1,6 +1,8 @@
 package at.ac.tuwien.xvsm.listener;
 
+import at.ac.tuwien.common.entity.Color;
 import at.ac.tuwien.common.entity.Part;
+import at.ac.tuwien.common.entity.PartType;
 import at.ac.tuwien.common.view.INotificationCallback;
 import at.ac.tuwien.xvsm.XVSMServer;
 import org.mozartspaces.core.Entry;
@@ -30,6 +32,7 @@ public class PartsListener implements NotificationListener {
                 Part p = (Part) entry.getValue();
                 notificationCallback.onPartAdded(p);
             }
+            server.checkForWorkWithPartForPaintingRobot();
             server.checkForWorkWithPartsForAssemblyRobot();
         }
         if(operation == Operation.TAKE){

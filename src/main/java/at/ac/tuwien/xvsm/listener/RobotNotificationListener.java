@@ -30,7 +30,7 @@ public class RobotNotificationListener implements NotificationListener {
 
         if(entry.getValue() instanceof IPaintedNotification){
             logger.info("painting robot just joined and is ready to do some work");
-            //TODO
+            server.checkForWorkWithPartForPaintingRobot();
         }
         if(entry.getValue() instanceof IAssembledNotification){
             logger.info("assembler robot just joined and is ready to do some work");
