@@ -24,7 +24,7 @@ public class XVSMConnection implements IConnection {
     private String host;
     private int port;
     private ContainerReference partsContainer, modulesContainer, dronesContainer, testedDronesContainer;
-    private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
+    private ContainerReference paintedNotifications, assembledNotifications, calibratedNotifications, testedNotifications;
 
     public XVSMConnection(){
         this.core = DefaultMzsCore.newInstance(Constants.RANDOM_FREE_PORT);
@@ -52,6 +52,7 @@ public class XVSMConnection implements IConnection {
         this.modulesContainer = Utils.getOrCreateContainer(Constants.MODULES_CONTAINER, capi, coordinators, host, port);
         this.dronesContainer = Utils.getOrCreateContainer(Constants.DRONES_CONTAINER, capi, coordinators, host, port);
         this.testedDronesContainer = Utils.getOrCreateContainer(Constants.TESTED_DRONES_CONTAINER, capi, coordinators, host, port);
+        this.paintedNotifications = Utils.getOrCreateContainer(Constants.PAINTED_NOTIFICATIONS, capi, coordinators, host, port);
         this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators, host, port);
         this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators, host, port);
         this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators, host, port);

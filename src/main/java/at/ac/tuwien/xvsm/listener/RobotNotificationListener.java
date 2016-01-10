@@ -2,6 +2,7 @@ package at.ac.tuwien.xvsm.listener;
 
 import at.ac.tuwien.common.notification.IAssembledNotification;
 import at.ac.tuwien.common.notification.ICalibratedNotification;
+import at.ac.tuwien.common.notification.IPaintedNotification;
 import at.ac.tuwien.common.notification.ITestedNotification;
 import at.ac.tuwien.xvsm.XVSMServer;
 import org.mozartspaces.core.Entry;
@@ -27,6 +28,10 @@ public class RobotNotificationListener implements NotificationListener {
     public void entryOperationFinished(Notification notification, Operation operation, List<? extends Serializable> list) {
         Entry entry = (Entry) list.get(0);
 
+        if(entry.getValue() instanceof IPaintedNotification){
+            logger.info("painting robot just joined and is ready to do some work");
+            //TODO
+        }
         if(entry.getValue() instanceof IAssembledNotification){
             logger.info("assembler robot just joined and is ready to do some work");
             server.checkForWorkWithModulesForAssemblyRobot();

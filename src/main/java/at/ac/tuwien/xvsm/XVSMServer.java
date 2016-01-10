@@ -29,7 +29,7 @@ public class XVSMServer implements IServer {
     private Capi capi;
     private ContainerReference partsContainer, modulesContainer, dronesContainer, testedDronesContainer;
     private CopyOnWriteArrayList<Order> orders;
-    private ContainerReference assembledNotifications, calibratedNotifications, testedNotifications;
+    private ContainerReference paintedNotifications, assembledNotifications, calibratedNotifications, testedNotifications;
     private INotificationCallback notificationCallback;
     private String host;
     private int port;
@@ -62,6 +62,7 @@ public class XVSMServer implements IServer {
         this.modulesContainer = Utils.getOrCreateContainer(Constants.MODULES_CONTAINER, capi, coordinators, host, port);
         this.dronesContainer = Utils.getOrCreateContainer(Constants.DRONES_CONTAINER, capi, coordinators, host, port);
         this.testedDronesContainer = Utils.getOrCreateContainer(Constants.TESTED_DRONES_CONTAINER, capi, coordinators, host, port);
+        this.paintedNotifications = Utils.getOrCreateContainer(Constants.PAINTED_NOTIFICATIONS, capi, coordinators, host, port);
         this.assembledNotifications = Utils.getOrCreateContainer(Constants.ASSEMBLED_NOTIFICATIONS, capi, coordinators, host, port);
         this.calibratedNotifications = Utils.getOrCreateContainer(Constants.CALIBRATED_NOTIFICATIONS, capi, coordinators, host, port);
         this.testedNotifications = Utils.getOrCreateContainer(Constants.TESTED_NOTIFICATIONS, capi, coordinators, host, port);
