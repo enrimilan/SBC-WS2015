@@ -88,12 +88,24 @@ public class XVSMConnection implements IConnection {
 
     @Override
     public void registerPaintingRobot(IPaintedNotification paintedNotification) throws ConnectionException {
-        //TODO
+        try {
+            capi.write(paintedNotifications, new Entry((Serializable) paintedNotification));
+        } catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
     public void partPainted(Part part, Job job) throws ConnectionException {
-        //TODO
+        try{
+            if(capi == null || partsContainer == null){
+                establish(host, port);
+            }
+            capi.write(partsContainer, new Entry(part));
+        }
+        catch (MzsCoreException e) {
+            throw new ConnectionException(e.getMessage());
+        }
     }
 
     @Override
