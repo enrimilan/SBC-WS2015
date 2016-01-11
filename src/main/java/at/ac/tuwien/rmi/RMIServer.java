@@ -319,6 +319,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             goodDrones.add(drone);
             notificationCallback.onGoodDroneTested(drone);
             if(o != null){
+                o.setNrOfProducedDrones(o.getNrOfProducedDrones()+1);
                 notificationCallback.onOrderModified(o);
                 if(o.getOrderSize() == o.getNrOfProducedDrones()){
                     orders.remove(o);
@@ -328,7 +329,6 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
         }
         else{
             if(o != null){
-                o.setNrOfProducedDrones(o.getNrOfProducedDrones()-1);
                 o.setNrOfAssembleCaseControlUnitPairRequests(o.getNrOfAssembleCaseControlUnitPairRequests()-1);
                 o.setNrOfAssembleMotorRotorPairRequests(o.getNrOfAssembleMotorRotorPairRequests()-3);
                 o.setNrOfPaintPartRequests(o.getNrOfPaintPartRequests()-1);
@@ -777,9 +777,6 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
             ITestedNotification logisticRobotNotification = logisticRobots.poll();
             if(logisticRobotNotification == null){
                 return false;
-            }
-            if(order != null){
-                order.setNrOfProducedDrones(order.getNrOfProducedDrones()+1);
             }
             jobId.set(jobId.get()+1);
             Job job = new Job(jobId.get());
