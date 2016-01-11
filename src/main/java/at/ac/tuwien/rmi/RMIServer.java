@@ -464,9 +464,6 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                         int i = 0;
                         Transaction t = new Transaction(this, Constants.TRANSACTION_TIME_TO_LIVE);
                         while(i<3 && motors.size()>0 && rotors.size()>0){
-                            if(order != null){
-                                order.setNrOfAssembleMotorRotorPairRequests(order.getNrOfAssembleMotorRotorPairRequests());
-                            }
                             Part m = motors.remove(0);
                             Part r = rotors.remove(0);
                             notificationCallback.onPartRemoved(m);
@@ -476,6 +473,9 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                             motorParts.add(m);
                             rotorParts.add(r);
                             i++;
+                        }
+                        if(order != null){
+                            order.setNrOfAssembleMotorRotorPairRequests(order.getNrOfAssembleMotorRotorPairRequests()+motors.size());
                         }
                         jobId.set(jobId.get()+1);
                         Job job = new Job(jobId.get());
