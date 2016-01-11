@@ -9,6 +9,7 @@ import at.ac.tuwien.utils.Constants;
 import at.ac.tuwien.utils.Utils;
 import at.ac.tuwien.xvsm.aspect.SpaceAspect;
 import at.ac.tuwien.xvsm.listener.*;
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import org.mozartspaces.capi3.*;
 import org.mozartspaces.core.*;
 import org.mozartspaces.core.aspects.SpaceIPoint;
@@ -208,6 +209,77 @@ public class XVSMServer implements IServer {
             return false;
         }
 
+        for(Order o : orders){
+            if(o.getNrOfAssembleCaseControlUnitPairRequests()<o.getOrderSize()){
+                Property partTypeProp = Property.forName("*", "partType");
+                Property caseTypeProp = Property.forName("*", "caseType");
+                Property droneColorProp = Property.forName("*", "color");
+                Query query = new Query().filter(
+                        Matchmakers.or(
+                                Matchmakers.and(partTypeProp.equalTo(PartType.CONTROL_UNIT)),
+                                Matchmakers.and(
+                                        partTypeProp.equalTo(PartType.CASE),
+                                        caseTypeProp.equalTo(o.getCaseType()),
+                                        droneColorProp.equalTo(o.getDroneColor())))
+                ).distinct(partTypeProp).sortup(partTypeProp);
+                List<Part> entries = null;
+                try {
+                    entries = capi.take(partsContainer, QueryCoordinator.newSelector(query,2),
+                            MzsConstants.RequestTimeout.DEFAULT, null);
+                    capi.commitTransaction(notificationTx);
+                    Part casePart = entries.get(0);
+                    Part controlUnitPart = entries.get(1);
+                    o.setNrOfAssembleCaseControlUnitPairRequests(o.getNrOfAssembleCaseControlUnitPairRequests()+1);
+                    notification.assembleCaseControlUnitPair(casePart, controlUnitPart, new Job(1), null);
+                    return true;
+                } catch (MzsCoreException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(o.getNrOfAssembleMotorRotorPairRequests()<o.getOrderSize()*3){
+                ArrayList<Part> motors = new ArrayList<>();
+                ArrayList<Part> rotors = new ArrayList<>();
+                try {
+                    Property partTypeProp = Property.forName("*", "partType");
+                    Query query = new Query().filter(
+                            Matchmakers.or(
+                                    partTypeProp.equalTo(PartType.MOTOR),
+                                    partTypeProp.equalTo(PartType.ROTOR)
+                            )
+                    ).distinct(partTypeProp).sortup(partTypeProp);
+                    int n = 3;
+                    for(int i=0; i<n; i++){
+                        List<Part> entries = capi.take(partsContainer, QueryCoordinator.newSelector(query,2),
+                                MzsConstants.RequestTimeout.DEFAULT, null);
+                        if(entries.size()<2){
+                            logger.info(entries.size()+" entries");
+                            break;
+                        }
+                        Part motor = entries.get(0);
+                        Part rotor = entries.get(1);
+                        motors.add(motor);
+                        rotors.add(rotor);
+                    }
+                } catch (CountNotMetException e){
+                    logger.error(e.getMessage());
+
+                } catch (MzsCoreException e) {
+                    logger.error(e.getMessage());
+                }
+
+                if(motors.size()>0 && rotors.size()>0 && motors.size()==rotors.size()){
+                    o.setNrOfAssembleMotorRotorPairRequests(o.getNrOfAssembleMotorRotorPairRequests()+motors.size());
+                    notification.assembleMotorRotorPairs(motors, rotors, new Job(1));
+                    try {
+                        capi.commitTransaction(notificationTx);
+                    } catch (MzsCoreException e) {
+                        logger.debug(e.getMessage());
+                    }
+                    return true;
+                }
+            }
+        }
+
         // step A: check for cases and control units to assemble
         try {
             Property partTypeProp = Property.forName("*", "partType");
@@ -222,8 +294,6 @@ public class XVSMServer implements IServer {
             capi.commitTransaction(notificationTx);
             Part casePart = entries.get(0);
             Part controlUnitPart = entries.get(1);
-            //notificationCallback.onPartRemoved(casePart);
-            //notificationCallback.onPartRemoved(controlUnitPart);
             notification.assembleCaseControlUnitPair(casePart, controlUnitPart, new Job(1), null);
             return true;
 
@@ -232,7 +302,7 @@ public class XVSMServer implements IServer {
         }
 
         logger.info("Step A: there are not at least 1 case AND 1 control unit, but we continue and try step B");
-        // step B: assembly maximally 3 motor/rotor modules
+        // step B: assemble maximally 3 motor/rotor modules
         ArrayList<Part> motors = new ArrayList<>();
         ArrayList<Part> rotors = new ArrayList<>();
         try {
@@ -242,7 +312,7 @@ public class XVSMServer implements IServer {
                             partTypeProp.equalTo(PartType.MOTOR),
                             partTypeProp.equalTo(PartType.ROTOR)
                     )
-            ).sortdown(partTypeProp).distinct(partTypeProp);
+            ).distinct(partTypeProp).sortup(partTypeProp);
             int n = 3;
             for(int i=0; i<n; i++){
                 List<Part> entries = capi.take(partsContainer, QueryCoordinator.newSelector(query,2),
@@ -255,8 +325,6 @@ public class XVSMServer implements IServer {
                 Part rotor = entries.get(1);
                 motors.add(motor);
                 rotors.add(rotor);
-                //notificationCallback.onPartRemoved(motor);
-                //notificationCallback.onPartRemoved(rotor);
             }
         } catch (CountNotMetException e){
             logger.error(e.getMessage());
@@ -310,10 +378,6 @@ public class XVSMServer implements IServer {
                     MzsConstants.RequestTimeout.DEFAULT, tx);
             capi.commitTransaction(tx);
             capi.commitTransaction(notificationTx);
-            //notificationCallback.onModuleRemoved(caseControlUnitPairs.get(0));
-            //notificationCallback.onModuleRemoved(motorRotorPairs.get(0));
-            //notificationCallback.onModuleRemoved(motorRotorPairs.get(1));
-            //notificationCallback.onModuleRemoved(motorRotorPairs.get(2));
             notification.assembleDrone(caseControlUnitPairs.get(0), motorRotorPairs, new Job(1), null);
             return true;
 
@@ -362,7 +426,6 @@ public class XVSMServer implements IServer {
             List<Module> entries = capi.take(modulesContainer, QueryCoordinator.newSelector(query,1),
                     MzsConstants.RequestTimeout.DEFAULT, null);
             capi.commitTransaction(notificationTx);
-            //notificationCallback.onModuleRemoved(entries.get(0));
             notification.calibrateMotorRotorPair(entries.get(0), new Job(1));
             return true;
         } catch (MzsCoreException e) {
