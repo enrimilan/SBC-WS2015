@@ -1,6 +1,7 @@
 package at.ac.tuwien.xvsm.listener;
 
 import at.ac.tuwien.common.entity.Drone;
+import at.ac.tuwien.common.entity.Order;
 import at.ac.tuwien.common.entity.Status;
 import at.ac.tuwien.common.view.INotificationCallback;
 import at.ac.tuwien.xvsm.XVSMServer;
@@ -27,10 +28,23 @@ public class TestedDronesListener implements NotificationListener {
         Entry entry = (Entry) list.get(0);
         Drone d = (Drone) entry.getValue();
         if(operation == Operation.WRITE) {
+            Order o = server.findOrderById(d.getOrderId());
             notificationCallback.onDroneRemoved(d);
             if (d.getStatus() == Status.TESTED_GOOD) {
                 notificationCallback.onGoodDroneTested(d);
+                if(o != null){
+                    o.setNrOfProducedDrones(o.getNrOfProducedDrones()+1);
+                    notificationCallback.onOrderModified(o);
+                    if(o.getOrderSize() == o.getNrOfProducedDrones()){
+                        server.getOrders().remove(o);
+                    }
+                }
             } else if (d.getStatus() == Status.TESTED_BAD) {
+                if(o != null){
+                    o.setNrOfAssembleCaseControlUnitPairRequests(o.getNrOfAssembleCaseControlUnitPairRequests()-1);
+                    o.setNrOfAssembleMotorRotorPairRequests(o.getNrOfAssembleMotorRotorPairRequests()-3);
+                    o.setNrOfPaintPartRequests(o.getNrOfPaintPartRequests()-1);
+                }
                 notificationCallback.onBadDroneTested(d);
             }
         }

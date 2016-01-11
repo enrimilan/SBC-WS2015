@@ -10,7 +10,6 @@ import at.ac.tuwien.utils.Utils;
 import at.ac.tuwien.xvsm.aspect.SpaceAspect;
 import at.ac.tuwien.xvsm.listener.*;
 import org.mozartspaces.capi3.*;
-import org.mozartspaces.capi3.Transaction;
 import org.mozartspaces.core.*;
 import org.mozartspaces.core.aspects.SpaceIPoint;
 import org.mozartspaces.notifications.NotificationManager;
@@ -23,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class XVSMServer implements IServer {
 
@@ -219,7 +216,7 @@ public class XVSMServer implements IServer {
                             partTypeProp.equalTo(PartType.CASE),
                             partTypeProp.equalTo(PartType.CONTROL_UNIT)
                     )
-            ).sortdown(partTypeProp).distinct(partTypeProp);
+            ).distinct(partTypeProp).sortup(partTypeProp);
             List<Part> entries = capi.take(partsContainer, QueryCoordinator.newSelector(query,2),
                     MzsConstants.RequestTimeout.DEFAULT, null);
             capi.commitTransaction(notificationTx);
@@ -436,10 +433,61 @@ public class XVSMServer implements IServer {
             return false;
         }
 
+        for(Order o : orders){
+            //look for orders
+            if(o.getNrOfProducedDrones()<o.getOrderSize()) {
+                Property droneStatusProp = Property.forName("*", "status");
+                Property orderIdProp = Property.forName("*", "orderId");
+                Property caseTypeProp = Property.forName("*", "caseType");
+                Property droneColorProp = Property.forName("*", "color");
+                Query query1 = new Query().filter(
+                        Matchmakers.and(
+                                droneStatusProp.equalTo(Status.CALIBRATED),
+                                orderIdProp.equalTo(o.getOrderId())
+                        )
+                ).cnt(1);
+                try {
+                    List<Drone> entries = capi.take(dronesContainer, QueryCoordinator.newSelector(query1, 1),
+                            MzsConstants.RequestTimeout.DEFAULT, null);
+                    capi.commitTransaction(notificationTx);
+                    Drone drone = entries.get(0);
+                    notification.testDrone(drone, new Job(1), o.getOrderId());
+                    return true;
+                } catch (MzsCoreException e) {
+                    logger.debug(e.getMessage());
+                }
+
+                //try some drones matching our order
+                Query query2 = new Query().filter(
+                        Matchmakers.and(
+                                droneStatusProp.equalTo(Status.CALIBRATED),
+                                caseTypeProp.equalTo(o.getCaseType()),
+                                droneColorProp.equalTo(o.getDroneColor())
+                        )
+                ).cnt(1);
+                try {
+                    List<Drone> entries = capi.take(dronesContainer, QueryCoordinator.newSelector(query2, 1),
+                            MzsConstants.RequestTimeout.DEFAULT, null);
+                    capi.commitTransaction(notificationTx);
+                    Drone drone = entries.get(0);
+                    notification.testDrone(drone, new Job(1), o.getOrderId());
+                    return true;
+                } catch (MzsCoreException e) {
+                    logger.debug(e.getMessage());
+                }
+
+            }
+        }
+
+        //try some random drones not assigned to any order
         try {
             Property droneStatusProp = Property.forName("*", "status");
+            Property orderIdProp = Property.forName("*", "orderId");
             Query query = new Query().filter(
-                    Matchmakers.and(droneStatusProp.equalTo(Status.CALIBRATED)));
+                    Matchmakers.and(
+                            droneStatusProp.equalTo(Status.CALIBRATED),
+                            orderIdProp.equalTo(null)
+                            ));
             List<Drone> entries = capi.take(dronesContainer, QueryCoordinator.newSelector(query,1),
                     MzsConstants.RequestTimeout.DEFAULT, null);
             capi.commitTransaction(notificationTx);
@@ -458,5 +506,21 @@ public class XVSMServer implements IServer {
         }
 
         return false;
+    }
+
+    public Order findOrderById(UUID orderId){
+        if(orderId == null){
+            return null;
+        }
+        for(Order o : orders){
+            if(o.getOrderId().equals(orderId)){
+                return o;
+            }
+        }
+        return null;
+    }
+
+    public CopyOnWriteArrayList<Order> getOrders() {
+        return orders;
     }
 }
