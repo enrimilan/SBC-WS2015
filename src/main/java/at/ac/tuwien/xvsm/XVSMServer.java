@@ -230,7 +230,7 @@ public class XVSMServer implements IServer {
                     Part casePart = entries.get(0);
                     Part controlUnitPart = entries.get(1);
                     o.setNrOfAssembleCaseControlUnitPairRequests(o.getNrOfAssembleCaseControlUnitPairRequests()+1);
-                    notification.assembleCaseControlUnitPair(casePart, controlUnitPart, new Job(1), null);
+                    notification.assembleCaseControlUnitPair(casePart, controlUnitPart, new Job(1), o.getOrderId());
                     return true;
                 } catch (MzsCoreException e) {
                     e.printStackTrace();
@@ -363,6 +363,40 @@ public class XVSMServer implements IServer {
             return false;
         }
 
+        for(Order o : orders){
+            if(o.getNrOfAssembleDronesRequests()<o.getOrderSize()){
+                TransactionReference tx = null;
+                ArrayList<Module> caseControlUnitPairs = new ArrayList<>();
+                ArrayList<Module> motorRotorPairs = new ArrayList<>();
+                try {
+                    Property moduleTypeProp = Property.forName("*", "moduleType");
+                    Property orderIdProp = Property.forName("*", "orderId");
+                    Query query1 = new Query().filter(
+                            Matchmakers.and(
+                                    moduleTypeProp.equalTo(ModuleType.CASE_CONTROL_UNIT_PAIR),
+                                    orderIdProp.equalTo(o.getOrderId())));
+                    Query query2 = new Query().filter(moduleTypeProp.equalTo(ModuleType.MOTOR_ROTOR_PAIR));
+                    tx =  capi.createTransaction(Constants.TRANSACTION_TIME_TO_LIVE, null);
+                    caseControlUnitPairs = capi.take(modulesContainer, QueryCoordinator.newSelector(query1, 1),
+                            MzsConstants.RequestTimeout.DEFAULT, tx);
+                    motorRotorPairs =  capi.take(modulesContainer, QueryCoordinator.newSelector(query2, 3),
+                            MzsConstants.RequestTimeout.DEFAULT, tx);
+                    capi.commitTransaction(tx);
+                    capi.commitTransaction(notificationTx);
+                    notification.assembleDrone(caseControlUnitPairs.get(0), motorRotorPairs, new Job(1), null);
+                    return true;
+
+                } catch (MzsCoreException e) {
+                    logger.info(e.getMessage());
+                    try {
+                        capi.rollbackTransaction(tx);
+                    } catch (MzsCoreException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+
         // step C: check for 3x motor/rotor pairs and 1x case/control unit pair
         TransactionReference tx = null;
         ArrayList<Module> caseControlUnitPairs = new ArrayList<>();
@@ -460,7 +494,8 @@ public class XVSMServer implements IServer {
 
         try {
             Property droneStatusProp = Property.forName("*", "status");
-            Query query = new Query().filter(droneStatusProp.notEqualTo(Status.CALIBRATED));
+            Property orderIdProp = Property.forName("*", "orderId");
+            Query query = new Query().filter(droneStatusProp.notEqualTo(Status.CALIBRATED)).sortup(orderIdProp);
             List<Drone> entries = capi.take(dronesContainer, QueryCoordinator.newSelector(query,1),
                     MzsConstants.RequestTimeout.DEFAULT, null);
             capi.commitTransaction(notificationTx);
