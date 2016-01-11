@@ -475,7 +475,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer, IServe
                             i++;
                         }
                         if(order != null){
-                            order.setNrOfAssembleMotorRotorPairRequests(order.getNrOfAssembleMotorRotorPairRequests()+motors.size());
+                            order.setNrOfAssembleMotorRotorPairRequests(order.getNrOfAssembleMotorRotorPairRequests()+i);
                         }
                         jobId.set(jobId.get()+1);
                         Job job = new Job(jobId.get());
